@@ -1,5 +1,5 @@
 import { repository, Filter } from "@loopback/repository";
-import { PermisoRepository, TipoPermisoRepository, SujetoRepository, DireccionPersonaNaturalRepository, VehiculoRepository, PermisoVigenteResponse } from "../repositories";
+import { PermisoRepository, TipoPermisoRepository, SujetoRepository, DireccionPersonaNaturalRepository, VehiculoRepository, PermisoVigenteResponse, EmpresaRepository, SolicitanteAutorizadoRepository } from "../repositories";
 import { get, param, HttpErrors, LogErrorProvider } from "@loopback/rest";
 import { controllerLogger } from "../logger/logger-config";
 import * as moment from 'moment';
@@ -15,6 +15,8 @@ export class PersonasControllerController {
     @repository(SujetoRepository) public sujetoRepository: SujetoRepository,
     @repository(DireccionPersonaNaturalRepository) public direccionPersonaNaturalRepository: DireccionPersonaNaturalRepository,
     @repository(VehiculoRepository) public vehiculoRepository: VehiculoRepository,
+    @repository(EmpresaRepository) public emrpesaRepository: EmpresaRepository,
+    @repository(SolicitanteAutorizadoRepository) public solicitanteAutorizadoRepository: SolicitanteAutorizadoRepository,
   ) {
 
   }
@@ -127,14 +129,16 @@ export class PersonasControllerController {
         codigoResultado: 1,
         descripcionResultado: 'Empresa no registrada'
       }
-      let empresa = await internacionalGateway.obtenerEmpresaByRut(rutEmpresa)
+      // let empresa = await internacionalGateway.obtenerEmpresaByRut(rutEmpresa)
+      let empresa: any = (await this.emrpesaRepository.obtenerEmpresaByRut(rutEmpresa))[0];
       if (empresa.id == undefined) {
         return resp;
       }
       resp.codigoResultado = 3
       resp.descripcionResultado = 'Empresa Registrada, Usuario No Autorizado'
       if (empresa.identificador_representante_legal !== rutSolicitante) {
-        let autorizados = await internacionalGateway.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id)
+        // let autorizados = await internacionalGateway.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id)
+        let autorizados: any[] = await this.solicitanteAutorizadoRepository.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id);
         if (!autorizados.find((auth: any) => auth.identificador === rutSolicitante)) {
           return resp;
         }
@@ -158,14 +162,15 @@ export class PersonasControllerController {
       }
       resp.codigoResultado = 2
       resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado Sin Permiso Vigente'
-      let permiso = await internacionalGateway.obtenerPermisoVigenteByRut(rutEmpresa)
-      if (!permiso) {
-        ctx.body = resp
-        return
+      // let permiso = await internacionalGateway.obtenerPermisoVigenteByRut(rutEmpresa)
+      let permiso: any = (await this.permisoRepository.obtenerPermisoVigenteByRut(rutEmpresa))[0];
+      if (permiso.id == undefined) {
+        return resp;
       }
       resp.codigoResultado = 4
       resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene Permiso Vigente'
-      let tipoPermiso = await internacionalGateway.obtenerTipoPermisoById(permiso.tipo_id)
+      // let tipoPermiso = await internacionalGateway.obtenerTipoPermisoById(permiso.tipo_id)
+      let tipoPermiso = await this.tipoPermisoRepository.findById(new Number(permiso.tipo_id));
       let sujeto = await internacionalGateway.obtenerSujetoById(permiso.sujeto_id)
       let vehiculos = await internacionalGateway.obtenerVehiculosByPermisoId(permiso.id)
       let flota: any[] = [], contabilizacion: { [k: string]: any } = {}

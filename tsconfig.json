@@ -4,7 +4,7 @@
   "compilerOptions": {
     "rootDir": "src",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
   },
   "include": [
     "src"
