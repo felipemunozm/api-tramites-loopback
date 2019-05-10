@@ -55,6 +55,7 @@
     "@loopback/service-proxy": "^1.1.7",
     "json2typescript": "^1.2.2",
     "loopback-connector-postgresql": "^3.6.1",
+    "moment": "^2.24.0",
     "typescript-logging": "^0.6.3"
   },
   "devDependencies": {
