@@ -74,7 +74,7 @@ export class PersonasControllerController {
           NumeroMotor: v.num_motor
         }
         flota.push(vehiculo)
-        let contabilizacion: { [k: string]: any } = {};
+        // let contabilizacion: { [k: string]: any } = {};
         contabilizacion[v.tipo] = (contabilizacion[v.tipo] ? contabilizacion[v.tipo] : 0.0) + 1
       })
       //Logica de calculo toneladas
