@@ -1,0 +1,10 @@
+{
+  "name": "internacional",
+  "connector": "postgresql",
+  "url": "",
+  "host": "206.189.164.106",
+  "port": 5432,
+  "user": "postgres",
+  "password": "postgres",
+  "database": "internacional"
+}
