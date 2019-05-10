@@ -17,6 +17,6 @@ export class DireccionPersonaNaturalRepository extends DefaultCrudRepository<
       "left join comuna co on co.codigo = dpa.codigo_comuna\n" +
       "left join region re on re.codigo = dpa.codigo_region\n" +
       "where persona_id = $1";
-    return this.dataSource.execute(query, { id });
+    return this.dataSource.execute(query, [id]);
   }
 }

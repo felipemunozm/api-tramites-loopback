@@ -22,7 +22,7 @@ export class PermisoRepository extends DefaultCrudRepository<
   ) {
     super(Permiso, dataSource);
   }
-  public obtenerPermisoVigenteByRut(rut: string): Promise<PermisoVigenteResponse> {
+  public obtenerPermisoVigenteByRut(rut: string): Promise<any> {
     let query: String = "select a.id, a.sujeto_id, a.pais_id, a.tipo_carga_id, a.tipo_id, a.fecha_creacion, a.fecha_fin_vigencia "
       + "from permiso a left join sujeto b on b.id = a.sujeto_id "
       + "left join persona_natural c on c.id = b.persona_natural_id "

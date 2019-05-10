@@ -1,4 +1,4 @@
-import { repository } from "@loopback/repository";
+import { repository, Filter } from "@loopback/repository";
 import { PermisoRepository, TipoPermisoRepository, SujetoRepository, DireccionPersonaNaturalRepository, VehiculoRepository, PermisoVigenteResponse } from "../repositories";
 import { get, param, HttpErrors, LogErrorProvider } from "@loopback/rest";
 import { controllerLogger } from "../logger/logger-config";
@@ -27,15 +27,18 @@ export class PersonasControllerController {
       let rut = params[1].replace(/\'/g, '')
       console.log("rut:" + rut)
       // let permiso = await internacionalGateway.obtenerPermisoVigenteByRut(rut);
-      let permiso: PermisoVigenteResponse = await this.permisoRepository.obtenerPermisoVigenteByRut(rut);
-      controllerLogger.info("permiso: " + permiso);
+      let permiso: any = (await this.permisoRepository.obtenerPermisoVigenteByRut(rut))[0];
+      let filter: Filter = {};
+      this.permisoRepository.find(filter);
+      controllerLogger.info("permiso: " + permiso.id);
+
       let resp: { [k: string]: any } = {};
       resp = {
         rutSolicitante: rut,
         codigoResultado: 1,
         descripcionResultado: 'No tiene permiso vigente'
       }
-      if (permiso == null) {
+      if (permiso.id == undefined) {
         return resp;
       }
       resp.codigoResultado = 2
@@ -43,9 +46,9 @@ export class PersonasControllerController {
       // let tipoPermiso = await internacionalGateway.obtenerTipoPermisoById(permiso.tipo_id)
       let tipoPermiso = await this.tipoPermisoRepository.findById(new Number(permiso.tipo_id));
       // let sujeto      = await internacionalGateway.obtenerSujetoById(permiso.sujeto_id)
-      let sujeto = await this.sujetoRepository.obtenerSujetoById(permiso.sujeto_id);
+      let sujeto = (await this.sujetoRepository.obtenerSujetoById(permiso.sujeto_id))[0];
       // let direccionSujeto = await internacionalGateway.obtenerDireccionByPersonaId(sujeto.persona_natural_id)
-      let direccionSujeto = await this.direccionPersonaNaturalRepository.obtenerDireccionByPersonaId(sujeto.persona_natural_id);
+      let direccionSujeto = (await this.direccionPersonaNaturalRepository.obtenerDireccionByPersonaId(sujeto.persona_natural_id))[0];
       // let vehiculos = await internacionalGateway.obtenerVehiculosByPermisoId(permiso.id)
       let vehiculos = await this.vehiculoRepository.obtenerVehiculosByPermisoId(permiso.id.toString());
       let flota: any[] = [], contabilizacion: { [k: string]: any } = {}
@@ -54,7 +57,7 @@ export class PersonasControllerController {
         cantidadVehiculos: vehiculos.length,
         capacidadCargaToneladas: 0
       }
-      vehiculos.array.forEach((v: any) => {
+      vehiculos.forEach((v: any) => {
         let vehiculo = {
           ppu: v.ppu,
           tipo: v.tipo,

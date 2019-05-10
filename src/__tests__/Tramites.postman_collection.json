@@ -1,0 +1,3057 @@
+{
+	"info": {
+		"_postman_id": "a69640bb-b4a0-4b27-9e9c-f370fff32508",
+		"name": "Tramites",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Registro Empresa",
+			"item": [
+				{
+					"name": "1.2 Registra Empresa",
+					"item": [
+						{
+							"name": "1.2 Trámite Creacion Empresa_TRANSPACIFICO",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"identificadorIntermediario\": \"KCA20190213_1\",\r\n\t\"fechaHoraCreacion\": \"13/02/2019 16:50:00\",\r\n\r\n\t\"codigoAnalista\": \"kcastro\",\r\n    \"nombreAnalista\": \"Karyna Castro\",\r\n    \"codigoRegion\": \"13\",\r\n\t\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"15330890-K\",\r\n\t\t\"nombre\": \"MARIA ISABEL ESCUTI\",\r\n\t\t\"email\": \"maria@pacifico.cl\"\r\n\t},\r\n\t\"relacionSolicitanteEmpresa\":\"Representante Legal\",\r\n\t\"empresa\": {\r\n\t\t\"rut\": \"1-9\",\r\n\t\t\"razonSocial\": \"dummy LIMITADA\",\r\n\t\t\"nombreFantasia\": \"dummy\",\r\n\t\t\"tipoEmpresa\": \"LTDA\",\r\n\t\t\"direccion\": {\r\n\t\t\t\"codigoRegionIntermediario\": \"13\",\r\n\t\t\t\"codigoComunaIntermediario\": \"13501\",\r\n\t\t\t\"textoDireccion\": \"CLORINDA WILLSHOW 678\",\r\n\t\t\t\"telefonoFijo\": \"\",\r\n\t\t\t\"telefonoMovil\": \"\",\r\n\t\t\t\"email\": \"contacto@pacifico.cl\"\r\n\t\t},\r\n\t\t\"representanteLegal\": {\r\n\t\t\t\"rut\": \"15330890-K\",\r\n\t\t\t\"nombre\": \"MARIA ISABEL ESCUTI\",\r\n\t\t\t\"direccion\": {\r\n\t\t\t\t\"codigoRegionIntermediario\": \"13\",\r\n\t\t\t\t\"codigoComunaIntermediario\": \"5301\",\r\n\t\t\t\t\"textoDireccion\": \"CLORINDA WILLSHOW 678\",\r\n\t\t\t\t\"telefonoFijo\": \"\",\r\n\t\t\t\t\"telefonoMovil\": \"\",\r\n\t\t\t\t\"email\": \"maria@pacifico.cl\"\r\n\t\t\t}\r\n\t\t}\r\n\t},\r\n\t\"documentosAdjuntos\": [\r\n        {\r\n            \"codigoTipoDocumento\": \"EMP_CRT_VIG\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\r\n        }\r\n    ]\r\n}\r\n\r\n\r\n\r\n\r\n"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/empresa",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.2 Trámite Creacion Empresa_JR",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"identificadorIntermediario\": \"KCA20190213_2\",\r\n\t\"fechaHoraCreacion\": \"13/02/2019 16:50:00\",\r\n\r\n\t\"codigoAnalista\": \"avalencia\",\r\n    \"nombreAnalista\": \"Ana María Valencia\",\r\n    \"codigoRegion\": \"14\",\r\n\t\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"10318329-4\",\r\n\t\t\"nombre\": \"CLARA BLANCA\",\r\n\t\t\"email\": \"clara@jr.cl\"\r\n\t},\r\n\t\"relacionSolicitanteEmpresa\": \"Representante Legal\",\r\n\t\"empresa\": {\r\n\t\t\"rut\": \"76440124-7\",\r\n\t\t\"razonSocial\": \"SOCIEDAD COMERCIAL TRANSPORTES TRANS JR LIMITADA\",\r\n\t\t\"nombreFantasia\": \"TRANS JR\",\r\n\t\t\"tipoEmpresa\": \"LTDA\",\r\n\t\t\"direccion\": {\r\n\t\t\t\"codigoRegionIntermediario\": \"05\",\r\n\t\t\t\"codigoComunaIntermediario\": \"05301\",\r\n\t\t\t\"textoDireccion\": \"O´HIGGINS #247, COMUNA DE LOS ANDES\",\r\n\t\t\t\"telefonoFijo\": \"\",\r\n\t\t\t\"telefonoMovil\": \"\",\r\n\t\t\t\"email\": \"contacto@jr.cl\"\r\n\t\t},\r\n\t\t\"representanteLegal\": {\r\n\t\t\t\"rut\": \"10315132-5\",\r\n\t\t\t\"nombre\": \"CORINA LIDIA DEL CARMEN MORALES ACOSTA\",\r\n\t\t\t\"direccion\": {\r\n\t\t\t\t\"codigoRegionIntermediario\": \"05\",\r\n\t\t\t\t\"codigoComunaIntermediario\": \"05301\",\r\n\t\t\t\t\"textoDireccion\": \"O´HIGGINS #247, COMUNA DE LOS ANDES\",\r\n\t\t\t\t\"telefonoFijo\": \"\",\r\n\t\t\t\t\"telefonoMovil\": \"\",\r\n\t\t\t\t\"email\": \"corina@jr.cl\"\r\n\t\t\t}\r\n\t\t}\r\n\t},\r\n\t\"documentosAdjuntos\": [\r\n        {\r\n            \"codigoTipoDocumento\": \"EMP_CRT_VIG\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\r\n        },\r\n        {\r\n            \"codigoTipoDocumento\": \"EMP_COP_ESC\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\r\n        }\r\n    ]\r\n}\r\n\r\n\r\n\r\n\r\n"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/empresa",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.2 Trámite Creacion Empresa PMI",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"identificadorIntermediario\": \"KCA20190220\",\r\n\t\"fechaHoraCreacion\": \"20/02/2019 16:50:00\",\r\n\r\n\t\"codigoAnalista\": \"avalencia\",\r\n    \"nombreAnalista\": \"Ana María Valencia\",\r\n    \"codigoRegion\": \"14\",\r\n\t\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"12950918-1\",\r\n\t\t\"nombre\": \"JANI ARAYA BRAVO\",\r\n\t\t\"email\": \"jani@pmi.cl\"\r\n\t},\r\n\t\"relacionSolicitanteEmpresa\": \"Representante Legal\",\r\n\t\"empresa\": {\r\n\t\t\"rut\": \"76419945-6\",\r\n\t\t\"razonSocial\": \"TRANSPORTES P.M.L. LIMITADA\",\r\n\t\t\"nombreFantasia\": \"TRANS PMI\",\r\n\t\t\"tipoEmpresa\": \"LTDA\",\r\n\t\t\"direccion\": {\r\n\t\t\t\"codigoRegionIntermediario\": \"05\",\r\n\t\t\t\"codigoComunaIntermediario\": \"05301\",\r\n\t\t\t\"textoDireccion\": \"CALLE UGALDE 71 COMUNA DE MELIPILLA\",\r\n\t\t\t\"telefonoFijo\": \"\",\r\n\t\t\t\"telefonoMovil\": \"\",\r\n\t\t\t\"email\": \"contacto@pmi.cl\"\r\n\t\t},\r\n\t\t\"representanteLegal\": {\r\n\t\t\t\"rut\": \"12950918-1\",\r\n\t\t\t\"nombre\": \"JANI ARAYA BRAVO\",\r\n\t\t\t\"direccion\": {\r\n\t\t\t\t\"codigoRegionIntermediario\": \"05\",\r\n\t\t\t\t\"codigoComunaIntermediario\": \"05301\",\r\n\t\t\t\t\"textoDireccion\": \"PTO TERRETRE  PISO3 OF 334, LOS ANDES\",\r\n\t\t\t\t\"telefonoFijo\": \"\",\r\n\t\t\t\t\"telefonoMovil\": \"\",\r\n\t\t\t\t\"email\": \"jani@pmi.cl\"\r\n\t\t\t}\r\n\t\t}\r\n\t},\r\n\t\"documentosAdjuntos\": [\r\n        {\r\n            \"codigoTipoDocumento\": \"EMP_CRT_VIG\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\r\n        },\r\n        {\r\n            \"codigoTipoDocumento\": \"EMP_COP_ESC\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\r\n        }\r\n    ]\r\n}\r\n\r\n\r\n\r\n\r\n"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/empresa",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creación Empresa F002",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"identificadorIntermediario\": \"KCAF002_CREAEMP\",\r\n\t\"fechaHoraCreacion\": \"06/02/2019 15:05:00\",\r\n\r\n\t\"codigoAnalista\": \"kcastro\",\r\n    \"nombreAnalista\": \"Karyna Castro\",\r\n    \"codigoRegion\": \"13\",\r\n\t\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"10318329-4\",\r\n\t\t\"nombre\": \"SOLICITANTE KCAF002\",\r\n\t\t\"email\": \"kcaF001@sol.cl\"\r\n\t},\r\n\t\"relacionSolicitanteEmpresa\": \"Representante Legal\",\r\n\t\"empresa\": {\r\n\t\t\"rut\": \"77818950-K\",\r\n\t\t\"razonSocial\": \"SEGURIDAD VIAL ELY-LOZ LTDA\",\r\n\t\t\"nombreFantasia\": \"SEGURIDAD VIAL ELY-LOZ LTDA\",\r\n\t\t\"tipoEmpresa\": \"LTDA\",\r\n\t\t\"direccion\": {\r\n\t\t\t\"codigoRegionIntermediario\": \"13\",\r\n\t\t\t\"codigoComunaIntermediario\": \"13501\",\r\n\t\t\t\"textoDireccion\": \"CLORINDA WILLSHOW 678\",\r\n\t\t\t\"telefonoFijo\": \"\",\r\n\t\t\t\"telefonoMovil\": \"\",\r\n\t\t\t\"email\": \"contacto@vial.cl\"\r\n\t\t},\r\n\t\t\"representanteLegal\": {\r\n\t\t\t\"rut\": \"10318329-4\",\r\n\t\t\t\"nombre\": \"SOLICITANTE KCAF002_SOLICITUDPERMISO\",\r\n\t\t\t\"direccion\": {\r\n\t\t\t\t\"codigoRegionIntermediario\": \"13\",\r\n\t\t\t\t\"codigoComunaIntermediario\": \"13501\",\r\n\t\t\t\t\"textoDireccion\": \"CLORINDA WILLSHOW 678\",\r\n\t\t\t\t\"telefonoFijo\": \"\",\r\n\t\t\t\t\"telefonoMovil\": \"\",\r\n\t\t\t\t\"email\": \"kcaF001@sol.cl\"\r\n\t\t\t}\r\n\t\t}\r\n\t},\r\n\t\"documentosAdjuntos\": [\r\n        {\r\n            \"codigoTipoDocumento\": \"EMP_CRT_VIG\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\r\n        }\r\n    ]\r\n}\r\n\r\n\r\n\r\n\r\n"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/empresa",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creacion Empresa Duplicada",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"identificadorIntermediario\": \"123456ABCDEF\",\r\n\t\"fechaHoraCreacion\": \"20/12/2018 09:36:00\",\r\n\t\"rutAnalista\": \"15919222-9\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"10703852-3\",\r\n\t\t\"nombre\": \"Pedro Ruiz\",\r\n\t\t\"email\": \"pedro.ruiz@tteruiz.cl\"\r\n\t},\r\n\t\"relacionSolicitanteEmpresa\": \"Representante Legal\",\r\n\t\"empresa\": {\r\n\t\t\"rut\": \"78966910-4\",\r\n\t\t\"razonSocial\": \"Transportes Ruiz e Hijo LTDA\",\r\n\t\t\"nombreFantasia\": \"Transportes Ruiz\",\r\n\t\t\"tipoEmpresa\": \"LTDA\",\r\n\t\t\"direccion\": {\r\n\t\t\t\"codigoRegionIntermediario\": \"13\",\r\n\t\t\t\"codigoComunaIntermediario\": \"13101\",\r\n\t\t\t\"textoDireccion\": \"Alameda 234, of. 27, piso 2\",\r\n\t\t\t\"telefonoFijo\": \"+56222222222\",\r\n\t\t\t\"telefonoMovil\": \"+56994370285\",\r\n\t\t\t\"email\": \"contacto@tteruiz.cl\"\r\n\t\t},\r\n\t\t\"representanteLegal\": {\r\n\t\t\t\"rut\": \"10703852-3\",\r\n\t\t\t\"nombre\": \"Pedro Ruiz\",\r\n\t\t\t\"direccion\": {\r\n\t\t\t\t\"codigoRegionIntermediario\": \"13\",\r\n\t\t\t\t\"codigoComunaIntermediario\": \"13101\",\r\n\t\t\t\t\"textoDireccion\": \"Alameda 234, of. 27, piso 2\",\r\n\t\t\t\t\"telefonoFijo\": \"+56222222222\",\r\n\t\t\t\t\"telefonoMovil\": \"+56994370285\",\r\n\t\t\t\t\"email\": \"pedro.ruiz@tteruiz.cl\"\r\n\t\t\t}\r\n\t\t}\r\n\t},\r\n\t\"documentosAdjuntos\": []\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/empresa",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creacion Errónea, datos inválidos",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"identificadorIntermediario\": \"123456ABCDEF\",\r\n\t\"fechaHoraCreacion\": \"20/12/2018 09:36:00\",\r\n\t\"rutAnalista\": \"15919222-9\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"10703852-3\",\r\n\t\t\"nombre\": \"Pedro Ruiz\",\r\n\t\t\"email\": \"pedro.ruiz@tteruiz.cl\"\r\n\t},\r\n\t\"relacionSolicitanteEmpresa\": \"Representante Legal\",\r\n\t\"empresa\": {\r\n\t\t\"rut\": \"78966910-4\",\r\n\t\t\"razonSocial\": \"Transportes Ruiz e Hijo LTDA\",\r\n\t\t\"nombreFantasia\": \"Transportes Ruiz\",\r\n\t\t\"tipoEmpresa\": \"LTDA\",\r\n\t\t\"direccion\": {\r\n\t\t\t\"codigoRegionIntermediario\": \"13\",\r\n\t\t\t\"codigoComunaIntermediario\": \"13101\",\r\n\t\t\t\"textoDireccion\": \"Alameda 234, of. 27, piso 2\",\r\n\t\t\t\"telefonoFijo\": \"+56222222222\",\r\n\t\t\t\"telefonoMovil\": \"+56994370285\",\r\n\t\t\t\"email\": \"contacto@tteruiz.cl\"\r\n\t\t},\r\n\t\t\"representanteLegal\": {\r\n\t\t\t\"rut\": \"10703852-3\",\r\n\t\t\t\"nombre\": \"Pedro Ruiz\",\r\n\t\t\t\"direccion\": {\r\n\t\t\t\t\"codigoRegionIntermediario\": \"13\",\r\n\t\t\t\t\"codigoComunaIntermediario\": \"13101\",\r\n\t\t\t\t\"textoDireccion\": \"Alameda 234, of. 27, piso 2\",\r\n\t\t\t\t\"telefonoFijo\": \"+56222222222\",\r\n\t\t\t\t\"telefonoMovil\": \"+56994370285\",\r\n\t\t\t\t\"email\": \"pedro.ruiz@tteruiz.cl\"\r\n\t\t\t}\r\n\t\t}\r\n\t},\r\n\t\"documentosAdjuntos\": []\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/empresa",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "1.4 Modifica datos empresa",
+					"item": [
+						{
+							"name": "1.4 Trámite Modifica Empresa",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"identificadorIntermediario\": \"KCA100002\",\n    \"fechaHoraCreacion\": \"30/01/2019 17:50:00\",\n    \"rutEmpresa\": \"76404745-1\",\n    \"rutSolicitante\": \"15330890-K\",\n    \"analista\": {\n        \"codigo\": \"kcastro\",\n        \"nombre\": \"Karyna Castro\",\n        \"codigoRegion\": \"13\"\n    },\n    \"modificaciones\": [\n        {\n            \"tipo\": 1,\n            \"descripcion\": \"Solicitantes Autorizados\",\n            \"solicitantes\": [\n                {\n                    \"rut\": \"10318329-4\",\n                    \"nombre\": \"Karyna Castro Araya\",\n                    \"relacionEmpresa\": \"Mandante\"\n                }\n            ]\n        },\n        {\n            \"tipo\": 2,\n            \"descripcion\": \"Cambio de Domicilio de Empresa\",\n            \"domicilio\": {\n                \"codigoRegionIntermediario\": \"13\",\n                \"codigoComunaIntermediario\": \"13501\",\n                \"textoDireccion\": \"NUEVO DOMICILIO EMPRESA\",\n                \"telefonoFijo\": \"999999999\",\n                \"telefonoMovil\": \"999999999\",\n                \"email\": \"contacto@pacifico.cl\"\n            }\n        },\n        {\n            \"tipo\": 3,\n            \"descripcion\": \"Cambio de Razón Social\",\n            \"razonSocial\": \"TRANSPORTES PACIFICO LIMITADA\"\n        },\n        {\n            \"tipo\": 4,\n            \"descripcion\": \"Cambio de Representante Legal\",\n            \"representanteLegal\": {\n                \"rut\": \"10318329-4\",\n                \"nombre\": \"Karyna Castro\"\n            }\n        }\n    ],\n    \"documentosAdjuntos\": [\n        {\n            \"codigoTipoDocumento\": \"EPU\",\n            \"urlDescargaDocumento\": \"https://storage.googlecloud.com/tr-1234/XYFD-Z234-02DC.pdf\"\n        },\n        {\n            \"codigoTipoDocumento\": \"CVNM\",\n            \"urlDescargaDocumento\": \"https://storage.googlecloud.com/tr-1234/ZZOP-4D5P-PZ89.pdf\"\n        },\n        {\n            \"codigoTipoDocumento\": \"CPEX\",\n            \"urlDescargaDocumento\": \"https://storage.googlecloud.com/tr-1234/KLKL-XQU7-LA04.pdf\"\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/empresa",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.4 Trámite Modifica Empresa PMI",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"identificadorIntermediario\": \"KCA20190225_1\",\n    \"fechaHoraCreacion\": \"25/02/2019 13:50:00\",\n    \"rutEmpresa\": \"76419945-6\",\n    \"rutSolicitante\": \"12950918-1\",\n    \"analista\": {\n        \"codigo\": \"kcastro\",\n        \"nombre\": \"Karyna Castro\",\n        \"codigoRegion\": \"13\"\n    },\n    \"modificaciones\": [\n        {\n            \"tipo\": 1,\n            \"descripcion\": \"Solicitantes Autorizados\",\n            \"solicitantes\": [\n                {\n                    \"rut\": \"10318329-4\",\n                    \"nombre\": \"Karyna Castro Araya\",\n                    \"relacionEmpresa\": \"Mandante\"\n                }\n            ]\n        },\n        {\n            \"tipo\": 2,\n            \"descripcion\": \"Cambio de Domicilio de Empresa\",\n            \"domicilio\": {\n                \"codigoRegionIntermediario\": \"13\",\n                \"codigoComunaIntermediario\": \"13501\",\n                \"textoDireccion\": \"NUEVO DOMICILIO EMPRESA\",\n                \"telefonoFijo\": \"123456\",\n                \"telefonoMovil\": \"99123456\",\n                \"email\": \"contacto@pmi.cl\"\n            }\n        },\n        {\n            \"tipo\": 3,\n            \"descripcion\": \"Cambio de Razón Social\",\n            \"razonSocial\": \"TRANSPORTES PACIFICO LIMITADA\"\n        },\n        {\n            \"tipo\": 4,\n            \"descripcion\": \"Cambio de Representante Legal\",\n            \"representanteLegal\": {\n                \"rut\": \"10318329-4\",\n                \"nombre\": \"Karyna Castro\"\n            }\n        }\n    ],\n    \"documentosAdjuntos\": [\n        {\n            \"codigoTipoDocumento\": \"EPU\",\n            \"urlDescargaDocumento\": \"https://storage.googlecloud.com/tr-1234/XYFD-Z234-02DC.pdf\"\n        },\n        {\n            \"codigoTipoDocumento\": \"CVNM\",\n            \"urlDescargaDocumento\": \"https://storage.googlecloud.com/tr-1234/ZZOP-4D5P-PZ89.pdf\"\n        },\n        {\n            \"codigoTipoDocumento\": \"CPEX\",\n            \"urlDescargaDocumento\": \"https://storage.googlecloud.com/tr-1234/KLKL-XQU7-LA04.pdf\"\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/empresa",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.4 Trámite Modifica Empresa Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"identificadorIntermediario\": \"KCA100002\",\n    \"fechaHoraCreacion\": \"30/01/2019 17:50:00\",\n    \"rutEmpresa\": \"76404745-1\",\n    \"rutSolicitante\": \"15330890-K\",\n    \"analista\": {\n        \"codigo\": \"kcastro\",\n        \"nombre\": \"Karyna Castro\",\n        \"codigoRegion\": \"13\"\n    },\n    \"modificaciones\": [\n        {\n            \"tipo\": 1,\n            \"descripcion\": \"Solicitantes Autorizados\",\n            \"solicitantes\": [\n                {\n                    \"rut\": \"10318329-4\",\n                    \"nombre\": \"Karyna Castro Araya\",\n                    \"relacionEmpresa\": \"Mandante\"\n                }\n            ]\n        },\n        {\n            \"tipo\": 2,\n            \"descripcion\": \"Cambio de Domicilio de Empresa\",\n            \"domicilio\": {\n                \"codigoRegionIntermediario\": \"13\",\n                \"codigoComunaIntermediario\": \"13501\",\n                \"textoDireccion\": \"NUEVO DOMICILIO EMPRESA\",\n                \"telefonoFijo\": \"999999999\",\n                \"telefonoMovil\": \"999999999\",\n                \"email\": \"contacto@pacifico.cl\"\n            }\n        },\n        {\n            \"tipo\": 3,\n            \"descripcion\": \"Cambio de Razón Social\",\n            \"razonSocial\": \"TRANSPORTES PACIFICO LIMITADA\"\n        },\n        {\n            \"tipo\": 4,\n            \"descripcion\": \"Cambio de Representante Legal\",\n            \"representanteLegal\": {\n                \"rut\": \"10318329-4\",\n                \"nombre\": \"Karyna Castro\"\n            }\n        }\n    ],\n    \"documentosAdjuntos\": [\n        {\n            \"codigoTipoDocumento\": \"EPU\",\n            \"urlDescargaDocumento\": \"https://storage.googlecloud.com/tr-1234/XYFD-Z234-02DC.pdf\"\n        },\n        {\n            \"codigoTipoDocumento\": \"CVNM\",\n            \"urlDescargaDocumento\": \"https://storage.googlecloud.com/tr-1234/ZZOP-4D5P-PZ89.pdf\"\n        },\n        {\n            \"codigoTipoDocumento\": \"CPEX\",\n            \"urlDescargaDocumento\": \"https://storage.googlecloud.com/tr-1234/KLKL-XQU7-LA04.pdf\"\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/empresa",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Consultas ",
+					"item": [
+						{
+							"name": "1.6 Consulta tipos documentos por tipo empresa",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/tiposDocumentos?codigoTipoEmpresa=LTDA",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"tiposDocumentos"
+									],
+									"query": [
+										{
+											"key": "codigoTipoEmpresa",
+											"value": "LTDA"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.5 Consulta datos Empresa",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/empresa?rutEmpresa=76.440.124-7&rutSolicitante=10318329-4",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"empresa"
+									],
+									"query": [
+										{
+											"key": "rutEmpresa",
+											"value": "76.440.124-7"
+										},
+										{
+											"key": "rutSolicitante",
+											"value": "10318329-4"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1.5 Consulta datos Empresa PMI",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/empresa?rutEmpresa=76419945-6&rutSolicitante=12950918-1",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"empresa"
+									],
+									"query": [
+										{
+											"key": "rutEmpresa",
+											"value": "76419945-6"
+										},
+										{
+											"key": "rutSolicitante",
+											"value": "12950918-1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e5381fdc-3c70-4c9e-9aa0-41706e4baeb9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "83675f84-759b-42c3-9b48-8b9a76c1e1a0",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Permiso Chile-Chile",
+			"item": [
+				{
+					"name": "2.1 Consulta Personas",
+					"item": [
+						{
+							"name": "Persona Registrada con permiso vigente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas?q={'rut'='10703852-3'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rut'='10703852-3'}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Persona Registrada con permiso vigente GALLARDO",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas?q={'rut'='18620237-6'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rut'='18620237-6'}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Persona Registrada con permiso vigente MOISES",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas?q={'rut'='8605088-9'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rut'='8605088-9'}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Persona Registrada sin permiso vigente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas?q={'rut'='10318329-4'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rut'='10318329-4'}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Persona no Registrada sin permiso vigente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas?q={'rut'='2372847-8'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rut'='2372847-8'}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "2.2 Consulta Empresa Persona",
+					"item": [
+						{
+							"name": "Empresa no registrada",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas/empresas?q={'rutSolicitante'='10703852-3', 'rutEmpresa'='78966910-4'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas",
+										"empresas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rutSolicitante'='10703852-3', 'rutEmpresa'='78966910-4'}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Consulta Empresa TRANSPACIFICO",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas/empresas?q={'rutSolicitante'='10318329-4', 'rutEmpresa'='77783210-7'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas",
+										"empresas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rutSolicitante'='10318329-4', 'rutEmpresa'='77783210-7'}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Consulta Empresa PMI",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas/empresas?q={'rutSolicitante'='12950918-1, 'rutEmpresa'='76419945-6'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas",
+										"empresas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rutSolicitante'='12950918-1, 'rutEmpresa'='76419945-6'}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Emrpesa registrada, usuario autorizado sin permiso vigente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas/empresas?q={'rutSolicitante'='10318329-4', 'rutEmpresa'='99599210-9'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas",
+										"empresas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rutSolicitante'='10318329-4', 'rutEmpresa'='99599210-9'}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Empresa registrada, usuario no autorizado",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas/empresas?q={'rutSolicitante'='16213608-9', 'rutEmpresa'='78966911-4'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas",
+										"empresas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rutSolicitante'='16213608-9', 'rutEmpresa'='78966911-4'}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Empresa Registrada, Usuario Autorizado y Tiene Permiso Vigente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas/empresas?q={'rutSolicitante'='12950918-1', 'rutEmpresa'='76419945-6'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas",
+										"empresas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rutSolicitante'='12950918-1', 'rutEmpresa'='76419945-6'}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Empresa Registrada, Usuario Autorizado y Sin Permiso Vigente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas/empresas?q={'rutSolicitante'='16213608-9', 'rutEmpresa'='78966911-4'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas",
+										"empresas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rutSolicitante'='16213608-9', 'rutEmpresa'='78966911-4'}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Consulta Empresa TRANSPORTES P.M.L",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/personas/empresas?q={'rutSolicitante'='12950918-1', 'rutEmpresa'='76419945-6'}",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"personas",
+										"empresas"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "{'rutSolicitante'='12950918-1', 'rutEmpresa'='76419945-6'}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "2.3 Validacion de flota",
+					"item": [
+						{
+							"name": "Todas OK",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"rutSujeto\": \"78966910-4\",\n\t\"ppus\": [\"KXZD49\", \"KXZD50\", \"XXXX11\"]\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Todas OK Copy",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"rutSujeto\": \"8605088-9\",\r\n\t\"ppus\": [[\"NT5510\"]]\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Prueba Persona F001",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"rutSujeto\": \"11961665-4\",\n\t\"ppus\": [\"DHWD35\", \"GFPR68\", \"CT6661\"]\n}\n"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Prueba Empresa F002",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"rutSujeto\": \"77818950-K\",\n\t\"ppus\": [\"CXGK60\"]\n}\n"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Prueba TRANSPORTES P.M.L. LIMITADA",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"rutSujeto\": \"76419945-6\",\n\t\"ppus\": [[\"JFSL68\"],[\"JFSL69\"],[\"JJJD54\"],[\"JKTY55\"],[\"HDVD21\"],[\"HDVD22\"],[\"HDVD23\"],[\"HTSZ82\"],[\"HTSZ83\"],[\"HSTP80\"],[\"HSTP81\"]]\n\t\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Prueba PPUs duplicadas",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"rutSujeto\": \"76419945-6\",\n\t\"ppus\": [\"JFSL68\",\"JFSL69\",\"JJJD54\",\"JKTY55\",\"HDVD21\",\"HDVD22\",\"HDVD23\",\"HTSZ82\",\"HTSZ83\",\"HSTP80\",\"HSTP81\"]\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Valida Flota TRANSPACIFICO",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"rutSujeto\": \"76404745-1\",\n\t\"ppus\": [\n\t\t[ \"PC3408\" ],\n        [ \"BXFJ62\" ],\n        [ \"KA1953\" ],\n        [ \"JD8245\" ],\n        [ \"GRJB47\" ],\n        [ \"JD1571\" ],\n        [ \"JK1266\" ]\n   ]\n}\n"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Valida Flota PMI",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"rutSujeto\": \"76419945-6\",\n\t\"ppus\": [\n[ \"JFSL68\" ],[ \"JFSL69\" ],[ \"JJJD54\" ],[ \"JKTY55\" ],[ \"HDVD21\" ],[ \"HDVD22\" ],[ \"HDVD23\" ],[ \"HTSZ82\" ],\n[ \"HTSZ83\" ],[ \"HSTP80\" ],[ \"HSTP81\" ],[ \"GRFL35\" ],[ \"GRFL36\" ],[ \"HGJH96\" ],[ \"HGJH97\" ],[ \"JP2224\" ],\n[ \"JP2225\" ],[ \"GRGH59\" ],[ \"GRGH60\" ],[ \"GRDT35\" ],[ \"GRDT36\" ]\t\t\n   ]\n}\n\n\n"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Prueba  Persona Natural",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "\t{\n\t\"rutSujeto\": \"11961665-4\",\n\t\"ppus\": [\n\t\t[ \"GFPR68\" ]\n       ]\n}\n"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Valida Flota  Persona Natural J.VICENCIO",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "\t{\n\t\"rutSujeto\": \"2372847-8\",\n\t\"ppus\": [\n\t\t[ \"CG4186\" ]\n       ]\n}\n"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Valida Flota  Persona Natural GALLARDO",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "\t{\n\t\"rutSujeto\": \"18620237-6\",\n\t\"ppus\": [\n\t\t[ \"NT5785\" ]\n       ]\n}\n"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Valida Flota  Persona Natural ROJO",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "\t\t{\n\t\t\"rutSujeto\": \"7874033-7\",\n\t\t\"ppus\": [\n\t\t\t[ \"CGJV47 \" ]\n\t       ]\n\t}\n"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Valida Flota  Persona Natural MOISES FUENZALIDA",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "\t{\n\t\"rutSujeto\": \"8605088-9\",\n\t\"ppus\": [\n\t\t[\"NT5509\"],\n\t\t[\"RP3987\"]\n       ]\n}\n\n\n"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Todas Rechazadas",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"rutSujeto\": \"10519039-5\",\r\n\t\"ppus\": [\r\n                    [\r\n                        \"KXZD49\"\r\n                       \r\n                    ],\r\n                    [\r\n                        \"KXZD50\"\r\n                    ],\r\n                    [\r\n                        \"XXXX11\"\r\n                    ]\r\n                ]\r\n}\r\n\r\n"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/flota/validacion",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"flota",
+										"validacion"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "2.4 Creación Solicitud trámite chile-chile",
+					"item": [
+						{
+							"name": "Creación solicitud como persona",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"identificadorIntermediario\": \"KCA_03013\",\n    \"fechaHoraCreacion\": \"03/02/2019 11:29:56\",\n    \"solicitante\": {\n        \"rut\": \"21817498-1\",\n        \"nombre\": \"FERNANDA VENEGAS ALBORNOZ\",\n        \"codigoRegion\": \"01\",\n        \"codigoComuna\": \"01\",\n        \"email\": \"angela.albornoz1491@gmail.com\", \n        \"direccion\": \"cardenal oviedo 911\"\n    },\n    \"tipoSujeto\": \"persona\",\n    \"sujeto\": {\n        \"rut\": \"21817498-1\",\n        \"nombre\": \"FERNANDA VENEGAS ALBORNOZ\"\n    }\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud/persona",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud",
+										"persona"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creación solicitud como persona MOISES",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n  \"identificadorIntermediario\": \"KCA_200\",\r\n\t\"fechaHoraCreacion\": \"22/02/2019 11:29:56\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"8605088-9\",\r\n\t\t\"nombre\": \"MOISES FUENZALIDA\"\r\n\t},\r\n\t\"tipoSujeto\": \"persona\",\r\n\t\"sujeto\": {\r\n\t\t\"rut\": \"8605088-9\",\r\n\t\t\"nombre\": \"MOISES FUENZALIDA\",\r\n\t\t \"email\": \"moises@mo.cl\",\r\n  \"direccion\": {\r\n          \"codigoRegion\": \"03\",\r\n          \"codigoComuna\": \"03101\",\r\n          \"textoDireccion\": \"Lindero uno 345, depto 23\"\r\n         }\r\n\r\n\t},\r\n\t\"relacionSolicitanteSujeto\": \"persona\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creación solicitud como persona GALLARDO",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n  \"identificadorIntermediario\": \"KCA_600\",\r\n\t\"fechaHoraCreacion\": \"22/02/2019 11:29:56\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"18620237-6\",\r\n\t\t\"nombre\": \"DAVID ALEXIS GALLARDO ASTETE\"\r\n\t},\r\n\t\"tipoSujeto\": \"persona\",\r\n\t\"sujeto\": {\r\n\t\t\"rut\": \"18620237-6\",\r\n\t\t\"nombre\": \"DAVID ALEXIS GALLARDO ASTETE\",\r\n\t\t \"email\": \"david@gallardo.cl\",\r\n  \"direccion\": {\r\n          \"codigoRegion\": \"13\",\r\n          \"codigoComuna\": \"Santiago\",\r\n          \"textoDireccion\": \"Alameda 234, of. 27, piso 2\"\r\n         }\r\n\r\n\t},\r\n\t\"relacionSolicitanteSujeto\": \"persona\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creación solicitud como persona F001",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n  \"identificadorIntermediario\": \"KCA10005\",\r\n\t\"fechaHoraCreacion\": \"05/02/2019 14:29:56\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"11961665-4\",\r\n\t\t\"nombre\": \"NELSON HUMBERTO ALBORNOZ CONTRERAS\"\r\n\t},\r\n\t\"tipoSujeto\": \"persona\",\r\n\t\"sujeto\": {\r\n\t\t\"rut\": \"11961665-4\",\r\n\t\t\"nombre\": \"NELSON HUMBERTO ALBORNOZ CONTRERAS\"\r\n\t},\r\n\t\"relacionSolicitanteSujeto\": \"persona\"\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creación solicitud como empresa",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n  \"identificadorIntermediario\": \"KCA999\",\r\n\t\"fechaHoraCreacion\": \"13/02/2019 12:05:12\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"10318329-4\",\r\n\t\t\"nombre\": \"CLARA BLANCA\"\r\n\t},\r\n\t\"tipoSujeto\": \"Empresa\",\r\n\t\"sujeto\": {\r\n\t\t\"rut\": \"76440124-7\"\r\n\t}\r\n}"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/solicitud/empresa",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creación solicitud como empresa - TRANSPACIFICO",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n  \"identificadorIntermediario\": \"KCA_1400\",\r\n\t\"fechaHoraCreacion\": \"14/02/2019 12:05:12\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"15330890-K\",\r\n\t\t\"nombre\": \"MARIA ISABEL ESCUTI\"\r\n\t},\r\n\t\"tipoSujeto\": \"Empresa\",\r\n\t\"sujeto\": {\r\n\t\t\"rut\": \"76404745-1\",\r\n\t\t\"nombre\": \"TRANSPACIFICO LIMITADA\"\r\n\t},\r\n\t\"relacionSolicitanteSujeto\": \"Representante Legal\"\r\n}"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/solicitud",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creación solicitud como empresa PMI",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n  \"identificadorIntermediario\": \"KCA_01584\",\r\n\t\"fechaHoraCreacion\": \"14/02/2019 12:05:12\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"12950918-1\",\r\n\t\t\"nombre\": \"JANI ARAYA BRAVO\"\r\n\t},\r\n\t\"tipoSujeto\": \"Empresa\",\r\n\t\"sujeto\": {\r\n\t\t\"rut\": \"76419945-6\",\r\n\t\t\"nombre\": \"TRANSPORTES P.M.L. LIMITADA\",\r\n\t\t\"codigoRegion\": \"05\"\r\n\t},\r\n\t\"relacionSolicitanteSujeto\": \"Representante Legal\"\r\n\t\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud/empresa",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creación solicitud como empresa F002",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n  \"identificadorIntermediario\": \"KCAF002_SOLICITUDPERMISO\",\r\n\t\"fechaHoraCreacion\": \"05/02/2019 15:05:12\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"10318329-4\",\r\n\t\t\"nombre\": \"SOLICITANTE KCAF002_SOLICITUDPERMISO\"\r\n\t},\r\n\t\"tipoSujeto\": \"Empresa\",\r\n\t\"sujeto\": {\r\n\t\t\"rut\": \"77818950-K\",\r\n\t\t\"nombre\": \"SEGURIDAD VIAL ELY-LOZ LTDA\"\r\n\t},\r\n\t\"relacionSolicitanteSujeto\": \"Representante Legal\"\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creación solicitud como empresa F002, empresa no registrada",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n  \"identificadorIntermediario\": \"KCAF002_SOLICITUDPERMISO\",\r\n\t\"fechaHoraCreacion\": \"05/02/2019 15:05:12\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"10318329-4\",\r\n\t\t\"nombre\": \"SOLICITANTE KCAF002_SOLICITUDPERMISO\"\r\n\t},\r\n\t\"tipoSujeto\": \"Empresa\",\r\n\t\"sujeto\": {\r\n\t\t\"rut\": \"7818950-K\",\r\n\t\t\"nombre\": \"SEGURIDAD VIAL ELY-LOZ LTDA\"\r\n\t},\r\n\t\"relacionSolicitanteSujeto\": \"Representante Legal\"\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creación solicitud como empresa F002, solicitante no autorizado",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n\t  \"identificadorIntermediario\": \"KCAF002_SOLICITUDPERMISO\",\r\n\t\"fechaHoraCreacion\": \"05/02/2019 15:05:12\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"10318329-4\",\r\n\t\t\"nombre\": \"SOLICITANTE KCAF002_SOLICITUDPERMISO\"\r\n\t},\r\n\t\"tipoSujeto\": \"Empresa\",\r\n\t\"sujeto\": {\r\n\t\t\"rut\": \"77818950-K\",\r\n\t\t\"nombre\": \"SEGURIDAD VIAL ELY-LOZ LTDA\"\r\n\t},\r\n\t\"relacionSolicitanteSujeto\": \"Representante Legal\"\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creación solicitud como empresa solicitante no autorizado",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n  \"identificadorIntermediario\": \"KCAF003_SOLICITUDPERMISO\",\r\n\t\"fechaHoraCreacion\": \"05/02/2019 15:05:12\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"17132473-4\",\r\n\t\t\"nombre\": \"SOLICITANTE KCAF002_SOLICITUDPERMISO\"\r\n\t},\r\n\t\"tipoSujeto\": \"Empresa\",\r\n\t\"sujeto\": {\r\n\t\t\"rut\": \"76404745-1\",\r\n\t\t\"nombre\": \"TRANSPORTES PACIFICO LIMITADA\"\r\n\t},\r\n\t\"relacionSolicitanteSujeto\": \"Representante Legal\"\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creación solicitud Duplicado",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n  \"identificadorIntermediario\": \"123456ABCDEF\",\r\n\t\"fechaHoraCreacion\": \"20/12/2018 10:45:56\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"10703852-3\",\r\n\t\t\"nombre\": \"Pedro Ruiz\"\r\n\t},\r\n\t\"tipoSujeto\": \"Empresa\",\r\n\t\"sujeto\": {\r\n\t\t\"rut\": \"78964910-4\",\r\n\t\t\"nombre\": \"Transporte Ruiz e Hijos LTDA\"\r\n\t},\r\n\t\"relacionSolicitanteSujeto\": \"Representante Legal\"\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Error de envío",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"property1\": \"test invalido\"\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "prueba",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n  \"identificadorIntermediario\": \"123456ABCDEF\",\r\n\t\"fechaHoraCreacion\": \"20/12/2018 10:45:56\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"10703852-3\",\r\n\t\t\"nombre\": \"Pedro Ruiz\"\r\n\t},\r\n\t\"tipoSujeto\": \"Empresa\",\r\n\t\"sujeto\": {\r\n\t\t\"rut\": \"78964910-4\",\r\n\t\t\"nombre\": \"Transporte Ruiz e Hijos LTDA\"\r\n\t}\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"solicitud"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "2.5 Creación Trámite Chile-Chile",
+					"item": [
+						{
+							"name": "Creacion Trámite",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"identificadorIntermediario\": \"KCA_01976\",\n    \"fechaHoraCreacion\": \"03/04/2019 12:45:56\",\n    \"solicitante\": {\n        \"rut\": \"16208667-7\",\n        \"nombre\": \"francisco venegas rojas\",\n        \"email\": \"frvenegasrojas@gmail.com\"\n    },\n    \"codigoAnalista\": \"kcastro\",\n    \"nombreAnalista\": \"Karyna\",\n    \"codigoRegion\": \"14\",\n    \"flotaFinal\": [\n        {\t\"ppu\":\"TK7726\",\n            \"tipo\": \"AUTOMOVIL\",\n            \"marca\": \"AUDI\",\n            \"modelo\": \"a3\",\n            \"anno\": 2000,\n            \"carroceria\": \"WAUZZZ8LZYA024004\",\n            \"ejes\": 0,\n            \"capacidadCargaToneladas\": 2,\n            \"fechaVencimiento\": \"20/04/2019\",\n            \"nombrePropietario\": \"MARTA ROJAS\",\n            \"fechaVencimientoLS\":\"\",\n            \"observacion\":\"\"\n        }\n    ],\n    \"documentosAdjuntos\": [],\n    \"urlCallback\": \"https://simple.com/1949\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/permiso/persona",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"permiso",
+										"persona"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creacion Trámite TRANSPACIFICO",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"identificadorIntermediario\": \"KCA_01584\",\r\n\t\"fechaHoraCreacion\": \"14/02/2019 12:45:56\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"15330890-K\",\r\n\t\t\"nombre\": \"MARIA ISABEL ESCUTI\",\r\n\t\t\"email\": \"maria@pacifico.cl\"\r\n\t},\r\n    \"codigoAnalista\": \"kcastro\",\r\n    \"nombreAnalista\": \"Karyna\",\r\n    \"codigoRegion\": \"14\",\r\n\t\"relacionSolicitanteEmpresa\": \"Representante Legal\",\r\n  \t\"empresa\": {\r\n\t\t\"rut\": \"76404745-1\"\r\n\t},\r\n\t\"flotaFinal\": [\r\n\t\t  {\r\n            \"ppu\": \"PC3408\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"T 113 H 6X4 SC 39\",\r\n            \"anno\": \"1996\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"3258622\",\r\n            \"ejes\": \"Sin dato\",\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"30/04/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TRANSPACIFICO LTDA\",\r\n            \"rutPropietario\": \"76404745-1\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\"\r\n        },\r\n        {\r\n            \"ppu\": \"BXFJ62\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"144\",\r\n            \"anno\": \"1999\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"XLER4X20004369331\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 5,\r\n            \"fechaVencimientoRT\": \"13/03/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TRANSPACIFICO LTDA\",\r\n            \"rutPropietario\": \"76404745-1\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\"\r\n        },\r\n        {\r\n            \"ppu\": \"KA1953\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"MACK\",\r\n            \"modelo\": \"MH 613\",\r\n            \"anno\": \"1992\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"MH613-12351\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 5,\r\n            \"fechaVencimientoRT\": \"04/12/2016\",\r\n            \"estadoRT\": \"R\",\r\n            \"nombrePropietario\": \"RODOLFO CEFERINO AVECILLA\",\r\n            \"rutPropietario\": \"22051716-0\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:MARTA RIVAS SCHULZ, causa:0000000000, comuna:LOS ANDES, documento:CONTRATO PRIVADO, fecReper:20171222, fechaDoc:20170828, naturaleza:ARRENDAMIENTO, numReper:7448, repertorio:LOS ANDES, titulo:TITULO MERA TENENCIA\",\r\n            \"observacion\": \"Revisión Técnica Rechazada o Vencida, debe adjuntar Certificado de RT para este vehiculo\"\r\n        },\r\n        {\r\n            \"ppu\": \"JD8245\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"GOREN\",\r\n            \"modelo\": \"SR 130MTS\",\r\n            \"anno\": \"1997\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9234\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"30/04/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TRANSPACIFICO LTDA\",\r\n            \"rutPropietario\": \"76404745-1\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:ARG TRAILERS LTDA, autorizante:WLADIMIR SCHRAMM LOPEZ, causa:00001740, comuna:SAN MIGUEL, documento:CONTRATO PRIVADO, fecReper:20160401, fechaDo:2016033,naturaleza:PROHIB ACTOS, numReper:9202, repertorio:VITACURA, titulo:PROHIBICION DE ENAJENAR\"\r\n        },\r\n        {\r\n            \"ppu\": \"GRJB47\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"GOREN\",\r\n            \"modelo\": \"SR 3M 30 12.50\",\r\n            \"anno\": \"2017\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"LJRC1438XGK0W6467\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"13/03/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TRANSPACIFICO LTDA\",\r\n            \"rutPropietario\": \"76404745-1\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:ARG TRAILERS LIMITADA, autorizante:SERGIO JARA CATALAN, causa:, comuna:SANTIAGO, documento:CONTRATO PRIVADO, fecReper:20161212, fechaDoc:20161207, naturaleza:PROHIB ACTOS, numReper:34180, repertorio:VITACURA, titulo:PROHIBICION DE ENAJENAR\"\r\n        },\r\n        {\r\n            \"ppu\": \"JD1571\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"GREAT DANE\",\r\n            \"modelo\": \"NO REGISTRA\",\r\n            \"anno\": \"1986\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"S/N\",\r\n            \"ejes\": 2,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"04/12/2016\",\r\n            \"estadoRT\": \"R\",\r\n            \"nombrePropietario\": \"RODOLFO CEFERINO AVECILLA\",\r\n            \"rutPropietario\": \"22051716-0\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:MARTA RIVAS SCHULZ, causa:0000000000, comuna:LOS ANDES, documento:CONTRATO PRIVADO, fecReper:20171129, fechaDoc:20170828, naturaleza:ARRENDAMIENTO, numReper:6954, repertorio:LOS ANDES, titulo:TITULO MERA TENENCIA\",\r\n            \"observacion\": \"Revisión Técnica Rechazada o Vencida, debe adjuntar Certificado de RT para este vehiculo\"\r\n        },\r\n        {\r\n            \"ppu\": \"JK1266\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"LA VARA\",\r\n            \"modelo\": \"RAMPLA PLANA\",\r\n            \"anno\": \"2010\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"RSA-046\",\r\n            \"ejes\": 2,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"10/02/2012\",\r\n            \"estadoRT\": \"R\",\r\n            \"nombrePropietario\": \"RODOLFO CEFERINO AVECILLA\",\r\n            \"rutPropietario\": \"22051716-0\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:MARTA RIVAS SCHULZ, causa:0000000000, comuna:LOS ANDES, documento:CONTRATO PRIVADO, fecReper:20171129, fechaDoc:20170828, naturaleza:ARRENDAMIENTO, numReper:6955, repertorio:LOS ANDES, titulo:TITULO MERA TENENCIA\",\r\n            \"observacion\": \"Revisión Técnica Rechazada o Vencida, debe adjuntar Certificado de RT para este vehiculo\"\r\n        }\r\n\t],\r\n\t\"documentosAdjuntos\": [],\r\n    \"urlCallback\": \"https://simple.com/1234\"\r\n}"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/permiso/empresa",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"permiso",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creacion Trámite MOLINA",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"identificadorIntermediario\": \"KCA_01528\",\n    \"fechaHoraCreacion\": \"10/04/2019 12:45:56\",\n    \"solicitante\": {\n        \"rut\": \"10318329-4\",\n        \"nombre\": \"CLARA BLANCA\",\n        \"email\": \"maria@molina.cl\"\n    },\n    \"codigoAnalista\": \"kcastro\",\n    \"nombreAnalista\": \"Karyna\",\n    \"codigoRegion\": \"14\",\n    \"empresa\": {\n        \"rut\": \"77783210-7\"\n    },\n    \"flotaFinal\": [\n        {\n            \"ppu\": \"CGHF10\",\n            \"tipo\": \"TRACTOCAMION\",\n            \"marca\": \"VOLVO\",\n            \"modelo\": \"VM\",\n            \"anno\": 2010,\n            \"carroceria\": \"VOLVO\",\n            \"chasis\": \"93KK0E0A9AE120215\",\n            \"numeroMotor\": \"F1A038522\",\n            \"ejes\": 2,\n            \"capacidadCargaToneladas\": 0,\n            \"fechaVencimientoRT\": \"14/09/2019\",\n            \"estadoRT\": \"A\",\n            \"nombrePropietario\": \"COMERCIAL MOLINA Y MOLINA LIMITADA\",\n            \"rutPropietario\": \"77783210-7\",\n            \"fechaVencimientoLS\": \"\",\n            \"limitacion\": \"\",\n            \"tipoid\": \"1\",\n            \"identificador\": \"Sin Dato\",\n            \"propietario\": \"COMERCIAL MOLINA Y MOLINA LIMITADA\",\n            \"toneladas\": \"11.0\"\n        }\n    ],\n    \"documentosAdjuntos\": [\n        {\n            \"codigoTipoDocumento\": \"VEH_RT\",\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\n        },\n        {\n            \"codigoTipoDocumento\": \"VEH_AUT\",\n            \"urlDescargaDocumento\": \"\"\n        },\n        {\n            \"codigoTipoDocumento\": \"VEH_CLS\",\n            \"urlDescargaDocumento\": \"\"\n        },\n        {\n            \"codigoTipoDocumento\": \"OTROS\",\n            \"urlDescargaDocumento\": \"\"\n        }\n    ],\n    \"urlCallback\": \"https://simple.com/1234\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/permiso/empresa",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"permiso",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creacion Trámite PMI",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"identificadorIntermediario\": \"KCA_PMI_1\",\r\n\t\"fechaHoraCreacion\": \"14/02/2019 12:45:56\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"12950918-1\",\r\n\t\t\"nombre\": \"JANI ARAYA BRAVO\",\r\n\t\t\"email\": \"jani@pmi.cl\"\r\n\t},\r\n    \"codigoAnalista\": \"analista_dos\",\r\n    \"nombreAnalista\": \"analista_dos\",\r\n    \"codigoRegion\": \"03\",\r\n\t\"relacionSolicitanteEmpresa\": \"Representante Legal\",\r\n\t\"empresa\": {\r\n\t\t\"rut\": \"76419945-6\",\r\n\t\t\"razonSocial\": \"TRANSPORTES P.M.L. LIMITADA\",\r\n\t\t\"nombreFantasia\": \"TRANS PMI\",\r\n\t\t\"tipoEmpresa\": \"LTDA\",\r\n\t\t\"direccion\": {\r\n\t\t\t\"codigoRegionIntermediario\": \"05\",\r\n\t\t\t\"codigoComunaIntermediario\": \"05301\",\r\n\t\t\t\"textoDireccion\":\"CALLE UGALDE 71 COMUNA DE MELIPILLA\",\r\n\t\t\t\"telefonoFijo\": \"\",\r\n\t\t\t\"telefonoMovil\": \"\",\r\n\t\t\t\"email\": \"contacto@pmi.cl\"\r\n\t\t},\r\n\t\t\"representanteLegal\": {\r\n\t\t\t\"rut\": \"12950918-1\",\r\n\t\t\t\"nombre\": \"JANI ARAYA BRAVO\",\r\n\t\t\t\"direccion\": {\r\n\t\t\t\t\"codigoRegionIntermediario\": \"05\",\r\n\t\t\t\t\"codigoComunaIntermediario\": \"05301\",\r\n\t\t\t\t\"textoDireccion\": \"PTO TERRETRE  PISO3 OF 334, LOS ANDES\",\r\n\t\t\t\t\"telefonoFijo\": \"\",\r\n\t\t\t\t\"telefonoMovil\": \"\",\r\n\t\t\t\t\"email\": \"jani@pmi.cl\"\r\n\t\t\t}\r\n\t\t}\r\n\t},\r\n\t\"flotaFinal\": [\r\n\t\t    {\r\n            \"ppu\": \"JFSL68\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"R480A\",\r\n            \"anno\": \"2017\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9BSR6X200H3894188\",\r\n            \"ejes\": \"Sin dato\",\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"20/03/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TRANSPORTES P.M.L. LIMITADA\",\r\n            \"rutPropietario\": \"76419945-6\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\"\r\n        },\r\n        {\r\n            \"ppu\": \"JFSL69\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"R480A\",\r\n            \"anno\": \"2017\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9BSR6X200H3894233\",\r\n            \"ejes\": \"Sin dato\",\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"22/03/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TRANSPORTES P.M.L. LIMITADA\",\r\n            \"rutPropietario\": \"76419945-6\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\"\r\n        },\r\n        {\r\n            \"ppu\": \"JJJD54\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"R480A\",\r\n            \"anno\": \"2017\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9BSR6X200H3897039\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 5,\r\n            \"fechaVencimientoRT\": \"01/08/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TRANSPORTES P.M.L. LIMITADA\",\r\n            \"rutPropietario\": \"76419945-6\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\"\r\n        },\r\n        {\r\n            \"ppu\": \"JKTY55\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"R480A\",\r\n            \"anno\": \"2017\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9BSR6X200H3896841\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 5,\r\n            \"fechaVencimientoRT\": \"29/07/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TRANSPORTES P.M.L. LIMITADA\",\r\n            \"rutPropietario\": \"76419945-6\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\"\r\n        },\r\n        {\r\n            \"ppu\": \"HDVD21\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"G360A\",\r\n            \"anno\": \"2015\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9BSG6X200F3871651\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 5,\r\n            \"fechaVencimientoRT\": \"18/08/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"SCANIA FINANCE CHILE S.A.\",\r\n            \"rutPropietario\": \"76574810-0\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:HUMBERTO QUEZADA MORENO, causa:0000004398, comuna:SANTIAGO, documento:ESCRITURA PUBLICA, fecReper:20150415, fechaDoc:20150327, naturaleza:ARRENDAMIENTO, numReper:1073, repertorio:LO PRADO, titulo:TITULO MERA TENENCIA\"\r\n        },\r\n        {\r\n            \"ppu\": \"HDVD22\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"G360A\",\r\n            \"anno\": \"2015\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9BSG6X200F3871647\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 5,\r\n            \"fechaVencimientoRT\": \"19/08/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"SCANIA FINANCE CHILE S.A.\",\r\n            \"rutPropietario\": \"76574810-0\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:HUMBERTO QUEZADA MORENO, causa:0000004398, comuna:SANTIAGO, documento:ESCRITURA PUBLICA, fecReper:20150415, fechaDoc:20150327, naturaleza:LEASING, numReper:1072, repertorio:LO PRADO, titulo:TITULO MERA TENENCIA\"\r\n        },\r\n        {\r\n            \"ppu\": \"HDVD23\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"G360A\",\r\n            \"anno\": \"2015\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9BSG6X200F3873334\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 5,\r\n            \"fechaVencimientoRT\": \"22/02/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"SCANIA FINANCE CHILE S.A.\",\r\n            \"rutPropietario\": \"76574810-0\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:HUMBERTO QUEZADA MORENO, causa:0000004398, comuna:SANTIAGO, documento:ESCRITURA PUBLICA, fecReper:20150415, fechaDoc:20150327, naturaleza:LEASING, numReper:1074, repertorio:LO PRADO, titulo:TITULO MERA TENENCIA\"\r\n        },\r\n        {\r\n            \"ppu\": \"HTSZ82\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"R440A\",\r\n            \"anno\": \"2016\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9BSR6X200G3883750\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 5,\r\n            \"fechaVencimientoRT\": \"17/06/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TANNER LEASING SA\",\r\n            \"rutPropietario\": \"96912590-0\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:MARIA SOLEDAD SANTOS, causa:0000000035, comuna:MELIPILLA, documento:ESCRITURA PUBLICA, fecReper:20160202, fechaDoc:20160111, naturaleza:ARRENDAMIENTO, numReper:5321, repertorio:LO BARNECHEA, titulo:TITULO MERA TENENCIA\"\r\n        },\r\n        {\r\n            \"ppu\": \"HTSZ83\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"R440A\",\r\n            \"anno\": \"2016\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9BSR6X200G3883505\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 5,\r\n            \"fechaVencimientoRT\": \"17/07/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TANNER LEASING SA\",\r\n            \"rutPropietario\": \"96912590-0\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:MARIA SOLEDAD SANTOS, causa:0000000035, comuna:MELIPILLA, documento:ESCRITURA PUBLICA, fecReper:20160202, fechaDoc:20160111, naturaleza:ARRENDAMIENTO, numReper:5323, repertorio:LO BARNECHEA, titulo:TITULO MERA TENENCIA\"\r\n        },\r\n        {\r\n            \"ppu\": \"HSTP80\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"R440A\",\r\n            \"anno\": \"2016\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9BSR6X200G3883510\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 5,\r\n            \"fechaVencimientoRT\": \"02/07/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"BANCO INTERNACIONAL\",\r\n            \"rutPropietario\": \"97011000-3\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:PATRICIO RABY BENAVENTE, causa:0000001192, comuna:SANTIAGO, documento:ESCRITURA PUBLICA, fecReper:20160212, fechaDoc:20160129, naturaleza:LEASING, numReper:1530, repertorio:ESTACIÓN CENTRAL, titulo:TITULO MERA TENENCIA\"\r\n        },\r\n        {\r\n            \"ppu\": \"HSTP81\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"R440A\",\r\n            \"anno\": \"2016\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9BSR6X200G3883503\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 5,\r\n            \"fechaVencimientoRT\": \"10/06/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"BANCO INTERNACIONAL\",\r\n            \"rutPropietario\": \"97011000-3\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:PATRICIO RABY BENAVENTE, causa:0000001192, comuna:SANTIAGO, documento:ESCRITURA PUBLICA, fecReper:20160212, fechaDoc:20160129, naturaleza:LEASING, numReper:1528, repertorio:ESTACIÓN CENTRAL, titulo:TITULO MERA TENENCIA\"\r\n        },\r\n        {\r\n            \"ppu\": \"GRFL35\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"LIBRELATO\",\r\n            \"modelo\": \"CRBAENI2 3E\",\r\n            \"anno\": \"2017\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"97T0BN643H2000526\",\r\n            \"ejes\": \"Sin dato\",\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"20/03/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TRANSPORTES P.M.L. LIMITADA\",\r\n            \"rutPropietario\": \"76419945-6\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\"\r\n        },\r\n        {\r\n            \"ppu\": \"GRFL36\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"LIBRELATO\",\r\n            \"modelo\": \"CRBAENI2 3E\",\r\n            \"anno\": \"2017\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"97T0BN643H2000525\",\r\n            \"ejes\": \"Sin dato\",\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"22/03/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TRANSPORTES P.M.L. LIMITADA\",\r\n            \"rutPropietario\": \"76419945-6\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\"\r\n        },\r\n        {\r\n            \"ppu\": \"HGJH96\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"LIBRELATO\",\r\n            \"modelo\": \"CRBAEN 12 3E\",\r\n            \"anno\": \"2017\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"97T0BN643H2000517\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"29/07/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TRANSPORTES P.M.L. LIMITADA\",\r\n            \"rutPropietario\": \"76419945-6\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\"\r\n        },\r\n        {\r\n            \"ppu\": \"HGJH97\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"LIBRELATO\",\r\n            \"modelo\": \"CRBAEN 12 3E\",\r\n            \"anno\": \"2017\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"97T0BN643H2000518\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"01/08/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TRANSPORTES P.M.L. LIMITADA\",\r\n            \"rutPropietario\": \"76419945-6\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\"\r\n        },\r\n        {\r\n            \"ppu\": \"JP2224\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"RANDON\",\r\n            \"modelo\": \"SR BA GR 03 40\",\r\n            \"anno\": \"2015\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9ADB0983FFM393648\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"19/08/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"SCANIA FINANCE CHILE S.A.\",\r\n            \"rutPropietario\": \"76574810-0\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:IVAN TORREALBA, causa:0439800000, comuna:SANTIAGO, documento:ESCRITURA PUBLICA, fecReper:20150702, fechaDoc:20150327, naturaleza:LEASING, numReper:5904, repertorio:ESTACIÓN CENTRAL, titulo:TITULO MERA TENENCIA\"\r\n        },\r\n        {\r\n            \"ppu\": \"JP2225\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"RANDON\",\r\n            \"modelo\": \"SR BA GR 03 40\",\r\n            \"anno\": \"2015\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9ADB0983FFM393647\",\r\n            \"ejes\": \"Sin dato\",\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"17/02/2019\",\r\n            \"estadoRT\": \"R\",\r\n            \"nombrePropietario\": \"SCANIA FINANCE CHILE S.A.\",\r\n            \"rutPropietario\": \"76574810-0\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:IVAN TORREALBA, causa:0000004398, comuna:SANTIAGO, documento:ESCRITURA PUBLICA, fecReper:20150702, fechaDoc:20150327, naturaleza:LEASING, numReper:5907, repertorio:ESTACIÓN CENTRAL, titulo:TITULO MERA TENENCIA\",\r\n            \"observacion\": \"Revisión Técnica Rechazada o Vencida, debe adjuntar Certificado de RT para este vehiculo\"\r\n        },\r\n        {\r\n            \"ppu\": \"GRGH59\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"RANDON\",\r\n            \"modelo\": \"SR BA GR 03 40\",\r\n            \"anno\": \"2016\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9ADB0953FGM397534\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"17/06/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TANNER LEASING SA\",\r\n            \"rutPropietario\": \"96912590-0\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:MARIA SOLEDAD SANTOS, causa:0000000035, comuna:MELIPILLA, documento:ESCRITURA PUBLICA, fecReper:20160202, fechaDoc:20160111, naturaleza:ARRENDAMIENTO, numReper:5327, repertorio:LO BARNECHEA, titulo:TITULO MERA TENENCIA\"\r\n        },\r\n        {\r\n            \"ppu\": \"GRGH60\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"RANDON\",\r\n            \"modelo\": \"SR BA GR 03 40\",\r\n            \"anno\": \"2016\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9ADB0953FGM397532\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"17/07/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"TANNER LEASING SA\",\r\n            \"rutPropietario\": \"96912590-0\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:MARIA SOLEDAD SANTOS, causa:0000000035, comuna:MELIPILLA, documento:ESCRITURA PUBLICA, fecReper:20160202, fechaDoc:20160111, naturaleza:ARRENDAMIENTO, numReper:5325, repertorio:LO BARNECHEA, titulo:TITULO MERA TENENCIA\"\r\n        },\r\n        {\r\n            \"ppu\": \"GRDT35\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"RANDON\",\r\n            \"modelo\": \"SR BA GR 03 40\",\r\n            \"anno\": \"2016\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9ADB0953FGM397530\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"10/06/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"BANCO INTERNACIONAL\",\r\n            \"rutPropietario\": \"97011000-3\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:FRANCISCO JAVIER LEIVA, causa:0000001192, comuna:SANTIAGO, documento:ESCRITURA PUBLICA, fecReper:20160212, fechaDoc:20160129, naturaleza:LEASING, numReper:1529, repertorio:ESTACIÓN CENTRAL, titulo:TITULO MERA TENENCIA\"\r\n        },\r\n        {\r\n            \"ppu\": \"GRDT36\",\r\n            \"tipo\": \"SEMIREMOLQUE\",\r\n            \"marca\": \"RANDON\",\r\n            \"modelo\": \"SR BA GR 03 40\",\r\n            \"anno\": \"2016\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"9ADB0953FGM397529\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"02/07/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"BANCO INTERNACIONAL\",\r\n            \"rutPropietario\": \"97011000-3\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:, autorizante:FRANCISCO LEIVA CARVAJAL, causa:0000001192, comuna:SANTIAGO, documento:CONTRATO PRIVADO, fecReper:20160530, fechaDoc:20160129, naturaleza:LEASING, numReper:4887, repertorio:ESTACIÓN CENTRAL, titulo:TITULO MERA TENENCIA\"\r\n        }\r\n    ],\r\n\t\"documentosAdjuntos\": [\r\n        {\r\n            \"codigoTipoDocumento\": \"VEH_CLS\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\r\n        },\r\n        {\r\n            \"codigoTipoDocumento\": \"VEH_AUT\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\r\n        }\r\n    ],\r\n    \"urlCallback\": \"https://simple.com/1234\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/permiso/empresa",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"permiso",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creacion Trámite Persona F001",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"identificadorIntermediario\": \"KCA_03009\",\r\n\t\"fechaHoraCreacion\": \"05/02/2019 14:30:56\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"11961665-4\",\r\n\t\t\"nombre\": \"NELSON HUMBERTO ALBORNOZ CONTRERAS\",\r\n\t\t\"email\": \"nelson@nelson.cl\"\r\n\t},\r\n    \"codigoAnalista\": \"kcastro\",\r\n    \"nombreAnalista\": \"Karyna\",\r\n    \"codigoRegion\": \"14\",\r\n\t\"tipoSujeto\": \"persona\",\r\n  \t\"flotaFinal\": [\r\n\t\t{\r\n\t\t\t\"ppu\": \"GFPR68\",\r\n\t\t\t\"tipo\": \"CAMION\",\r\n\t\t\t\"marca\": \"CHEVROLET\",\r\n\t\t\t\"modelo\": \"NQR 919 E4\",\r\n\t\t\t\"anno\": 2014,\r\n\t\t\t\"carroceria\": \"Sin dato\",\r\n\t\t\t\"ejes\": 2,\r\n\t\t\t\"capacidadCargaToneladas\": 8,\r\n\t\t\t\"fechaVencimiento\": \"\",\r\n\t\t\t\"nombrePropietario\": \"NELSON HUMBERTO ALBORNOZ CONTRERAS\"\r\n\t\t}\r\n     ],\r\n    \"documentosAdjuntos\": [],\r\n    \"urlCallback\": \"https://simple.com/1234\"\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/permiso/persona",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"permiso",
+										"persona"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creacion Trámite como persona MOISES",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"identificadorIntermediario\": \"KCA_200\",\r\n\t\"fechaHoraCreacion\": \"22/02/2019 11:10:00\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"8605088-9\",\r\n\t\t\"nombre\": \"MOISES FUENZALIDA\",\r\n\t\t\"email\": \"moises@mo.cl\"\r\n\t},\r\n    \"codigoAnalista\": \"analista_uno\",\r\n    \"nombreAnalista\": \"analista_uno\",\r\n    \"codigoRegion\": \"03\",\r\n\t\"flotaFinal\": [\r\n\t   {\r\n            \"ppu\": \"NT5509\",\r\n            \"tipo\": \"CAMION\",\r\n            \"marca\": \"MERCEDES BENZ\",\r\n            \"modelo\": \"2538 S\",\r\n            \"anno\": \"1996\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"WDB-658146-1K-152838\",\r\n            \"ejes\": 3,\r\n            \"capacidadCargaToneladas\": 14,\r\n            \"fechaVencimientoRT\": \"02/02/2019\",\r\n            \"estadoRT\": \"R\",\r\n            \"nombrePropietario\": \"MOISÉS ANTONIO FUENZALIDA REYES\",\r\n            \"rutPropietario\": \"8605088-9\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\",\r\n            \"observacion\": \"Revisión Técnica Rechazada o Vencida, debe adjuntar Certificado de RT para este vehiculo\"\r\n        },\r\n        {\r\n            \"ppu\": \"RP3987\",\r\n            \"tipo\": \"CAMION\",\r\n            \"marca\": \"MACK\",\r\n            \"modelo\": \"RD 688 S\",\r\n            \"anno\": \"1997\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"RD688S-32445\",\r\n            \"ejes\": 2,\r\n            \"capacidadCargaToneladas\": 8,\r\n            \"fechaVencimientoRT\": \"02/12/2017\",\r\n            \"estadoRT\": \"R\",\r\n            \"nombrePropietario\": \"MOISÉS ANTONIO FUENZALIDA REYES\",\r\n            \"rutPropietario\": \"8605088-9\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\",\r\n            \"observacion\": \"Revisión Técnica Rechazada o Vencida, debe adjuntar Certificado de RT para este vehiculo\"\r\n        }\r\n    ],\r\n\t\"documentosAdjuntos\": [\r\n        {\r\n            \"codigoTipoDocumento\": \"VEH_RT\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\r\n        }\r\n    ],\r\n    \"urlCallback\": \"https://simple.com/1234\"\r\n}"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/permiso/persona",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"permiso",
+										"persona"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creacion Trámite como persona GALLARDO",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"identificadorIntermediario\": \"KCA_600\",\r\n\t\"fechaHoraCreacion\": \"22/02/2019 11:10:00\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"18620237-6\"\r\n\t},\r\n    \"codigoAnalista\": \"kcastro\",\r\n    \"nombreAnalista\": \"Karyna\",\r\n    \"codigoRegion\": \"14\",\r\n\t\"flotaFinal\": [\r\n\t    {\r\n            \"ppu\": \"NT5785\",\r\n            \"tipo\": \"CAMION\",\r\n            \"marca\": \"TOYOTA\",\r\n            \"modelo\": \"DYNA\",\r\n            \"anno\": \"1996\",\r\n            \"carroceria\": \"Sin dato\",\r\n            \"chasis\": \"BU140-0001817\",\r\n            \"ejes\": 2,\r\n            \"capacidadCargaToneladas\": 8,\r\n            \"fechaVencimientoRT\": \"15/08/2016\",\r\n            \"estadoRT\": \"R\",\r\n            \"nombrePropietario\": \"DAVID ALEXIS GALLARDO ASTETE\",\r\n            \"rutPropietario\": \"18620237-6\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\",\r\n            \"observacion\": \"Revisión Técnica Rechazada o Vencida, debe adjuntar Certificado de RT para este vehiculo\"\r\n        }\r\n    ],\r\n\t\"documentosAdjuntos\": [\r\n        {\r\n            \"codigoTipoDocumento\": \"VEH_RT\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\r\n        }\r\n    ],\r\n    \"urlCallback\": \"https://simple.com/1234\"\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/permiso/persona",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"permiso",
+										"persona"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creacion Trámite Codigo Intermediario duplicado",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"identificadorIntermediario\": \"123456ABCDEF\",\r\n\t\"fechaHoraCreacion\": \"20/12/2018 12:45:56\",\r\n\t\"solicitante\": {\r\n\t\t\"rut\": \"10703852-3\",\r\n\t\t\"nombre\": \"Pedro Ruiz\",\r\n\t\t\"email\": \"pedro.ruiz@tteruiz.cl\"\r\n\t},\r\n    \"rutAnalista\": \"15919222-9\",\r\n\t\"relacionSolicitanteEmpresa\": \"Representante Legal\",\r\n  \"empresa\": {\r\n\t\t\"rut\": \"78966910-4\",\r\n\t\t\"razonSocial\": \"Transportes Ruiz e Hijo LTDA\",\r\n\t\t\"nombreFantasia\": \"Transportes Ruiz\",\r\n\t\t\"tipoEmpresa\": \"LTDA\",\r\n\t\t\"direccion\": {\r\n\t\t\t\"codigoRegionIntermediario\": \"13\",\r\n\t\t\t\"codigoComunaIntermediario\": \"13101\",\r\n\t\t\t\"textoDireccion\": \"Alameda 234, of. 27, piso 2\",\r\n\t\t\t\"telefonoFijo\": \"+56222222222\",\r\n\t\t\t\"telefonoMovil\": \"+56994370285\",\r\n\t\t\t\"email\": \"contacto@tteruiz.cl\"\r\n\t\t},\r\n\t\t\"representanteLegal\": {\r\n\t\t\t\"rut\": \"10703852-3\",\r\n\t\t\t\"nombre\": \"Pedro Ruiz\",\r\n\t\t\t\"direccion\": {\r\n\t\t\t\t\"codigoRegionIntermediario\": \"13\",\r\n\t\t\t\t\"codigoComunaIntermediario\": \"13101\",\r\n\t\t\t\t\"textoDireccion\": \"Alameda 234, of. 27, piso 2\",\r\n\t\t\t\t\"telefonoFijo\": \"+56222222222\",\r\n\t\t\t\t\"telefonoMovil\": \"+56994370285\",\r\n\t\t\t\t\"email\": \"pedro.ruiz@tteruiz.cl\"\r\n\t\t\t}\r\n\t\t}\r\n\t},\r\n\t\"flotaFinal\": [\r\n\t\t{\r\n\t\t\t\"ppu\": \"KXZD49\",\r\n\t\t\t\"tipo\": \"TRACTOCAMION\",\r\n\t\t\t\"marca\": \"MERCEDES BENZ\",\r\n\t\t\t\"modelo\": \"ACTROS 1845 LS\",\r\n\t\t\t\"anno\": 2019,\r\n\t\t\t\"carroceria\": \"WDB963403K0296338\",\r\n\t\t\t\"ejes\": 3,\r\n\t\t\t\"capacidadCargaToneladas\": 10,\r\n\t\t\t\"fechaVencimiento\": \"20/04/2019\",\r\n\t\t\t\"nombrePropietario\": \"SCOTIABANK CHILE\"\r\n\t\t},\r\n    {\r\n\t\t\t\"ppu\": \"KXZD50\",\r\n\t\t\t\"tipo\": \"TRACTOCAMION\",\r\n\t\t\t\"marca\": \"MERCEDES BENZ\",\r\n\t\t\t\"modelo\": \"ACTROS 1845 LS\",\r\n\t\t\t\"anno\": 2019,\r\n\t\t\t\"carroceria\": \"WDB963403K0295010\",\r\n\t\t\t\"ejes\": 3,\r\n\t\t\t\"capacidadCargaToneladas\": 10,\r\n\t\t\t\"fechaVencimiento\": \"20/04/2019\",\r\n\t\t\t\"nombrePropietario\": \"SCOTIABANK CHILE\"\r\n\t\t},\r\n    {\r\n\t\t\t\"ppu\": \"KXZD49\",\r\n\t\t\t\"tipo\": \"TRACTOCAMION\",\r\n\t\t\t\"marca\": \"MERCEDES BENZ\",\r\n\t\t\t\"modelo\": \"ACTROS 1845 LS\",\r\n\t\t\t\"anno\": 2019,\r\n\t\t\t\"carroceria\": \"WDB963403K0295011\",\r\n\t\t\t\"ejes\": 3,\r\n\t\t\t\"capacidadCargaToneladas\": 10,\r\n\t\t\t\"fechaVencimiento\": \"20/04/2019\",\r\n\t\t\t\"nombrePropietario\": \"SCOTIABANK CHILE\"\r\n\t\t}\r\n\t],\r\n\t\"documentosAdjuntos\": [],\r\n    \"urlCallback\": \"https://simple.com/1234\"\r\n}"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/permiso",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"permiso"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Permiso +1 regitros",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"identificadorIntermediario\": \"KCA_03012\",\r\n                \"fechaHoraCreacion\": \"04/04/2019 11:10:00\",\r\n                \"solicitante\": {\r\n                               \"rut\": \"13927522-5\"\r\n                               },\r\n    \"codigoAnalista\": \"kcastro@mtt.gob.cl\",\r\n    \"nombreAnalista\": \"Karyna\",\r\n    \"codigoRegion\": \"01\",\r\n                \"flotaFinal\": [\r\n                    {\r\n            \"ppu\": \"CGTS61\",\r\n            \"tipo\": \"CAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"P380B\",\r\n            \"anno\": 2010,\r\n            \"carroceria\": \"SCANIA\",\r\n            \"chasis\": \"9BSP8X400A3656576\",\r\n            \"numeroMotor\": \"8138967\",\r\n            \"ejes\": 4,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"20/09/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"SERGIO FERNANDO SALFATE SECO\",\r\n            \"rutPropietario\": \"13927522-5\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:TANNER SERVICIOS FINANCIEROS S.A., autorizante:CLAUDIA GOMEZ LUCARES, causa:20335-2017, comuna:SANTIAGO, documento:ESCRITURA PUBLICA, fecReper:20170119, fechaDoc:20170119, naturaleza:PRENDA, numReper:27139, repertorio:UNIDAD DE PRENDAS SIN DESPLAZAMIENTO, titulo:PRENDA @ ACausa:0, acreedor:TANNER SERVICIOS FINANCIEROS S.A., autorizante:CLAUDIA GOMEZ LUCARES, causa:20335-2017, comuna:SANTIAGO, documento:ESCRITURA PUBLICA, fecReper:20170119, fechaDoc:20170119, naturaleza:PROHIB ACTOS, numReper:27140, repertorio:UNIDAD DE PRENDAS SIN DESPLAZAMIENTO, titulo:PROHIBICION DE ENAJENAR\",\r\n            \"propietario\": \"SERGIO FERNANDO SALFATE SECO\",\r\n            \"toneladas\": \"30.0\"\r\n        },\r\n           {\r\n            \"ppu\": \"BWTY50\",\r\n            \"tipo\": \"CAMION\",\r\n            \"marca\": \"SCANIA\",\r\n            \"modelo\": \"P380B\",\r\n            \"anno\": 2010,\r\n            \"carroceria\": \"SCANIA\",\r\n            \"chasis\": \"9BSP8X400A3656831\",\r\n            \"numeroMotor\": \"8139212\",\r\n            \"ejes\": 4,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"20/09/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"SERGIO FERNANDO SALFATE SECO\",\r\n            \"rutPropietario\": \"13927522-5\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"ACausa:0, acreedor:MUNDO CREDITO S.A., autorizante:FRANCISCO VARAS FERNANDE, causa:4134-2017, comuna:SANTIAGO, documento:ESCRITURA PUBLICA, fecReper:20170106, fechaDoc:20170106, naturaleza:PRENDA, numReper:4918, repertorio:UNIDAD DE PRENDAS SIN DESPLAZAMIENTO, titulo:PRENDA @ ACausa:0, acreedor:MUNDO CREDITO S.A., autorizante:FRANCISCO VARAS FERNANDE, causa:4134-2017, comuna:SANTIAGO, documento:ESCRITURA PUBLICA, fecReper:20170106, fechaDoc:20170106, naturaleza:PROHIB ACTOS, numReper:4919, repertorio:UNIDAD DE PRENDAS SIN DESPLAZAMIENTO, titulo:PROHIBICION DE ENAJENAR\",\r\n            \"propietario\": \"SERGIO FERNANDO SALFATE SECO\",\r\n            \"toneladas\": \"40.0\"\r\n        }\r\n    ],\r\n                \"documentosAdjuntos\": [\r\n        {\r\n            \"codigoTipoDocumento\": \"VEH_RT\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\r\n        },\r\n         {\r\n            \"codigoTipoDocumento\": \"VEH_AUT\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495250\"\r\n        },\r\n         {\r\n            \"codigoTipoDocumento\": \"VEH_CLS\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495251\"\r\n        },\r\n         {\r\n            \"codigoTipoDocumento\": \"OTROS\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495252\"\r\n        }\r\n    ],\r\n    \"urlCallback\": \"https://simple.com/1234\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/permiso/persona",
+									"protocol": "http",
+									"host": [
+										"206",
+										"189",
+										"164",
+										"106"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"permiso",
+										"persona"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Tramite Molina",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"identificadorIntermediario\": \"KCA_01504\",\r\n                \"fechaHoraCreacion\": \"10/04/2019 12:45:56\",\r\n                \"solicitante\": {\r\n                               \"rut\": \"10318329-4\",\r\n                               \t\"nombre\": \"MARIA ISABEL ESCUTI\",\r\n\t\t\t\t\t\t\t\t\"email\": \"maria@pacifico.cl\"\r\n                               \r\n                },\r\n    \"codigoAnalista\": \"kcastro\",\r\n    \"nombreAnalista\": \"Karyna\",\r\n    \"codigoRegion\": \"14\",\r\n               \"empresa\": {\r\n                               \"rut\": \"76404745-1\"\r\n                               },\r\n                \"flotaFinal\": [\r\n                {\r\n            \"ppu\": \"CGHF10\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"VOLVO\",\r\n            \"modelo\": \"VM\",\r\n            \"anno\": 2010,\r\n            \"carroceria\": \"VOLVO\",\r\n            \"chasis\": \"93KK0E0A9AE120215\",\r\n            \"numeroMotor\": \"F1A038522\",\r\n            \"ejes\": 2,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"14/09/2019\",\r\n            \"estadoRT\": \"A\",\r\n            \"nombrePropietario\": \"COMERCIAL MOLINA Y MOLINA LIMITADA\",\r\n            \"rutPropietario\": \"77783210-7\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\",\r\n            \"tipoid\": \"1\",\r\n            \"identificador\": \"Sin Dato\",\r\n            \"propietario\": \"COMERCIAL MOLINA Y MOLINA LIMITADA\",\r\n            \"toneladas\": \"11.0\"\r\n        },\r\n        {\r\n            \"ppu\": \"CGHF11\",\r\n            \"tipo\": \"TRACTOCAMION\",\r\n            \"marca\": \"VOLVO\",\r\n            \"modelo\": \"VM\",\r\n            \"anno\": 2010,\r\n            \"carroceria\": \"VOLVO\",\r\n            \"chasis\": \"93KK0E0A0AE120216\",\r\n            \"numeroMotor\": \"F1A038523\",\r\n            \"ejes\": 2,\r\n            \"capacidadCargaToneladas\": 0,\r\n            \"fechaVencimientoRT\": \"02/04/2019\",\r\n            \"estadoRT\": \"R\",\r\n            \"nombrePropietario\": \"COMERCIAL MOLINA Y MOLINA LIMITADA\",\r\n            \"rutPropietario\": \"77783210-7\",\r\n            \"fechaVencimientoLS\": \"\",\r\n            \"limitacion\": \"\",\r\n            \"tipoid\": \"1\",\r\n            \"identificador\": \"Sin Dato\",\r\n            \"propietario\": \"COMERCIAL MOLINA Y MOLINA LIMITADA\",\r\n            \"toneladas\": \"12.0\",\r\n            \"observacion\": \"Revisión Técnica Rechazada o Vencida, debe adjuntar Certificado de RT para este vehiculo\"\r\n        }\r\n                ],\r\n                \"documentosAdjuntos\": [\r\n        {\r\n            \"codigoTipoDocumento\": \"VEH_RT\",\r\n            \"urlDescargaDocumento\": \"http://www.mtt.gob.cl/firmaDocs/getPDF?id=495249\"\r\n        },\r\n         {\r\n            \"codigoTipoDocumento\": \"VEH_AUT\",\r\n            \"urlDescargaDocumento\": \"\"\r\n        },\r\n         {\r\n            \"codigoTipoDocumento\": \"VEH_CLS\",\r\n            \"urlDescargaDocumento\": \"\"\r\n        },\r\n         {\r\n            \"codigoTipoDocumento\": \"OTROS\",\r\n            \"urlDescargaDocumento\": \"\"\r\n        }\r\n    ],\r\n    \"urlCallback\": \"https://simple.com/1234\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://localhost:1337/tramites/internacional/chile-chile/permiso/empresa",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1337",
+									"path": [
+										"tramites",
+										"internacional",
+										"chile-chile",
+										"permiso",
+										"empresa"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "3. Generales",
+			"item": [
+				{
+					"name": "3 Recibe Rechazo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"identificadorIntermediario\": \"KCA10003\",\n    \"analista\": {\n        \"codigo\": \"kcastro\",\n        \"nombre\": \"Karyna Castro\",\n        \"codigoRegion\": \"13\"\n    },\n    \"fechaHoraRechazo\": \"01/02/2019 22:29:12\",\n    \"tipoRechazo\": {\n        \"codigo\": \"E01\",\n        \"descripcion\": \"Rechazado Con Observación\"\n    },\n    \"motivo\": \"Adjunto no legible\",\n    \"emailNotificacion\": \"maria@pacifico.cl\"\n}\n"
+						},
+						"url": {
+							"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/solicitud",
+							"protocol": "http",
+							"host": [
+								"206",
+								"189",
+								"164",
+								"106"
+							],
+							"port": "1337",
+							"path": [
+								"tramites",
+								"internacional",
+								"chile-chile",
+								"solicitud"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recibe estado de firma del certificado",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm1lZGlhcmlvIjoiU0lNUExFIn0.PBpqt-gldpscNMvN_G1RE6NX3ieIJd9tdJqDB2ETZhs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"identificadorIntermediario\": \"23443HJYJJ\",\n \t\"documentoId\": 453800,\n\t\"fechaHoraEnvio\": \"23/11/2018 17:45:56\",\n\t\"estadoDocumento\": {\n\t\t\"codigoEstado\": \"REC/FIR\",\n\t\t\"descripcionEstado\": \"Rechazado/Firmado\",\n\t\t\"fechaHora\": \"23/11/2018 17:45:56\",\n \t\t\"rechazo\": {\n\t        \"motivo\": \"Motivo de rechazo escrito por usuario en sistema de firma\"\n\t\t},\n\t\t\"datosFirma\": {\n\t\t\t\"folioDocumento\": 231,\n\t\t\t\"urlDocumento\": \"http://www.mtt.gob.cl/linkdoc\"\n\t\t}\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://206.189.164.106:1337/tramites/internacional/chile-chile/envio/confirmacion",
+							"protocol": "http",
+							"host": [
+								"206",
+								"189",
+								"164",
+								"106"
+							],
+							"port": "1337",
+							"path": [
+								"tramites",
+								"internacional",
+								"chile-chile",
+								"envio",
+								"confirmacion"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

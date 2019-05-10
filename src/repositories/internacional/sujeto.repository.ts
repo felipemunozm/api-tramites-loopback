@@ -19,6 +19,6 @@ export class SujetoRepository extends DefaultCrudRepository<
       + "pj.razon_social, pj.tipo_id_id tipo_id_pj from sujeto a "
       + "left join persona_natural pn on a.persona_natural_id = pn.id "
       + "left join persona_juridica pj on a.persona_juridica_id = pj.id where a.id = $1"
-    return this.dataSource.execute(query, { sujetoId });
+    return this.dataSource.execute(query, [sujetoId]);
   }
 }
