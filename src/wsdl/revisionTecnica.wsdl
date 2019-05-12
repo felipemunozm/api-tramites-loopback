@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ax2460="http://registros.revtec.sgprt.mtt.cl/xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ns="http://consultarevisiontecnica.mtt.cl" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://consultarevisiontecnica.mtt.cl">
+   <wsdl:documentation>consultaRevisionTecnica</wsdl:documentation>
+   <wsdl:types>
+      <xs:schema attributeFormDefault="qualified" elementFormDefault="unqualified" targetNamespace="http://registros.revtec.sgprt.mtt.cl/xsd">
+         <xs:complexType name="DatosRevisionTecnica">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="anoFabricacion" nillable="true" type="xs:int" />
+               <xs:element minOccurs="0" name="cantAsientos" nillable="true" type="xs:int" />
+               <xs:element minOccurs="0" name="cantEjes" nillable="true" type="xs:int" />
+               <xs:element minOccurs="0" name="capKg" nillable="true" type="xs:int" />
+               <xs:element minOccurs="0" name="capM3" nillable="true" type="xs:double" />
+               <xs:element minOccurs="0" name="capToneladas" nillable="true" type="xs:double" />
+               <xs:element minOccurs="0" name="codTipoCarroceria" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="codigoMarca" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="codigoTipoCombustible" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="codigoTipoSello" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="codigoTipoServicio" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="codigoTipoVehiculo" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="codtipoCertificacion" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="eje1" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="eje2" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="fechaConsulta" nillable="true" type="xs:dateTime" />
+               <xs:element minOccurs="0" name="marca" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="marcaCarroceria" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="modelo" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="numeroChasis" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="numeroMotor" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="pbv" nillable="true" type="xs:int" />
+               <xs:element minOccurs="0" name="potencia" nillable="true" type="xs:int" />
+               <xs:element minOccurs="0" name="ppu" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="ppuDv" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="revisionTecnica" nillable="true" type="ax2460:Revision" />
+               <xs:element minOccurs="0" name="revisionesGases" nillable="true" type="ax2460:RevisionesGases" />
+               <xs:element minOccurs="0" name="tara" nillable="true" type="xs:int" />
+               <xs:element minOccurs="0" name="tipoCombustible" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="tipoSello" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="tipoServicio" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="tipoVehiculo" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="traccion" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="vin" nillable="true" type="xs:string" />
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="Revision">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="codigoPrt" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="comunaPrt" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="direccionPrt" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="fechaRevision" nillable="true" type="xs:date" />
+               <xs:element minOccurs="0" name="fechaVencimiento" nillable="true" type="xs:date" />
+               <xs:element minOccurs="0" name="idCrt" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="mensaje" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="numeroCertificado" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="regionPrt" nillable="true" type="xs:string" />
+               <xs:element minOccurs="0" name="resultado" nillable="true" type="xs:string" />
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="RevisionesGases">
+            <xs:sequence>
+               <xs:element maxOccurs="unbounded" minOccurs="0" name="revisionGas" nillable="true" type="ax2460:Revision" />
+            </xs:sequence>
+         </xs:complexType>
+      </xs:schema>
+      <xs:schema xmlns:ax2461="http://registros.revtec.sgprt.mtt.cl/xsd" attributeFormDefault="qualified" elementFormDefault="unqualified" targetNamespace="http://consultarevisiontecnica.mtt.cl">
+         <xs:import namespace="http://registros.revtec.sgprt.mtt.cl/xsd" />
+         <xs:element name="consultaRevisionTecnica">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="ppu" nillable="true" type="xs:string" />
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+         <xs:element name="consultaRevisionTecnicaResponse">
+            <xs:complexType>
+               <xs:sequence>
+                  <xs:element minOccurs="0" name="return" nillable="true" type="ax2460:DatosRevisionTecnica" />
+               </xs:sequence>
+            </xs:complexType>
+         </xs:element>
+      </xs:schema>
+   </wsdl:types>
+   <wsdl:message name="consultaRevisionTecnicaRequest">
+      <wsdl:part name="parameters" element="ns:consultaRevisionTecnica" />
+   </wsdl:message>
+   <wsdl:message name="consultaRevisionTecnicaResponse">
+      <wsdl:part name="parameters" element="ns:consultaRevisionTecnicaResponse" />
+   </wsdl:message>
+   <wsdl:portType name="ConsultaRevisionTecnica_API_TramitesPortType">
+      <wsdl:operation name="consultaRevisionTecnica">
+         <wsdl:input message="ns:consultaRevisionTecnicaRequest" wsaw:Action="urn:consultaRevisionTecnica" />
+         <wsdl:output message="ns:consultaRevisionTecnicaResponse" wsaw:Action="urn:consultaRevisionTecnicaResponse" />
+      </wsdl:operation>
+   </wsdl:portType>
+   <wsdl:binding name="ConsultaRevisionTecnica_API_TramitesSoap11Binding" type="ns:ConsultaRevisionTecnica_API_TramitesPortType">
+      <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+      <wsdl:operation name="consultaRevisionTecnica">
+         <soap:operation soapAction="urn:consultaRevisionTecnica" style="document" />
+         <wsdl:input>
+            <soap:body use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:service name="ConsultaRevisionTecnica_API_Tramites">
+      <wsdl:port name="ConsultaRevisionTecnica_API_TramitesHttpSoap11Endpoint" binding="ns:ConsultaRevisionTecnica_API_TramitesSoap11Binding">
+         <soap:address location="http://ws.mtt.cl/services/ConsultaRevisionTecnica_API_Tramites.ConsultaRevisionTecnica_API_TramitesHttpSoap11Endpoint" />
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>

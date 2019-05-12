@@ -1,0 +1,55 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:tns="http://facade.firmaElectronica.rntpp.mtt.cl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" name="DocumentoFacadeService" targetNamespace="http://facade.firmaElectronica.rntpp.mtt.cl/">
+  <types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://facade.firmaElectronica.rntpp.mtt.cl/" version="1.0">
+            <xs:element name="procesarXml" type="tns:procesarXml"></xs:element>
+            <xs:element name="procesarXmlResponse" type="tns:procesarXmlResponse"></xs:element>
+            <xs:complexType name="procesarXml">
+               <xs:sequence>
+                  <xs:element name="region" type="xs:int"></xs:element>
+                  <xs:element minOccurs="0" name="sistema" type="xs:string"></xs:element>
+                  <xs:element minOccurs="0" name="tipoDcto" type="xs:string"></xs:element>
+                  <xs:element minOccurs="0" name="materia" type="xs:string"></xs:element>
+                  <xs:element minOccurs="0" name="xml" type="xs:string"></xs:element>
+               </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="procesarXmlResponse">
+               <xs:sequence>
+                  <xs:element name="return" type="xs:int"></xs:element>
+               </xs:sequence>
+            </xs:complexType>
+         </xs:schema>
+  </types>
+  <message name="procesarXmlResponse">
+    <part name="parameters" element="tns:procesarXmlResponse">
+    </part>
+  </message>
+  <message name="procesarXml">
+    <part name="parameters" element="tns:procesarXml">
+    </part>
+  </message>
+  <portType name="DocumentoFacadeDelegate">
+    <operation name="procesarXml">
+      <input message="tns:procesarXml" wsam:Action="http://facade.firmaElectronica.rntpp.mtt.cl/DocumentoFacadeDelegate/procesarXmlRequest">
+    </input>
+      <output message="tns:procesarXmlResponse" wsam:Action="http://facade.firmaElectronica.rntpp.mtt.cl/DocumentoFacadeDelegate/procesarXmlResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="DocumentoFacadePortBinding" type="tns:DocumentoFacadeDelegate">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"></soap:binding>
+    <operation name="procesarXml">
+      <soap:operation soapAction=""></soap:operation>
+      <input>
+        <soap:body use="literal"></soap:body>
+      </input>
+      <output>
+        <soap:body use="literal"></soap:body>
+      </output>
+    </operation>
+  </binding>
+  <service name="DocumentoFacadeService">
+    <port name="DocumentoFacadePort" binding="tns:DocumentoFacadePortBinding">
+      <soap:address location="http://wsqa.mtt.cl:8280/services/RecibeDocumentoFirma_Api_Tramites"></soap:address>
+    </port>
+  </service>
+</definitions>

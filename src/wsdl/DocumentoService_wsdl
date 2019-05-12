@@ -1,0 +1,334 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://ws.mtt.cl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://ws.mtt.cl/">
+   <wsdl:types>
+      <xsd:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://ws.mtt.cl/" version="1.0">
+         <xsd:element name="EstadoDocumento" type="tns:estadoDocumento"></xsd:element>
+         <xsd:element name="consultaEstado" type="tns:consultaEstado"></xsd:element>
+         <xsd:element name="consultaEstadoResponse" type="tns:consultaEstadoResponse"></xsd:element>
+         <xsd:element name="getMateriasAutorizadas" type="tns:getMateriasAutorizadas"></xsd:element>
+         <xsd:element name="getMateriasAutorizadasResponse" type="tns:getMateriasAutorizadasResponse"></xsd:element>
+         <xsd:element name="getPDF" type="tns:getPDF"></xsd:element>
+         <xsd:element name="getPDFResponse" type="tns:getPDFResponse"></xsd:element>
+         <xsd:element name="getPreview" type="tns:getPreview"></xsd:element>
+         <xsd:element name="getPreviewResponse" type="tns:getPreviewResponse"></xsd:element>
+         <xsd:element name="getSiguienteFolio" type="tns:getSiguienteFolio"></xsd:element>
+         <xsd:element name="getSiguienteFolioResponse" type="tns:getSiguienteFolioResponse"></xsd:element>
+         <xsd:complexType name="getPreview">
+            <xsd:sequence>
+               <xsd:element minOccurs="0" name="tipoDocumento" type="xsd:string"></xsd:element>
+               <xsd:element minOccurs="0" name="materia" type="xsd:string"></xsd:element>
+               <xsd:element minOccurs="0" name="xmlBytes" type="xsd:base64Binary"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="getPreviewResponse">
+            <xsd:sequence>
+               <xsd:element minOccurs="0" name="Preview" type="tns:preview"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="preview">
+            <xsd:sequence>
+               <xsd:element name="esquemaValido" type="xsd:boolean"></xsd:element>
+               <xsd:element minOccurs="0" name="pdf" type="xsd:base64Binary"></xsd:element>
+               <xsd:element name="status" type="xsd:boolean"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="getMateriasAutorizadas">
+            <xsd:sequence>
+               <xsd:element minOccurs="0" name="Sistema" type="xsd:string"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="getMateriasAutorizadasResponse">
+            <xsd:sequence>
+               <xsd:element maxOccurs="unbounded" minOccurs="0" name="Autorizacion" type="tns:autorizacion"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="autorizacion">
+            <xsd:sequence>
+               <xsd:element minOccurs="0" name="materia" type="xsd:string"></xsd:element>
+               <xsd:element minOccurs="0" name="tipoDocumento" type="xsd:string"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="consultaEstado">
+            <xsd:sequence>
+               <xsd:element maxOccurs="unbounded" minOccurs="0" name="IdDocumento" type="xsd:int"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="consultaEstadoResponse">
+            <xsd:sequence>
+               <xsd:element maxOccurs="unbounded" minOccurs="0" ref="tns:EstadoDocumento"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="estadoDocumento">
+            <xsd:sequence>
+               <xsd:element minOccurs="0" name="estado" type="xsd:string"></xsd:element>
+               <xsd:element minOccurs="0" name="fechaFirma" type="xsd:string"></xsd:element>
+               <xsd:element minOccurs="0" name="fechaRechazo" type="xsd:string"></xsd:element>
+               <xsd:element minOccurs="0" name="folio" type="xsd:int"></xsd:element>
+               <xsd:element minOccurs="0" name="idDocumento" type="xsd:int"></xsd:element>
+               <xsd:element minOccurs="0" name="linkDocumento" type="xsd:string"></xsd:element>
+               <xsd:element minOccurs="0" name="motivoRechazo" type="xsd:string"></xsd:element>
+               <xsd:element name="status" type="xsd:boolean"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="getSiguienteFolio">
+            <xsd:sequence>
+               <xsd:element minOccurs="0" name="FolioRequest" type="tns:folioRequest"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="folioRequest">
+            <xsd:sequence>
+               <xsd:element minOccurs="0" name="centroFoliacion" type="xsd:int"></xsd:element>
+               <xsd:element minOccurs="0" name="materia" type="xsd:string"></xsd:element>
+               <xsd:element minOccurs="0" name="sistema" type="xsd:string"></xsd:element>
+               <xsd:element minOccurs="0" name="tipoDocumento" type="xsd:string"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="getSiguienteFolioResponse">
+            <xsd:sequence>
+               <xsd:element minOccurs="0" name="SiguienteFolio" type="tns:siguienteFolio"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="siguienteFolio">
+            <xsd:sequence>
+               <xsd:element minOccurs="0" name="centroFoliacion" type="xsd:int"></xsd:element>
+               <xsd:element minOccurs="0" name="descripcionError" type="xsd:string"></xsd:element>
+               <xsd:element minOccurs="0" name="folio" type="xsd:int"></xsd:element>
+               <xsd:element minOccurs="0" name="materia" type="xsd:string"></xsd:element>
+               <xsd:element name="status" type="xsd:boolean"></xsd:element>
+               <xsd:element minOccurs="0" name="tipoDocumento" type="xsd:string"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="getPDF">
+            <xsd:sequence>
+               <xsd:element maxOccurs="unbounded" minOccurs="0" name="IdDocumento" type="xsd:int"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="getPDFResponse">
+            <xsd:sequence>
+               <xsd:element minOccurs="0" name="PDF" type="tns:pdf"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+         <xsd:complexType name="pdf">
+            <xsd:sequence>
+               <xsd:element minOccurs="0" name="pdf" type="xsd:base64Binary"></xsd:element>
+               <xsd:element name="status" type="xsd:boolean"></xsd:element>
+            </xsd:sequence>
+         </xsd:complexType>
+      </xsd:schema>
+   </wsdl:types>
+   <wsdl:message name="consultaEstado">
+      <wsdl:part name="parameters" element="tns:consultaEstado"></wsdl:part>
+   </wsdl:message>
+   <wsdl:message name="consultaEstadoResponse">
+      <wsdl:part name="parameters" element="tns:consultaEstadoResponse"></wsdl:part>
+   </wsdl:message>
+   <wsdl:message name="getPreview">
+      <wsdl:part name="parameters" element="tns:getPreview"></wsdl:part>
+   </wsdl:message>
+   <wsdl:message name="getPreviewResponse">
+      <wsdl:part name="parameters" element="tns:getPreviewResponse"></wsdl:part>
+   </wsdl:message>
+   <wsdl:message name="getSiguienteFolio">
+      <wsdl:part name="parameters" element="tns:getSiguienteFolio"></wsdl:part>
+   </wsdl:message>
+   <wsdl:message name="getSiguienteFolioResponse">
+      <wsdl:part name="parameters" element="tns:getSiguienteFolioResponse"></wsdl:part>
+   </wsdl:message>
+   <wsdl:message name="getMateriasAutorizadas">
+      <wsdl:part name="parameters" element="tns:getMateriasAutorizadas"></wsdl:part>
+   </wsdl:message>
+   <wsdl:message name="getMateriasAutorizadasResponse">
+      <wsdl:part name="parameters" element="tns:getMateriasAutorizadasResponse"></wsdl:part>
+   </wsdl:message>
+   <wsdl:message name="getPDF">
+      <wsdl:part name="parameters" element="tns:getPDF"></wsdl:part>
+   </wsdl:message>
+   <wsdl:message name="getPDFResponse">
+      <wsdl:part name="parameters" element="tns:getPDFResponse"></wsdl:part>
+   </wsdl:message>
+   <wsdl:portType name="DocumentoServicePortType">
+      <wsdl:operation name="consultaEstado">
+         <wsdl:input message="tns:consultaEstado" wsaw:Action="http://documentoservice.ws.mtt.cl/consultaEstado"></wsdl:input>
+         <wsdl:output message="tns:consultaEstadoResponse" wsaw:Action="http://ws.mtt.cl/DocumentoService/consultaEstadoResponse"></wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getPreview">
+         <wsdl:input message="tns:getPreview" wsaw:Action="http://documentoservice.ws.mtt.cl/getPreview"></wsdl:input>
+         <wsdl:output message="tns:getPreviewResponse" wsaw:Action="http://ws.mtt.cl/DocumentoService/getPreviewResponse"></wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getSiguienteFolio">
+         <wsdl:input message="tns:getSiguienteFolio" wsaw:Action="http://documentoservice.ws.mtt.cl/getSiguienteFolio"></wsdl:input>
+         <wsdl:output message="tns:getSiguienteFolioResponse" wsaw:Action="http://ws.mtt.cl/DocumentoService/getSiguienteFolioResponse"></wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getMateriasAutorizadas">
+         <wsdl:input message="tns:getMateriasAutorizadas" wsaw:Action="http://documentoservice.ws.mtt.cl/getMateriasAutorizadas"></wsdl:input>
+         <wsdl:output message="tns:getMateriasAutorizadasResponse" wsaw:Action="http://ws.mtt.cl/DocumentoService/getMateriasAutorizadasResponse"></wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getPDF">
+         <wsdl:input message="tns:getPDF" wsaw:Action="http://documentoservice.ws.mtt.cl/getPDF"></wsdl:input>
+         <wsdl:output message="tns:getPDFResponse" wsaw:Action="http://ws.mtt.cl/DocumentoService/getPDFResponse"></wsdl:output>
+      </wsdl:operation>
+   </wsdl:portType>
+   <wsdl:binding name="DocumentoServiceSoap11Binding" type="tns:DocumentoServicePortType">
+      <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"></soap:binding>
+      <wsdl:operation name="consultaEstado">
+         <soap:operation soapAction="http://documentoservice.ws.mtt.cl/consultaEstado" style="document"></soap:operation>
+         <wsdl:input>
+            <soap:body use="literal"></soap:body>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"></soap:body>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getPreview">
+         <soap:operation soapAction="http://documentoservice.ws.mtt.cl/getPreview" style="document"></soap:operation>
+         <wsdl:input>
+            <soap:body use="literal"></soap:body>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"></soap:body>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getSiguienteFolio">
+         <soap:operation soapAction="http://documentoservice.ws.mtt.cl/getSiguienteFolio" style="document"></soap:operation>
+         <wsdl:input>
+            <soap:body use="literal"></soap:body>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"></soap:body>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getMateriasAutorizadas">
+         <soap:operation soapAction="http://documentoservice.ws.mtt.cl/getMateriasAutorizadas" style="document"></soap:operation>
+         <wsdl:input>
+            <soap:body use="literal"></soap:body>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"></soap:body>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getPDF">
+         <soap:operation soapAction="http://documentoservice.ws.mtt.cl/getPDF" style="document"></soap:operation>
+         <wsdl:input>
+            <soap:body use="literal"></soap:body>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"></soap:body>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:binding name="DocumentoServiceSoap12Binding" type="tns:DocumentoServicePortType">
+      <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"></soap12:binding>
+      <wsdl:operation name="consultaEstado">
+         <soap12:operation soapAction="http://documentoservice.ws.mtt.cl/consultaEstado" style="document"></soap12:operation>
+         <wsdl:input>
+            <soap12:body use="literal"></soap12:body>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"></soap12:body>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getPreview">
+         <soap12:operation soapAction="http://documentoservice.ws.mtt.cl/getPreview" style="document"></soap12:operation>
+         <wsdl:input>
+            <soap12:body use="literal"></soap12:body>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"></soap12:body>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getSiguienteFolio">
+         <soap12:operation soapAction="http://documentoservice.ws.mtt.cl/getSiguienteFolio" style="document"></soap12:operation>
+         <wsdl:input>
+            <soap12:body use="literal"></soap12:body>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"></soap12:body>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getMateriasAutorizadas">
+         <soap12:operation soapAction="http://documentoservice.ws.mtt.cl/getMateriasAutorizadas" style="document"></soap12:operation>
+         <wsdl:input>
+            <soap12:body use="literal"></soap12:body>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"></soap12:body>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getPDF">
+         <soap12:operation soapAction="http://documentoservice.ws.mtt.cl/getPDF" style="document"></soap12:operation>
+         <wsdl:input>
+            <soap12:body use="literal"></soap12:body>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"></soap12:body>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:binding name="DocumentoServiceHttpBinding" type="tns:DocumentoServicePortType">
+      <http:binding verb="POST"></http:binding>
+      <wsdl:operation name="consultaEstado">
+         <http:operation location="consultaEstado"></http:operation>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"></mime:content>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"></mime:content>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getPreview">
+         <http:operation location="getPreview"></http:operation>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"></mime:content>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"></mime:content>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getSiguienteFolio">
+         <http:operation location="getSiguienteFolio"></http:operation>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"></mime:content>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"></mime:content>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getMateriasAutorizadas">
+         <http:operation location="getMateriasAutorizadas"></http:operation>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"></mime:content>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"></mime:content>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getPDF">
+         <http:operation location="getPDF"></http:operation>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"></mime:content>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"></mime:content>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:service name="DocumentoService">
+      <wsdl:port name="DocumentoServiceHttpSoap11Endpoint" binding="tns:DocumentoServiceSoap11Binding">
+         <soap:address location="http://wsqa.mtt.cl:8280/services/DocumentoService.DocumentoServiceHttpSoap11Endpoint"></soap:address>
+      </wsdl:port>
+      <wsdl:port name="DocumentoServiceHttpsSoap11Endpoint" binding="tns:DocumentoServiceSoap11Binding">
+         <soap:address location="https://wsqa.mtt.cl:8243/services/DocumentoService.DocumentoServiceHttpsSoap11Endpoint"></soap:address>
+      </wsdl:port>
+      <wsdl:port name="DocumentoServiceHttpSoap12Endpoint" binding="tns:DocumentoServiceSoap12Binding">
+         <soap12:address location="http://wsqa.mtt.cl:8280/services/DocumentoService.DocumentoServiceHttpSoap12Endpoint"></soap12:address>
+      </wsdl:port>
+      <wsdl:port name="DocumentoServiceHttpsSoap12Endpoint" binding="tns:DocumentoServiceSoap12Binding">
+         <soap12:address location="https://wsqa.mtt.cl:8243/services/DocumentoService.DocumentoServiceHttpsSoap12Endpoint"></soap12:address>
+      </wsdl:port>
+      <wsdl:port name="DocumentoServiceHttpsEndpoint" binding="tns:DocumentoServiceHttpBinding">
+         <http:address location="https://wsqa.mtt.cl:8243/services/DocumentoService.DocumentoServiceHttpsEndpoint"></http:address>
+      </wsdl:port>
+      <wsdl:port name="DocumentoServiceHttpEndpoint" binding="tns:DocumentoServiceHttpBinding">
+         <http:address location="http://wsqa.mtt.cl:8280/services/DocumentoService.DocumentoServiceHttpEndpoint"></http:address>
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>

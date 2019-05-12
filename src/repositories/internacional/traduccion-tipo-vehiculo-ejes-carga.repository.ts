@@ -12,4 +12,8 @@ export class TraduccionTipoVehiculoEjesCargaRepository extends DefaultCrudReposi
   ) {
     super(TraduccionTipoVehiculoEjesCarga, dataSource);
   }
+  public obtenerCapacidadesCargas(): any {
+    let query: string = "select id, tipo_vehiculo, cantidad_ejes, capacidad_carga from traduccion_tipo_vehiculo_ejes_carga";
+    return this.dataSource.execute(query);
+  }
 }

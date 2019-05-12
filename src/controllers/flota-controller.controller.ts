@@ -2,6 +2,9 @@ import { get, param, HttpErrors } from "@loopback/rest";
 import * as moment from 'moment';
 import { Any } from "json2typescript";
 import { controllerLogger } from "../logger/logger-config";
+import { repository } from "@loopback/repository";
+import { TraduccionTipoVehiculoEjesCargaRepository } from "../repositories";
+import { serviciosGateway } from "../utils/servicios-gateway";
 
 // Uncomment these imports to begin using these cool features!
 
@@ -9,11 +12,14 @@ import { controllerLogger } from "../logger/logger-config";
 
 
 export class FlotaControllerController {
-  constructor() { }
+  constructor(
+    @repository(TraduccionTipoVehiculoEjesCargaRepository) public traduccionTipoVehiculosEjesCargaRepository: TraduccionTipoVehiculoEjesCargaRepository,
+  ) { }
 
   @get("/tramites/internacional/chile-chile/personas/empresas")
   async validarFlota(@param.query.string('q') q: string): Promise<any> {
-    let matrizConversionCapacidadesCargas = await internacionalGateway.obtenerCapacidadesCargas()
+    // let matrizConversionCapacidadesCargas = await internacionalGateway.obtenerCapacidadesCargas()
+    let matrizConversionCapacidadesCargas = await this.traduccionTipoVehiculosEjesCargaRepository.obtenerCapacidadesCargas();
     let tiposVehiculosAceptados = ['camioneta', 'furgon', 'tractocamion', 'camion', 'semiremolque', 'remolque', 'chasis cabinado', 'CAMION']
     try {
       let params: any = q;
