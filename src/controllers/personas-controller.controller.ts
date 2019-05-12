@@ -1,6 +1,6 @@
-import { repository, Filter } from "@loopback/repository";
-import { PermisoRepository, TipoPermisoRepository, SujetoRepository, DireccionPersonaNaturalRepository, VehiculoRepository, PermisoVigenteResponse, EmpresaRepository, SolicitanteAutorizadoRepository } from "../repositories";
-import { get, param, HttpErrors, LogErrorProvider } from "@loopback/rest";
+import { repository } from "@loopback/repository";
+import { PermisoRepository, TipoPermisoRepository, SujetoRepository, DireccionPersonaNaturalRepository, VehiculoRepository, EmpresaRepository, SolicitanteAutorizadoRepository } from "../repositories";
+import { get, param, HttpErrors } from "@loopback/rest";
 import { controllerLogger } from "../logger/logger-config";
 import * as moment from 'moment';
 
@@ -171,8 +171,10 @@ export class PersonasControllerController {
       resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene Permiso Vigente'
       // let tipoPermiso = await internacionalGateway.obtenerTipoPermisoById(permiso.tipo_id)
       let tipoPermiso = await this.tipoPermisoRepository.findById(new Number(permiso.tipo_id));
-      let sujeto = await internacionalGateway.obtenerSujetoById(permiso.sujeto_id)
-      let vehiculos = await internacionalGateway.obtenerVehiculosByPermisoId(permiso.id)
+      // let sujeto = await internacionalGateway.obtenerSujetoById(permiso.sujeto_id)
+      let sujeto = (await this.sujetoRepository.obtenerSujetoById(permiso.sujeto_id))[0];
+      // let vehiculos = await internacionalGateway.obtenerVehiculosByPermisoId(permiso.id)
+      let vehiculos = await this.vehiculoRepository.obtenerVehiculosByPermisoId(permiso.id.toString());
       let flota: any[] = [], contabilizacion: { [k: string]: any } = {}
       let resumen = {
         cantidadVehiculos: vehiculos.length,
@@ -230,9 +232,8 @@ export class PersonasControllerController {
       }
       return resp
     } catch (ex) {
-      console.log(ex)
-      ctx.status = 404
-      ctx.body = ex.toString()
+      controllerLogger.error(ex, ex);
+      throw new HttpErrors.InternalServerError(ex.toString());
     }
   }
 }
