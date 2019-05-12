@@ -12,4 +12,9 @@ export class TipoTramiteRepository extends DefaultCrudRepository<
   ) {
     super(TipoTramite, dataSource);
   }
+
+  public obtenerTipoTramites(): Promise<any> {
+    let query: string = "select id, codigo, nombre from tipo_tramite";
+    return this.dataSource.execute(query);
+  }
 }

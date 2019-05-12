@@ -12,4 +12,8 @@ export class TipoTramiteEtapaSolicitudRepository extends DefaultCrudRepository<
   ) {
     super(TipoTramiteEtapaSolicitud, dataSource);
   }
+  public obtenerEtapasSolicitudes(): Promise<any> {
+    let query: string = "select id, codigo, nombre from tipo_tramite_etapa_solicitud";
+    return this.dataSource.execute(query);
+  }
 }

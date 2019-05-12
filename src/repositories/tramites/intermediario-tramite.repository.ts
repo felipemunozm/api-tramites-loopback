@@ -12,4 +12,8 @@ export class IntermediarioTramiteRepository extends DefaultCrudRepository<
   ) {
     super(IntermediarioTramite, dataSource);
   }
+  public obtenerIntermediarios(): Promise<any> {
+    let query: string = "select id, codigo, nombre, authentication_key from intermediario_tramite";
+    return this.dataSource.execute(query);
+  }
 }
