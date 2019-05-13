@@ -12,4 +12,12 @@ export class SujetoSolicitudRepository extends DefaultCrudRepository<
   ) {
     super(SujetoSolicitud, dataSource);
   }
+  public crearSujetoPersonaJuridicaPermiso(permisoId: any, personaId: any): Promise<any> {
+    let query = "insert into sujeto_solicitud (version, persona_juridica_id, solicitud_id) values (0, $1, $2) returning id";
+    return this.dataSource.execute(query, [personaId, permisoId]);
+  }
+  public crearSujetoPersonaNaturalPermiso(permisoId: any, personaId: any): Promise<any> {
+    let query = "insert into sujeto_solicitud (version, persona_natural_id, solicitud_id) values (0, $1, $2) returning id";
+    return this.dataSource.execute(query, [personaId, permisoId]);
+  }
 }

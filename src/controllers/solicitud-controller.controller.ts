@@ -2,7 +2,7 @@ import { post, param, requestBody, HttpErrors } from "@loopback/rest";
 import * as moment from 'moment';
 import { controllerLogger } from "../logger/logger-config";
 import { repository } from "@loopback/repository";
-import { TipoTramiteRepository, IntermediarioTramiteRepository, TipoTramiteEtapaSolicitudRepository, EmpresaRepository, SolicitanteAutorizadoRepository, PersonaNaturalRepository } from "../repositories";
+import { TipoTramiteRepository, IntermediarioTramiteRepository, TipoTramiteEtapaSolicitudRepository, EmpresaRepository, SolicitanteAutorizadoRepository, PersonaNaturalRepository, SolicitudTramiteRepository, SujetoSolicitudRepository, SolicitanteTramiteRepository, EstadoSolicitudRepository } from "../repositories";
 
 // Uncomment these imports to begin using these cool features!
 
@@ -17,6 +17,10 @@ export class SolicitudControllerController {
     @repository(EmpresaRepository) public empresaRepository: EmpresaRepository,
     @repository(SolicitanteAutorizadoRepository) public solicitanteAutorizadoRepository: SolicitanteAutorizadoRepository,
     @repository(PersonaNaturalRepository) public personaNaturalrepsitory: PersonaNaturalRepository,
+    @repository(SolicitudTramiteRepository) public solicitudTramiteRepository: SolicitudTramiteRepository,
+    @repository(SujetoSolicitudRepository) public sujetoSolicitudRepository: SujetoSolicitudRepository,
+    @repository(SolicitanteTramiteRepository) public solicitanteTramiteRepository: SolicitanteTramiteRepository,
+    @repository(EstadoSolicitudRepository) public estadoSolicitudRepository: EstadoSolicitudRepository,
   ) { }
 
   @post('/tramites/internacional/chile-chile/solicitud/empresa')
@@ -66,7 +70,8 @@ export class SolicitudControllerController {
             tipoIdentificadorId: 1,
             email: params.sujeto.email
           }
-          personaNatural = await internacionalGateway.crearPersonaNatural(personaCrear)
+          // personaNatural = await internacionalGateway.crearPersonaNatural(personaCrear)
+          personaNatural = (await this.personaNaturalrepsitory.crearPersonaNatural(personaCrear))[0];
           let direccionPersonaNatural = {
             codigo_region: params.sujeto.direccion.codigoRegion,
             codigo_comuna: params.sujeto.direccion.codigoComuna,
@@ -74,19 +79,22 @@ export class SolicitudControllerController {
             tipo: 'particular',
             persona_id: personaNatural.id
           }
-          internacionalGateway.crearDireccionPersonaNatural(direccionPersonaNatural)
+          // internacionalGateway.crearDireccionPersonaNatural(direccionPersonaNatural)
+          this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionPersonaNatural);
         }
 
       }
 
-      let solicitantePermiso = await internacionalGateway.obtenerPersonaNaturalByRut(params.solicitante.rut)
-      if (!solicitantePermiso) {
+      // let solicitantePermiso = await internacionalGateway.obtenerPersonaNaturalByRut(params.solicitante.rut)
+      let solicitantePermiso: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(params.solicitante.rut))[0];
+      if (solicitantePermiso.id == undefined) {
         let solitateCrear = {
           nombreCompleto: params.solicitante.nombre,
           identificador: params.solicitante.rut,
           tipoIdentificadorId: 1
         }
-        solicitantePermiso = await internacionalGateway.crearPersonaNatural(solitateCrear)
+        // solicitantePermiso = await internacionalGateway.crearPersonaNatural(solitateCrear)
+        solicitantePermiso = (await this.personaNaturalrepsitory.crearPersonaNatural(solitateCrear))[0];
       }
 
       let permiso = {
@@ -105,23 +113,28 @@ export class SolicitudControllerController {
         tipoTramiteId: tiposTramite.find((tipo: any) => tipo.codigo === 'chile-chile').id,
         intermediarioId: intermediarios[0].id
       }
-      let solicitud = await gestionTramitesGateway.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario)
-      if (solicitud) {
+      // let solicitud = await gestionTramitesGateway.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario)
+      let solicitud: any = (await this.solicitudTramiteRepository.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario))[0];
+      if (solicitud.id != undefined) {
         return {
           codigoResultado: 2,
           descripcionResultado: "La solicitud con el identificador " + params.identificadorIntermediario + " ya existe."
         }
       }
-      await gestionTramitesGateway.crearSolicitudPermiso(permiso)
+      // await gestionTramitesGateway.crearSolicitudPermiso(permiso)
+      await this.solicitudTramiteRepository.crearSolicitudPermiso(permiso)
         .then(async (resp: any) => {
           if (params.tipoSujeto.toLowerCase() === 'empresa') {
-            gestionTramitesGateway.crearSujetoPersonaJuridicaPermiso(resp.id, empresa.persona_juridica_id)
+            // gestionTramitesGateway.crearSujetoPersonaJuridicaPermiso(resp.id, empresa.persona_juridica_id)
+            this.sujetoSolicitudRepository.crearSujetoPersonaJuridicaPermiso(resp[0].id, empresa.persona_juridica_id);
           } else {
-            gestionTramitesGateway.crearSujetoPersonaNaturalPermiso(resp.id, personaNatural.id)
+            // gestionTramitesGateway.crearSujetoPersonaNaturalPermiso(resp.id, personaNatural.id)
+            this.sujetoSolicitudRepository.crearSujetoPersonaNaturalPermiso(resp.id, personaNatural.id);
           }
 
           //gestionTramitesGateway.crearSolicitantePermiso(params.relacionSolicitanteSujeto, resp.id, solicitantePermiso.id)
-          gestionTramitesGateway.crearSolicitantePermiso('', resp.id, solicitantePermiso.id)
+          // gestionTramitesGateway.crearSolicitantePermiso('', resp.id, solicitantePermiso.id)
+          this.solicitanteTramiteRepository.crearSolicitantePermiso('', resp.id, solicitantePermiso.id);
 
           let estado = {
             analistaId: null,
@@ -130,7 +143,8 @@ export class SolicitudControllerController {
             solicitudId: resp.id,
             fechaHora: moment(params.fechaHoraCreacion, "DD/MM/YYYY").toDate()
           }
-          await gestionTramitesGateway.crearEstadoSolicitudPermiso(estado)
+          // await gestionTramitesGateway.crearEstadoSolicitudPermiso(estado)
+          this.estadoSolicitudRepository.crearEstadoSolicitudPermiso(estado)
             .then((respCambioEstado: any) => {
               return {
                 codigoResultado: 1,

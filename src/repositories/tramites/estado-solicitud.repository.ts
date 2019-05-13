@@ -12,4 +12,8 @@ export class EstadoSolicitudRepository extends DefaultCrudRepository<
   ) {
     super(EstadoSolicitud, dataSource);
   }
+  public crearEstadoSolicitudPermiso(estado: any): Promise<any> {
+    let query: string = "";
+    return this.dataSource.execute(query, [estado.analistaId, estado.metadata, estado.etapaId, estado.solicitudId, estado.fechaHora]);
+  }
 }
