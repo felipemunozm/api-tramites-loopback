@@ -1,4 +1,4 @@
-import { post, param, requestBody, HttpErrors } from "@loopback/rest";
+import { post, param, requestBody, HttpErrors, put } from "@loopback/rest";
 import * as moment from 'moment';
 import { controllerLogger } from "../logger/logger-config";
 import { repository } from "@loopback/repository";
@@ -316,6 +316,70 @@ export class SolicitudControllerController {
     } catch (ex) {
       console.log(ex);
       throw new HttpErrors.InternalServerError('No fue posible crear la solicitud de permiso');
+    }
+  }
+  @put('/tramites/internacional/chile-chile/solicitud')
+  async rechazoSolicitud(@requestBody() params: any): Promise<any> {
+    try {
+      if (!params || !params.identificadorIntermediario || !params.fechaHoraRechazo || !params.tipoRechazo ||
+        !params.motivo || !params.emailNotificacion || !params.tipoRechazo.codigo ||
+        !params.tipoRechazo.descripcion || !params.analista || !params.analista.codigo ||
+        !params.analista.nombre || !params.analista.codigoRegion) {
+        throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
+      }
+      let intermediarios = await gestionTramitesGateway.obtenerIntermediarios()
+      let etapas = await gestionTramitesGateway.obtenerEtapasSolicitudes()
+      let regiones = await internacionalGateway.obtenerRegiones()
+      let region = regiones.find(r => r.codigo === params.analista.codigoRegion)
+      if (!region) {
+        return {
+          codigoResultado: 3,
+          descripcionResultado: "No existe una región con el código " + params.codigoRegion + "."
+        }
+      }
+      let analistas = await gestionTramitesGateway.obtenerAnalistas()
+      let analista = analistas.find((analista: any) => analista.codigo === params.analista.codigo)
+      if (analista.id == undefined) {
+        analista = {
+          codigo: params.analista.codigo,
+          nombre_completo: params.analista.nombre,
+          region_id: region.id
+        }
+        let resultadoCreacionAnalista = await gestionTramitesGateway.crearAnalista(analista)
+        analista.id = resultadoCreacionAnalista.id
+      } else {
+        if (analista.nombre_completo !== params.analista.nombre || analista.region_id.toString() !== params.analista.codigoRegion) {
+          await gestionTramitesGateway.actualizarAnalista(analista)
+        }
+      }
+      let solicitud = await gestionTramitesGateway.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario)
+      if (solicitud.id == undefined) {
+        return {
+          codigoResultado: 2,
+          descripcionResultado: "No existe una solicitud con el identificador de intermediario " + params.identificadorIntermediario + "."
+        }
+      }
+      let estado = {
+        analistaId: analista.id,
+        metadata: JSON.stringify({ tipoRechazo: { codigo: params.tipoRechazo.codigo, descripcion: params.tipoRechazo.descripcion }, motivo: params.motivo, emailNotificacion: params.emailNotificacion }),
+        etapaId: etapas.find((etapa: any) => etapa.nombre === 'Rechazada').id,
+        solicitudId: solicitud.id,
+        fechaHora: moment(params.fechaHoraRechazo, "DD/MM/YYYY").toDate()
+      }
+      await gestionTramitesGateway.crearEstadoSolicitudPermiso(estado)
+        .then((resp: any) => {
+          return {
+            codigoResultado: 1,
+            descripcionResultado: "Rechazo exitoso de Solicitud de Permiso"
+          }
+        })
+        .catch((error: any) => {
+          console.log(error)
+          throw { error: { statusCode: 502, message: 'No fue posible rechazar la solicitud de permiso' } };
+        })
+    } catch (ex) {
+      console.log(ex)
+      throw { error: { statusCode: 502, message: ex.toString() } };
     }
   }
 }
