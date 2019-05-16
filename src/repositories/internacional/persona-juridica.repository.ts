@@ -20,4 +20,8 @@ export class PersonaJuridicaRepository extends DefaultCrudRepository<
     let query: string = "update persona_juridica set razon_social = $1 where id = $2 returning id";
     return this.dataSource.execute(query, [razonSocial, personaJuridicaId]);
   }
+  public actualizarRepresentanteLegalEmpresa(personaJuridicaId: any, personaNaturalId: any): Promise<any> {
+    let query: string = "update persona_juridica set representante_legal_id = $1 where id = $2 returning id";
+    return this.dataSource.execute(query, [personaNaturalId, personaJuridicaId]);
+  }
 }
