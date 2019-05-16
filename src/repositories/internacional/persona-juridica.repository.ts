@@ -24,4 +24,5 @@ export class PersonaJuridicaRepository extends DefaultCrudRepository<
     let query: string = "update persona_juridica set representante_legal_id = $1 where id = $2 returning id";
     return this.dataSource.execute(query, [personaNaturalId, personaJuridicaId]);
   }
+
 }
