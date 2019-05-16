@@ -12,4 +12,8 @@ export class TipoEmpresaRepository extends DefaultCrudRepository<
   ) {
     super(TipoEmpresa, dataSource);
   }
+  public obtenerTipoEmpresaByCodigo(codigo: any): Promise<any> {
+    let query: string = "select * from tipo_empresa where codigo = $1";
+    return this.dataSource.execute(query, [codigo]);
+  }
 }
