@@ -20,4 +20,8 @@ export class SujetoVehiculoRepository extends DefaultCrudRepository<
     let query: string = "update sujeto_vehiculo set fecha_actualizacion = now () where id = $1 returning id";
     return this.dataSource.execute(respConsultaPermiso);
   }
+  public borrarSujetoVehiculo(borrarPermisoSujetoVehiculo: any): Promise<any> {
+    let query: string = "delete from sujeto_vehiculo where id in (select c.id from permiso a inner join sujeto b on b.id = a.sujeto_id inner join sujeto_vehiculo c on b.id = c.sujeto_id where a.id = $1);";
+    return this.dataSource.execute(borrarPermisoSujetoVehiculo);
+  }
 }
