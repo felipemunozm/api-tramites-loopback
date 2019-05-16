@@ -23,4 +23,8 @@ export class PermisoSujetoVehiculoRepository extends DefaultCrudRepository<
     let query: string = "insert into permiso_sujeto_vehiculo (version, habilitado, permiso_id, sujeto_vehiculo_id) select 0, true, a.id, c.id from permiso a inner join sujeto b on b.id = a.sujeto_id inner join sujeto_vehiculo c on b.id = c.sujeto_id where a.id = $1 returning id;";
     return this.dataSource.execute(b);
   }
+  public borrarPermisoSujetoVehiculo(respCreacionPermiso: any): Promise<any> {
+    let query: string = "Delete from permiso_sujeto_vehiculo where permiso_id = $1 returning *;";
+    return this.dataSource.execute(respCreacionPermiso);
+  }
 }
