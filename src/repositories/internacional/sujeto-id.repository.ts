@@ -12,7 +12,7 @@ export class SujetoIdRepository extends DefaultCrudRepository<
   ) {
     super(SujetoId, dataSource);
   }
-  public obtenerSujetoById(sujetoId: string): Promise<any> {
+  public obtenerSujetoById(sujetoId: any): Promise<any> {
     let query: string = "select pn.email, a.persona_natural_id, pn.identificador identificador_pn, pn.nombre_completo, "
       + "pn.tipo_id_id tipo_id_pn, a.persona_juridica_id, pj.identificador identificador_pj, "
       + "case when a.persona_natural_id is null then 'PJ' else 'PN' end tipo_persona, "
