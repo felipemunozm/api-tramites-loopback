@@ -1,6 +1,4 @@
 export * from './ping.controller';
-export * from './api-internacional.controller';
-export * from './example.controller';
 export * from './personas-controller.controller';
 export * from './flota-controller.controller';
 export * from './solicitud-controller.controller';
