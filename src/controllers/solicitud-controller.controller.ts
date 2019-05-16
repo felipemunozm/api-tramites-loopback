@@ -31,8 +31,7 @@ export class SolicitudControllerController {
       if (!params || !params.identificadorIntermediario || !params.fechaHoraCreacion || !params.solicitante
         || !params.tipoSujeto || !params.sujeto || !params.solicitante.rut
         || !params.solicitante.nombre || !params.sujeto.rut /*|| !params.sujeto.nombre*/) {
-        throw 'Parámetros incorrectos';
-        return
+        throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
       }
       // let tiposTramite = await gestionTramitesGateway.obtenerTiposTramites()
       let tiposTramite: any = await this.tipoTramiteRepository.obtenerTipoTramites();
@@ -178,7 +177,7 @@ export class SolicitudControllerController {
         || !params.tipoSujeto || !params.sujeto || !params.solicitante.rut || !params.solicitante.email
         || !params.solicitante.codigoRegion || !params.solicitante.codigoComuna || !params.solicitante.direccion
         || !params.solicitante.nombre || !params.sujeto.rut || !params.sujeto.nombre) {
-        throw 'Parámetros incorrectos'
+        throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
       }
       // let tiposTramite = await gestionTramitesGateway.obtenerTiposTramites()
       let tiposTramite: any = await this.tipoTramiteRepository.obtenerTipoTramites();
