@@ -17,4 +17,8 @@ export class TipoPermisoRepository extends DefaultCrudRepository<
     let query: string = "select codigo, nombre, meses_vigencia from tipo_permiso where id = $1";
     return this.dataSource.execute(query, [tipoId]);
   }
+  public obtenerTipoPermisoByCodigo(codigo: any): Promise<any> {
+    let query: string = "select id, codigo, nombre, meses_vigencia from tipo_permiso where codigo = $1";
+    return this.dataSource.execute(query, [codigo])
+  }
 }
