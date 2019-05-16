@@ -16,4 +16,5 @@ export class TipoIdPersonaRepository extends DefaultCrudRepository<
     let query: string = "select id, codigo, pais_id, nombre from tipo_id_persona";
     return this.dataSource.execute(query);
   }
+
 }
