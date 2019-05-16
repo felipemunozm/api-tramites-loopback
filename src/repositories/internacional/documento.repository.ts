@@ -12,4 +12,8 @@ export class DocumentoRepository extends DefaultCrudRepository<
   ) {
     super(Documento, dataSource);
   }
+  public insertarDocumento(urlDescargaDocumento: any, codigoTipoDocumento: any, permisoId: any): Promise<any> {
+    let query: string = "insert into documento (version, tipo_id, hashing, url, algoritmo, permiso_id) select 0, id, null, $1, null, $2 from tipo_documento where codigo = $3;";
+    return this.dataSource.execute(urlDescargaDocumento, codigoTipoDocumento, permisoId);
+  }
 }
