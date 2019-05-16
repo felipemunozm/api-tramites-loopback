@@ -17,4 +17,5 @@ export class TipoTramiteRepository extends DefaultCrudRepository<
     let query: string = "select id, codigo, nombre from tipo_tramite";
     return this.dataSource.execute(query);
   }
+
 }
