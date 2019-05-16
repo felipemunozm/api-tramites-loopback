@@ -12,4 +12,8 @@ export class RegionRepository extends DefaultCrudRepository<
   ) {
     super(Region, dataSource);
   }
+  public obtenerRegiones(): Promise<any> {
+    let query: string = "select id, codigo, nombre from region";
+    return this.dataSource.execute(query);
+  }
 }

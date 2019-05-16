@@ -2,7 +2,7 @@ import { post, param, requestBody, HttpErrors, put } from "@loopback/rest";
 import * as moment from 'moment';
 import { controllerLogger } from "../logger/logger-config";
 import { repository } from "@loopback/repository";
-import { TipoTramiteRepository, IntermediarioTramiteRepository, TipoTramiteEtapaSolicitudRepository, EmpresaRepository, SolicitanteAutorizadoRepository, PersonaNaturalRepository, SolicitudTramiteRepository, SujetoSolicitudRepository, SolicitanteTramiteRepository, EstadoSolicitudRepository } from "../repositories";
+import { TipoTramiteRepository, IntermediarioTramiteRepository, TipoTramiteEtapaSolicitudRepository, EmpresaRepository, SolicitanteAutorizadoRepository, PersonaNaturalRepository, SolicitudTramiteRepository, SujetoSolicitudRepository, SolicitanteTramiteRepository, EstadoSolicitudRepository, RegionRepository, AnalistaRepository } from "../repositories";
 
 // Uncomment these imports to begin using these cool features!
 
@@ -21,6 +21,8 @@ export class SolicitudControllerController {
     @repository(SujetoSolicitudRepository) public sujetoSolicitudRepository: SujetoSolicitudRepository,
     @repository(SolicitanteTramiteRepository) public solicitanteTramiteRepository: SolicitanteTramiteRepository,
     @repository(EstadoSolicitudRepository) public estadoSolicitudRepository: EstadoSolicitudRepository,
+    @repository(RegionRepository) public regionRepository: RegionRepository,
+    @repository(AnalistaRepository) public analistaRepository: AnalistaRepository,
   ) { }
 
   @post('/tramites/internacional/chile-chile/solicitud/empresa')
@@ -327,17 +329,21 @@ export class SolicitudControllerController {
         !params.analista.nombre || !params.analista.codigoRegion) {
         throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
       }
-      let intermediarios = await gestionTramitesGateway.obtenerIntermediarios()
-      let etapas = await gestionTramitesGateway.obtenerEtapasSolicitudes()
-      let regiones = await internacionalGateway.obtenerRegiones()
-      let region = regiones.find(r => r.codigo === params.analista.codigoRegion)
-      if (!region) {
+      // let intermediarios = await gestionTramitesGateway.obtenerIntermediarios()
+      let intermediarios: any = await this.intermediarioTramiteRepository.obtenerIntermediarios();
+      // let etapas = await gestionTramitesGateway.obtenerEtapasSolicitudes()
+      let etapas: any = await this.tipoTramiteEtapaSolicitudRepository.obtenerEtapasSolicitudes();
+      // let regiones = await internacionalGateway.obtenerRegiones()
+      let regiones: any = await this.regionRepository.obtenerRegiones();
+      let region = regiones.find((r: any) => r.codigo === params.analista.codigoRegion)
+      if (region.id == undefined) {
         return {
           codigoResultado: 3,
           descripcionResultado: "No existe una región con el código " + params.codigoRegion + "."
         }
       }
-      let analistas = await gestionTramitesGateway.obtenerAnalistas()
+      // let analistas = await gestionTramitesGateway.obtenerAnalistas()
+      let analistas: any = await this.analistaRepository.obtenerAnalistas();
       let analista = analistas.find((analista: any) => analista.codigo === params.analista.codigo)
       if (analista.id == undefined) {
         analista = {
@@ -345,14 +351,17 @@ export class SolicitudControllerController {
           nombre_completo: params.analista.nombre,
           region_id: region.id
         }
-        let resultadoCreacionAnalista = await gestionTramitesGateway.crearAnalista(analista)
-        analista.id = resultadoCreacionAnalista.id
+        // let resultadoCreacionAnalista = await gestionTramitesGateway.crearAnalista(analista)
+        let resultadoCreacionAnalista: any = (await this.analistaRepository.crearAnalista(analista))[0];
+        analista.id = resultadoCreacionAnalista.id;
       } else {
         if (analista.nombre_completo !== params.analista.nombre || analista.region_id.toString() !== params.analista.codigoRegion) {
-          await gestionTramitesGateway.actualizarAnalista(analista)
+          // await gestionTramitesGateway.actualizarAnalista(analista)
+          await this.analistaRepository.actualizarAnalista(analista);
         }
       }
-      let solicitud = await gestionTramitesGateway.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario)
+      // let solicitud = await gestionTramitesGateway.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario)
+      let solicitud: any = await this.solicitudTramiteRepository.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario);
       if (solicitud.id == undefined) {
         return {
           codigoResultado: 2,
@@ -366,7 +375,8 @@ export class SolicitudControllerController {
         solicitudId: solicitud.id,
         fechaHora: moment(params.fechaHoraRechazo, "DD/MM/YYYY").toDate()
       }
-      await gestionTramitesGateway.crearEstadoSolicitudPermiso(estado)
+      // await gestionTramitesGateway.crearEstadoSolicitudPermiso(estado)
+      await this.estadoSolicitudRepository.crearEstadoSolicitudPermiso(estado)
         .then((resp: any) => {
           return {
             codigoResultado: 1,
