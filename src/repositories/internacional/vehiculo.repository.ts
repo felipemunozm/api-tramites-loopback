@@ -28,4 +28,8 @@ export class VehiculoRepository extends DefaultCrudRepository<
     let query: string = "select ppu from vehiculo where ppu=$1";
     return this.dataSource.execute(ppu);
   }
+  public ObtenerVehiculo(ppu: any): Promise<any> {
+    let query: string = "select id from vehiculo where ppu=$";
+    return this.dataSource.execute(ppu);
+  }
 }
