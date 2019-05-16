@@ -16,7 +16,7 @@ export class TipoIdVehiculoRepository extends DefaultCrudRepository<
     let query: string = "select id, codigo, pais_id, nombre from tipo_id_vehiculo";
     return this.dataSource.execute(query);
   }
-  public obtenerTipoIdentificadorVehiculoByCodigo(codigo: string): Promise<any> {
+  public obtenerTipoIdentificadorVehiculoByCodigo(codigo: any): Promise<any> {
     let query: string = "select id, codigo, pais_id, nombre from tipo_id_vehiculo where codigo = $1";
     return this.dataSource.execute(query, [codigo]);
   }
