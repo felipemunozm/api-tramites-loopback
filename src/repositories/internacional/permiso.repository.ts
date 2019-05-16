@@ -34,4 +34,8 @@ export class PermisoRepository extends DefaultCrudRepository<
     let query: string = "insert into tramite (version, identificador_intermediario, analista_aprobacion_id, solicitud_id, metadata, codigo, fecha_hora_creacion, tipo_tramite_id, intermediario_id) ";
     return this.dataSource.execute(query, [tramite.identificadorIntermediario, tramite.analistaId, tramite.solicitudId, tramite.metadata, tramite.codigo, tramite.fechaHoraCreacion, tramite.tipoTramiteId, tramite.intermediarioId]);
   }
+  public crearPermiso(permiso: any): Promise<any> {
+    let query: string = "insert into permiso (version, sujeto_id, pais_id, tipo_carga_id, tipo_id, fecha_creacion, fecha_fin_vigencia, url_callback) values (0, $1, $2, $3, $4, $5, $6, $7) returning id";
+    return this.dataSource.execute(permiso);
+  }
 }
