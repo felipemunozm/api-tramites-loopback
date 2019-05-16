@@ -25,4 +25,8 @@ export class EmpresaRepository extends DefaultCrudRepository<
       "left join persona_natural pn on pj.representante_legal_id = pn.id where pj.identificador = $1";
     return this.dataSource.execute(query, [rut]);
   }
+  public crearEmpresa(personaJuridicaId: any, tipoEmpresa: any): Promise<any> {
+    let query: string = "insert into empresa (version, persona_juridica_id,tipo_empresa_id) values (0, $1, $2) returning id";
+    return this.dataSource.execute(query, [personaJuridicaId, tipoEmpresa]);
+  }
 }
