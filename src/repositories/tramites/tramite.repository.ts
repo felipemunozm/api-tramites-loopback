@@ -21,4 +21,8 @@ export class TramiteRepository extends DefaultCrudRepository<
       + 'values (0, $1, $2, $3, $4, $5, $6, $7, $8) returning id';
     return this.dataSource.execute(query, [tramite.identificadorIntermediario, tramite.analistaId, tramite.solicitudId, tramite.metadata, tramite.codigo, tramite.fechaHoraCreacion, tramite.tipoTramiteId, tramite.intermediarioId]);
   }
+  public DeleteTramite(id: any): Promise<any> {
+    let query = "delete from tramite where solicitud_id = $1";
+    return this.dataSource.execute(query, [id]);
+  }
 }
