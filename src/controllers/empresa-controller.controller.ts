@@ -1,4 +1,4 @@
-import { post, requestBody, HttpErrors } from "@loopback/rest";
+import { post, requestBody, HttpErrors, put } from "@loopback/rest";
 import { repository } from "@loopback/repository";
 import { TipoTramiteRepository, IntermediarioTramiteRepository, RegionRepository, AnalistaRepository, EmpresaRepository, PermisoRepository, TipoIdPersonaRepository, PersonaNaturalRepository, PersonaJuridicaRepository, TipoEmpresaRepository, DomicilioEmpresaRepository, SolicitanteAutorizadoRepository, TipoDocumentoRepository, DocumentoEmpresaRepository, EstadoTramiteRepository } from "../repositories";
 import * as moment from 'moment';
@@ -205,6 +205,149 @@ export class EmpresaControllerController {
     } catch (ex) {
       console.log(ex);
       controllerLogger.error(ex, ex);
+      throw new HttpErrors.InternalServerError(ex.toString());
+    }
+  }
+  @put('/tramites/internacional/chile-chile/empresa')
+  public async modificarTramiteEmpresa(@requestBody() params: any): Promise<any> {
+    try {
+      // let params = ctx.request.body
+      if (!params || !params.identificadorIntermediario || !params.fechaHoraCreacion || !params.rutSolicitante
+        || !params.rutEmpresa || !params.modificaciones || !params.documentosAdjuntos || params.modificaciones.length === 0
+        || !params.analista || !params.analista.codigo || !params.analista.nombre || !params.analista.codigoRegion) {
+        throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
+      }
+      // let tiposTramite = await gestionTramitesGateway.obtenerTiposTramites()
+      let tiposTramite: any = await this.tipoTramiteRepository.obtenerTipoTramites();
+      let tipoTramite = tiposTramite.find((tipo: any) => tipo.codigo === 'modificacion-empresa')
+      if (!tipoTramite) console.error('Debe crear un Tipo de Trámite con código modificacion-empresa.')
+      // let intermediarios = await gestionTramitesGateway.obtenerIntermediarios()
+      let intermediarios: any = await this.intermediarioTramiteRepository.obtenerIntermediarios();
+      // let regiones = await internacionalGateway.obtenerRegiones()
+      let regiones: any = await this.regionRepository.obtenerRegiones();
+      let region = regiones.find((r: any) => r.codigo === params.analista.codigoRegion)
+      if (region.id == undefined) {
+        return {
+          codigoResultado: 3,
+          descripcionResultado: "No existe una región con el código " + params.analista.codigoRegion + "."
+        }
+      }
+      // let analistas = await gestionTramitesGateway.obtenerAnalistas()
+      let analistas: any = await this.analistaRepository.obtenerAnalistas();
+      let analista = analistas.find((analista: any) => analista.codigo === params.analista.codigo)
+      if (analista.id == undefined) {
+        analista = {
+          codigo: params.analista.codigo,
+          nombre_completo: params.analista.nombre,
+          region_id: region.id
+        }
+        // let resultadoCreacionAnalista = await gestionTramitesGateway.crearAnalista(analista)
+        let resultadoCreacionAnalista: any = (await this.analistaRepository.crearAnalista(analista))[0];
+        analista.id = resultadoCreacionAnalista.id;
+      } else {
+        if (analista.nombre_completo !== params.analista.nombre || analista.region_id.toString() !== params.analista.codigoRegion) {
+          // await gestionTramitesGateway.actualizarAnalista(analista)
+          await this.analistaRepository.actualizarAnalista(analista);
+        }
+      }
+      // let empresa = await internacionalGateway.obtenerEmpresaByRut(params.rutEmpresa)
+      let empresa: any = await this.empresaRepository.obtenerEmpresaByRut(params.rutEmpresa);
+      if (empresa.id == undefined) throw new Error('Empresa con rut ' + params.rutEmpresa + ' no existe.')
+      // let tiposIdentificadores = await internacionalGateway.obtenerTiposIdentificadoresPersonas()
+      let tiposIdentificadores: any = await this.tipoIdPersonaRepository.obtenerTiposIdentificadoresPersonas();
+      let tipoIdRut = tiposIdentificadores.find((tipo: any) => tipo.codigo === 'RUT')
+      if (tipoIdRut == undefined) throw new Error('Debe crear el tipo de identificador con código RUT')
+      let modificaciones = params.modificaciones;
+      let mensajes: any = [];
+      await modificaciones.forEach(async (modificacion: any) => {
+        if (modificacion.tipo.id == undefined || modificacion.descripcion == undefined) {
+          throw new Error('Modificación no contiene los parámetros esperados. ' + JSON.stringify(modificacion))
+        }
+        switch (modificacion.tipo) {
+          case 1:
+            if (modificacion.solicitantes.id == undefined || modificacion.solicitantes.length === 0) throw new Error('Falta el o los solicitantes.')
+            modificacion.solicitantes.forEach(async (solicitante: any) => {
+              if (['Representante Legal', 'Mandatario'].indexOf(solicitante.relacionEmpresa) === -1) throw new Error('Relación ' + solicitante.relacionEmpresa + ' desconocida.')
+              // let persona = await internacionalGateway.obtenerPersonaNaturalByRut(solicitante.rut)
+              let persona: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(solicitante.rut))[0];
+              if (persona.id == undefined) {
+                persona = { nombreCompleto: solicitante.nombre, identificador: solicitante.rut, tipoIdentificadorId: tipoIdRut.id }
+                // let respuestaCreacionPersonaNatural = await internacionalGateway.crearPersonaNatural(persona)
+                let respuestaCreacionPersonaNatural: any = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
+                persona.id = respuestaCreacionPersonaNatural.id;
+              }
+              // await internacionalGateway.crearSolicitanteAutorizado(empresa.id, persona.id, solicitante.relacionEmpresa)
+              await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresa.id, persona.id, solicitante.relacionEmpresa);
+              mensajes.push('Nuevo solicitante autorizado creado: ' + solicitante.nombre)
+            })
+            break
+          case 2:
+            if (!modificacion.domicilio || !modificacion.domicilio.codigoRegionIntermediario || !modificacion.domicilio.codigoComunaIntermediario ||
+              !modificacion.domicilio.textoDireccion || !modificacion.domicilio.telefonoFijo || !modificacion.domicilio.telefonoMovil || !modificacion.domicilio.email) {
+              throw new Error('Parámetros de modificación de domicilio incorrectos.')
+            }
+            let domicilio: any = {
+              codigoRegion: modificacion.domicilio.codigoRegionIntermediario,
+              codigoComuna: modificacion.domicilio.codigoComunaIntermediario,
+              texto: modificacion.domicilio.textoDireccion,
+              telefonoFijo: modificacion.domicilio.telefonoFijo,
+              telefonoMovil: modificacion.domicilio.telefonoMovil,
+              email: modificacion.domicilio.email,
+              empresaId: empresa.id
+            }
+            // let resultadoCreacionDomicilio = await internacionalGateway.crearDomicilioEmpresa(domicilio)
+            let resultadoCreacionDomicilio: any = await this.domicilioEmpresaRepository.crearDomicilioEmpresa(domicilio);
+            domicilio.id = resultadoCreacionDomicilio.id;
+            mensajes.push('Nuevo domicilio de empresa creado: ' + domicilio.texto)
+            break
+          case 3:
+            if (modificacion.razonSocial == undefined) throw new Error('No viene la Razón Social a cambiar.')
+            // await internacionalGateway.actualizarRazonSocialPersonaJuridica(empresa.persona_juridica_id, modificacion.razonSocial)
+            await this.personaJuridicaRepository.actualizarRazonSocialPersonaJuridica(empresa.persona_juridica_id, modificacion.razonSocial);
+            mensajes.push('Razón Social modificada a "' + modificacion.razonSocial + '"')
+            break
+          case 4:
+            if (modificacion.representanteLegal == undefined || modificacion.representanteLegal.rut == undefined || modificacion.representanteLegal.nombre == undefined) throw new Error('Parámetros de Representante Legal incorrectos.')
+            // let persona = await internacionalGateway.obtenerPersonaNaturalByRut(modificacion.representanteLegal.rut)
+            let persona: any = await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(modificacion.representanteLegal.rut);
+            if (persona.id == undefined) {
+              persona = { nombreCompleto: modificacion.representanteLegal.nombre, identificador: modificacion.representanteLegal.rut, tipoIdentificadorId: tipoIdRut.id }
+              // let respuestaCreacionPersonaNatural = await internacionalGateway.crearPersonaNatural(persona)
+              let respuestaCreacionPersonaNatural: any = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
+              persona.id = respuestaCreacionPersonaNatural.id;
+            }
+            // await internacionalGateway.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id)
+            await this.personaJuridicaRepository.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id);
+            mensajes.push('Representante Legal cambiado a: ' + persona.nombreCompleto)
+            break
+          default:
+            throw new Error('Tipo ' + modificacion.tipo + ' desconocido.')
+        }
+      })
+      let tramite = {
+        identificadorIntermediario: params.identificadorIntermediario,
+        analistaId: analista.id,
+        solicitudId: null,
+        metadata: JSON.stringify(modificaciones),
+        codigo: null,
+        fechaHoraCreacion: moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").toDate(),
+        tipoTramiteId: tipoTramite.id,
+        intermediarioId: intermediarios[0].id
+      }
+      // await gestionTramitesGateway.crearTramite(tramite)
+      await this.permisoRepository.crearTramite(tramite)
+        .then(async (resp: any) => {
+          return {
+            codigoResultado: 1,
+            descripcionResultado: "Trámite de Modificación de Empresa registrado exitosamente. Modificaciones realizadas: " + mensajes.join('; ')
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          throw new HttpErrors.InternalServerError('No fue posible crear el trámite.');
+        })
+    } catch (ex) {
+      console.log(ex)
       throw new HttpErrors.InternalServerError(ex.toString());
     }
   }
