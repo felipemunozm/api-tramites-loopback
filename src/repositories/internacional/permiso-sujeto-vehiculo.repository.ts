@@ -27,4 +27,8 @@ export class PermisoSujetoVehiculoRepository extends DefaultCrudRepository<
     let query: string = "Delete from permiso_sujeto_vehiculo where permiso_id = $1 returning *;";
     return this.dataSource.execute(respCreacionPermiso);
   }
+  public borrarPermiso(borrarPermisoSujetoVehiculo: any): Promise<any> {
+    let query: string = "Delete from permiso where id = $1 returning id;";
+    return this.dataSource.execute(borrarPermisoSujetoVehiculo);
+  }
 }
