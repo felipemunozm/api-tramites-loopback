@@ -25,4 +25,8 @@ export class SujetoIdRepository extends DefaultCrudRepository<
     let query: string = "insert into sujeto (version, ' + (tipoPersona === 'Juridica' ? 'persona_juridica_id' : 'persona_natural_id') + ') values (0, $1) returning id";
     return this.dataSource.execute(query, [tipoPersona, personaId]);
   }
+  public controlPermisoSujetoVehiculo(respConsultaPermisos: any): Promise<any> {
+    let query: string = "update sujeto_id set flag = 1 where flag is null and id = $1 returning flag;";
+    return this.dataSource.execute(respConsultaPermisos);
+  }
 }
