@@ -12,4 +12,8 @@ export class EstadoTramiteRepository extends DefaultCrudRepository<
   ) {
     super(EstadoTramite, dataSource);
   }
+  public crearEstadoTramite(tramiteId: any, estapaId: any): Promise<any> {
+    let query: string = "insert into estado_tramite (version, tramite_id, metadata, etapa_id, fecha_hora) values (0, $1, $2, $3, $4) returning id";
+    return this.dataSource.execute(query, [tramiteId, '', estapaId, new Date()]);
+  }
 }
