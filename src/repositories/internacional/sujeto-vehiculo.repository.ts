@@ -16,4 +16,8 @@ export class SujetoVehiculoRepository extends DefaultCrudRepository<
     let query: string = "insert into sujeto_vehiculo (version, habilitado, sujeto_id, vehiculo_id, fecha_actualizacion) values (0, true, $1, $2, now()) returning id";
     return this.dataSource.execute(query, respCreacionSujeto, response);
   }
+  public actualizacionSujetoVehiculo(respConsultaPermiso: any): Promise<any> {
+    let query: string = "update sujeto_vehiculo set fecha_actualizacion = now () where id = $1 returning id";
+    return this.dataSource.execute(respConsultaPermiso);
+  }
 }
