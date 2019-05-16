@@ -12,4 +12,8 @@ export class DocumentoEmpresaRepository extends DefaultCrudRepository<
   ) {
     super(DocumentoEmpresa, dataSource);
   }
+  public crearDocumentoEmpresa(tipoDocumentoId: any, empresaId: any, url: any) {
+    let query: string = "insert into documento_empresa (version, tipo_id, empresa_id, url, hashing, algoritmo) values (0, $1, $2, $3, $4, $5) returning id";
+    return this.dataSource.execute(query, [tipoDocumentoId, empresaId, url, '', '']);
+  }
 }
