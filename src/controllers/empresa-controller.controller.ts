@@ -1,10 +1,11 @@
-import { post, requestBody, HttpErrors, put } from "@loopback/rest";
+import { post, requestBody, HttpErrors, put, param, get } from "@loopback/rest";
 import { repository } from "@loopback/repository";
-import { TipoTramiteRepository, IntermediarioTramiteRepository, RegionRepository, AnalistaRepository, EmpresaRepository, PermisoRepository, TipoIdPersonaRepository, PersonaNaturalRepository, PersonaJuridicaRepository, TipoEmpresaRepository, DomicilioEmpresaRepository, SolicitanteAutorizadoRepository, TipoDocumentoRepository, DocumentoEmpresaRepository, EstadoTramiteRepository } from "../repositories";
+import { TipoTramiteRepository, IntermediarioTramiteRepository, RegionRepository, AnalistaRepository, EmpresaRepository, PermisoRepository, TipoIdPersonaRepository, PersonaNaturalRepository, PersonaJuridicaRepository, TipoEmpresaRepository, DomicilioEmpresaRepository, SolicitanteAutorizadoRepository, TipoDocumentoRepository, DocumentoEmpresaRepository, EstadoTramiteRepository, DireccionPersonaNaturalRepository } from "../repositories";
 import * as moment from 'moment';
 import { controllerLogger } from "../logger/logger-config";
 import { getHeapStatistics } from "v8";
 import { SolicitanteAutorizado } from "../models";
+import { httpify } from "caseless";
 
 // Uncomment these imports to begin using these cool features!
 
@@ -28,6 +29,7 @@ export class EmpresaControllerController {
     @repository(TipoDocumentoRepository) public tipoDocumentoRepository: TipoDocumentoRepository,
     @repository(DocumentoEmpresaRepository) public documentoEmpresaRepository: DocumentoEmpresaRepository,
     @repository(EstadoTramiteRepository) public estadoTramiteRepository: EstadoTramiteRepository,
+    @repository(DireccionPersonaNaturalRepository) public direccionPersonaNaturalRepository: DireccionPersonaNaturalRepository,
   ) { }
   @post('/tramites/internacional/chile-chile/empresa')
   public async creacionTramiteCreacionEmpresa(@requestBody() params: any): Promise<any> {
@@ -349,6 +351,83 @@ export class EmpresaControllerController {
     } catch (ex) {
       console.log(ex)
       throw new HttpErrors.InternalServerError(ex.toString());
+    }
+  }
+  @get('/tramites/internacional/chile-chile/empresa')
+  async getEmpresa(@param.query.string('rutEmpresa') rutEmpresa: any, @param.query.string('rutSolicitante') rutSolicitante: any): Promise<any> {
+    try {
+      // let rutEmpresa = ctx.query.rutEmpresa
+      // let rutSolicitante = ctx.query.rutSolicitante
+      // let empresa = await internacionalGateway.obtenerEmpresaByRut(rutEmpresa)
+      let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(rutEmpresa))[0];
+      let solicitantes: any = [], sol: any = [], documentos = [], direccionRepresentanteLegal = {}
+      if (empresa.id == undefined) {
+        return {
+          codigoResultado: 2,
+          descripcionResultado: "No hay una empresa registrada con el rut " + rutEmpresa + "."
+        }
+        // return
+      }
+      // solicitantes = await internacionalGateway.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id)
+      solicitantes = await this.solicitanteAutorizadoRepository.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id);
+      if (rutSolicitante !== empresa.identificador_representante_legal) {
+
+        if (!solicitantes || solicitantes.length === 0) {
+          return {
+            codigoResultado: 4,
+            descripcionResultado: "No hay solicitantes autorizados para esta empresa."
+          }
+          // return
+        }
+        let solicitante = solicitantes.find((s: any) => s.identificador === rutSolicitante)
+        if (solicitante.id == undefined) {
+          return {
+            codigoResultado: 3,
+            descripcionResultado: "No hay un solicitante autorizado con el rut " + rutSolicitante + "."
+          }
+          // return
+        }
+
+      }
+      // direccionRepresentanteLegal = await internacionalGateway.obtenerDireccionByPersonaId(empresa.id_representante_legal)
+      direccionRepresentanteLegal = (await this.direccionPersonaNaturalRepository.obtenerDireccionByPersonaId(empresa.id_representante_legal))[0];
+      // documentos = await internacionalGateway.obtenerDocumentosEmpresaById(empresa.id)
+      documentos = await this.documentoEmpresaRepository.obtenerDocumentosEmpresaById(empresa.id);
+      solicitantes.forEach((s: any) => {
+        console.log('sol')
+        console.log(s)
+        sol.push({ rut: s.identificador, nombre: s.nombre_completo })
+      })
+      return {
+        codigoResultado: 1,
+        descripcionResultado: "Exitoso.",
+        empresa: {
+          id: empresa.id,
+          rut: empresa.identificador,
+          razonSocial: empresa.razon_social,
+          tipoEmpresa: empresa.tipo_empresa,
+          representanteLegal: {
+            rut: empresa.identificador_representante_legal,
+            nombre: empresa.nombre_representante_legal,
+            direccion: direccionRepresentanteLegal
+          },
+          direccion: {
+            codigo_comuna: empresa.codigo_comuna,
+            nombre_comuna: empresa.nombre_comuna,
+            codigo_region: empresa.codigo_region,
+            nombre_region: empresa.nombre_region,
+            texto: empresa.texto,
+            telefono_fijo: empresa.telefono_fijo,
+            telefono_movil: empresa.telefono_movil,
+            email: empresa.email
+          },
+          documentos: documentos,
+          solicitantesAutorizados: sol
+        }
+      }
+    } catch (ex) {
+      console.log(ex)
+      throw ex.toString()
     }
   }
 }
