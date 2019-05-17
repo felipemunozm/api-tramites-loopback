@@ -1,8 +1,8 @@
-import { get, param, HttpErrors } from "@loopback/rest";
+import { param, HttpErrors, post } from "@loopback/rest";
 import * as moment from 'moment';
 import { controllerLogger } from "../logger/logger-config";
 import { repository } from "@loopback/repository";
-import { TraduccionTipoVehiculoEjesCargaRepository } from "../repositories";
+import { TraduccionTipoVehiculoEjesCargaRepository, VehiculoRepository } from "../repositories";
 import { serviciosGateway } from "../utils/servicios-gateway";
 import { HttpError } from "http-errors";
 
@@ -14,9 +14,10 @@ import { HttpError } from "http-errors";
 export class FlotaControllerController {
   constructor(
     @repository(TraduccionTipoVehiculoEjesCargaRepository) public traduccionTipoVehiculosEjesCargaRepository: TraduccionTipoVehiculoEjesCargaRepository,
+    @repository(VehiculoRepository) public vehiculoRepository: VehiculoRepository,
   ) { }
 
-  @get("/tramites/internacional/chile-chile/flota/validacion", {
+  @post("/tramites/internacional/chile-chile/flota/validacion", {
     parameters: [{ name: 'q', schema: { type: 'string' }, in: 'query' }],
     responses: {
       '200': {
@@ -25,9 +26,6 @@ export class FlotaControllerController {
           'application/json': {
             schema: {
               type: 'string',
-              abc: {
-                type: 'string'
-              }
             }
           }
         }
@@ -66,7 +64,7 @@ export class FlotaControllerController {
         .then(async (respuestaPpu: any) => {
           await Promise.all(promisesPrt)
             .then((respuestaPrt: any) => {
-              respuestaPpu.forEach((v: any) => {
+              respuestaPpu.forEach(async (v: any) => {
 
                 let ppu = v.return.patente.split('-')[0]
                 let ppuDuplicada = ppusProcesadas.find(p => p.ppu === ppu)
@@ -307,6 +305,7 @@ export class FlotaControllerController {
                       })
                       client.connect()
                       //Inicia Insert
+                      let someshit: any = (await this.vehiculoRepository.insertVehiculoFV(vehiculo))[0]
                       client.query('insert into vehiculo (version, cantidad_ejes, identificador, tipo, cantidad_toneladas_carga, tipo_id_id, modelo, marca, ppu, anno_fabricacion, carroceria, nombre_propietario, vigencia_registro, chasis, num_motor)'
                         + ' values (0,' + '\'' + vehiculo.ejes + '\'' + ', ' + '\'' + vehiculo.identificador + '\'' + ', ' + '\'' + vehiculo.tipo + '\'' + ', ' + '\'' + vehiculo.toneladas + '\'' + ',' + '\'' + vehiculo.tipoid + '\'' + ', ' + '\'' + vehiculo.modelo + '\'' + ', ' + '\'' + vehiculo.marca + '\'' + ', ' + '\'' + vehiculo.ppu + '\'' + ', ' + '\'' + vehiculo.anno + '\'' + ',  ' + '\'' + vehiculo.carroceria + '\'' + ',  ' + '\'' + vehiculo.propietario + '\'' + ', now(), ' + '\'' + vehiculo.chasis + '\'' + ', ' + '\'' + vehiculo.numeroMotor + '\'' + ') returning id;', (err: any, res: any) => {
                           //console.log(err, res)
