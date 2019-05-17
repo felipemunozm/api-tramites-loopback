@@ -24,7 +24,8 @@ export class FlotaControllerController {
     try {
       let params: any = q;
       if (!params || !params.rutSujeto || !params.ppus || params.ppus.length === 0) {
-        throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
+        // throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
+        throw new HttpErrors.InternalServerError('Parámetros incorrectos');
       }
       let newtipArr = [], vehiculosTipo2 = [], vehiculosRechazados3: any[] = [], promisesPpus: any[] = [], ppusProcesadas: any[] = [], promisesPrt: any[] = [], vehiculosRechazados: any[] = [], vehiculosRechazados2: any[] = [], vehiculosValidados: any[] = [], vehiculosValidadosPorTipo: any[] = [], motivosRechazos: any[] = [], totalCarga = 0, vehiculosDocsLeasing: any[] = [], vehiculosDocsRevision: any[] = [], vehiculosValidadosPar: any[] = [], contadorRechazos: any[] = [], contadorParcial: any = [], Noexiste: any[] = [], ppuRech: any[] = [], docLeasing = false, docRevision = false, existe: any;
       params.ppus.forEach((ppu: any[]) => {
