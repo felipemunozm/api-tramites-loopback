@@ -1,10 +1,10 @@
 import { get, param, HttpErrors } from "@loopback/rest";
 import * as moment from 'moment';
-import { Any } from "json2typescript";
 import { controllerLogger } from "../logger/logger-config";
 import { repository } from "@loopback/repository";
 import { TraduccionTipoVehiculoEjesCargaRepository } from "../repositories";
 import { serviciosGateway } from "../utils/servicios-gateway";
+import { HttpError } from "http-errors";
 
 // Uncomment these imports to begin using these cool features!
 
@@ -23,7 +23,7 @@ export class FlotaControllerController {
         description: 'datos ok',
         content: {
           'application/json': {
-            schema: { type: 'string' }
+            schema: { type: '{rut=\'string\'}' }
           }
         }
       },
@@ -45,7 +45,9 @@ export class FlotaControllerController {
       let params: any = q;
       if (!params || !params.rutSujeto || !params.ppus || params.ppus.length === 0) {
         // throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
-        return new HttpErrors.NotFound('Parámetros incorrectoss');
+        let e: HttpError = new HttpErrors.NotFound('Parámetros incorrectoss');
+        e.statusCode = 404
+        return e;
       }
       let newtipArr = [], vehiculosTipo2 = [], vehiculosRechazados3: any[] = [], promisesPpus: any[] = [], ppusProcesadas: any[] = [], promisesPrt: any[] = [], vehiculosRechazados: any[] = [], vehiculosRechazados2: any[] = [], vehiculosValidados: any[] = [], vehiculosValidadosPorTipo: any[] = [], motivosRechazos: any[] = [], totalCarga = 0, vehiculosDocsLeasing: any[] = [], vehiculosDocsRevision: any[] = [], vehiculosValidadosPar: any[] = [], contadorRechazos: any[] = [], contadorParcial: any = [], Noexiste: any[] = [], ppuRech: any[] = [], docLeasing = false, docRevision = false, existe: any;
       params.ppus.forEach((ppu: any[]) => {
