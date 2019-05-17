@@ -16,7 +16,27 @@ export class FlotaControllerController {
     @repository(TraduccionTipoVehiculoEjesCargaRepository) public traduccionTipoVehiculosEjesCargaRepository: TraduccionTipoVehiculoEjesCargaRepository,
   ) { }
 
-  @get("/tramites/internacional/chile-chile/flota/validacion")
+  @get("/tramites/internacional/chile-chile/flota/validacion", {
+    parameters: [{ name: 'q', schema: { type: 'string' }, in: 'query' }],
+    responses: {
+      '200': {
+        description: 'datos ok',
+        content: {
+          'application/json': {
+            schema: { type: 'string' }
+          }
+        }
+      },
+      '404': {
+        description: 'Error de datos de entrada',
+        content: {
+          'application/json': {
+            schema: { type: 'string' }
+          }
+        }
+      }
+    }
+  })
   async validarFlota(@param.query.string('q') q: string): Promise<any> {
     // let matrizConversionCapacidadesCargas = await internacionalGateway.obtenerCapacidadesCargas()
     let matrizConversionCapacidadesCargas = await this.traduccionTipoVehiculosEjesCargaRepository.obtenerCapacidadesCargas();
