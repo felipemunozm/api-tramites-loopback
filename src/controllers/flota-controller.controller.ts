@@ -23,7 +23,12 @@ export class FlotaControllerController {
         description: 'datos ok',
         content: {
           'application/json': {
-            schema: { type: '{rut=\'string\'}' }
+            schema: {
+              type: 'string',
+              abc: {
+                type: 'string'
+              }
+            }
           }
         }
       },
