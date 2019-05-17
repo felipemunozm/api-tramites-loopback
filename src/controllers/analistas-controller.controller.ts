@@ -1,4 +1,4 @@
-import { get } from "@loopback/rest";
+import { get, requestBody, post } from "@loopback/rest";
 import { repository } from "@loopback/repository";
 import { AnalistaRepository } from "../repositories";
 
@@ -40,6 +40,31 @@ export class AnalistasControllerController {
         resp.analistas.push(analista)
       })
       return resp;
+    } catch (ex) {
+      console.log(ex)
+      throw ex.toString()
+    }
+  }
+  @post('/tramites/internacional/analista')
+  async crearAnalista(@requestBody() params: any): Promise<any> {
+    if (!params || !params.nombreCompleto || !params.codigo || !params.regionId) {
+      throw 'Parámetros incorrectos'
+      return
+    }
+    let analista: any = {
+      codigo: params.codigo,
+      nombre_completo: params.nombreCompleto,
+      region_id: params.regionId
+    }
+    try {
+      let resp: any = {
+        codigoResultado: 1,
+        descripcionResultado: 'Analista creado.'
+      }
+      // let respCreacionAnalista = await gestionTramitesGateway.crearAnalista(analista)
+      let respCreacionAnalista = (await this.analistaRepository.crearAnalista(analista))[0];
+      resp.analistaId = respCreacionAnalista.id
+      return resp
     } catch (ex) {
       console.log(ex)
       throw ex.toString()
