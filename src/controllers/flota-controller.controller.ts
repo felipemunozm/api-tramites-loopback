@@ -1,4 +1,4 @@
-import { param, HttpErrors, post } from "@loopback/rest";
+import { param, HttpErrors, post, requestBody } from "@loopback/rest";
 import * as moment from 'moment';
 import { controllerLogger } from "../logger/logger-config";
 import { repository } from "@loopback/repository";
@@ -40,12 +40,12 @@ export class FlotaControllerController {
       }
     }
   })
-  async validarFlota(@param.query.string('q') q: string): Promise<any> {
+  async validarFlota(@requestBody() params: any): Promise<any> {
     // let matrizConversionCapacidadesCargas = await internacionalGateway.obtenerCapacidadesCargas()
     let matrizConversionCapacidadesCargas = await this.traduccionTipoVehiculosEjesCargaRepository.obtenerCapacidadesCargas();
     let tiposVehiculosAceptados = ['camioneta', 'furgon', 'tractocamion', 'camion', 'semiremolque', 'remolque', 'chasis cabinado', 'CAMION']
     try {
-      let params: any = q;
+      // let params: any = q;
       if (!params || !params.rutSujeto || !params.ppus || params.ppus.length === 0) {
         throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
         // let e: HttpError = new HttpErrors.HttpError('Parámetros incorrectoss');
