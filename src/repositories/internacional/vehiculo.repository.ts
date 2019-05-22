@@ -41,4 +41,9 @@ export class VehiculoRepository extends DefaultCrudRepository<
       + ' values (0,' + '\'' + vehiculo.ejes + '\'' + ', ' + '\'' + vehiculo.identificador + '\'' + ', ' + '\'' + vehiculo.tipo + '\'' + ', ' + '\'' + vehiculo.toneladas + '\'' + ',' + '\'' + vehiculo.tipoid + '\'' + ', ' + '\'' + vehiculo.modelo + '\'' + ', ' + '\'' + vehiculo.marca + '\'' + ', ' + '\'' + vehiculo.ppu + '\'' + ', ' + '\'' + vehiculo.anno + '\'' + ',  ' + '\'' + vehiculo.carroceria + '\'' + ',  ' + '\'' + vehiculo.propietario + '\'' + ', now(), ' + '\'' + vehiculo.chasis + '\'' + ', ' + '\'' + vehiculo.numeroMotor + '\'' + ') returning id;'
     return this.dataSource.execute(query);
   }
+
+  public updateVehiculoFV(vehiculo: any): Promise<any> {
+    let query: string = "update vehiculo set fecha_actualizacion_registro = now() where ppu = $1";
+    return this.dataSource.execute(query, [vehiculo.ppu]);
+  }
 }
