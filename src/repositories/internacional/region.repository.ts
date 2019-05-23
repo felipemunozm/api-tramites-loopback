@@ -13,7 +13,7 @@ export class RegionRepository extends DefaultCrudRepository<
     super(Region, dataSource);
   }
   public obtenerRegiones(): Promise<any> {
-    let query: string = "select id, codigo, nombre from region";
+    let query: string = "select id, codigo, nombre from region order by id asc";
     return this.dataSource.execute(query);
   }
 }
