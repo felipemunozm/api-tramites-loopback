@@ -207,7 +207,8 @@ export class FlotaControllerController {
                 revisionTecnica.fechaVencimiento = moment(infoPrt.return.revisionTecnica.fechaVencimiento)
                 revisionTecnica.estado = infoPrt.return.revisionTecnica.resultado
               }
-              let cap = matrizConversionCapacidadesCargas.find((matriz: any) => matriz.tipo_vehiculo === infoPrt.return.tipoVehiculo.toLowerCase() && matriz.cantidad_ejes === infoPrt.return.cantEjes)
+              controllerLogger.info("Tipo Vehiculo = " + infoPrt.return.tipoVehiculo.toLowerCase().replace(' ', ''));
+              let cap = matrizConversionCapacidadesCargas.find((matriz: any) => matriz.tipo_vehiculo === infoPrt.return.tipoVehiculo.toLowerCase().replace(' ', '') && matriz.cantidad_ejes === infoPrt.return.cantEjes)
               vehiculo.carroceria = infoPrt.return.tipoCarroceria ? infoPrt.return.tipoCarroceria : 'Sin dato'
               vehiculo.numeroMotor = infoPrt.return.numeroMotor ? infoPrt.return.numeroMotor : 'Sin dato'
               vehiculo.ejes = infoPrt && infoPrt.return && infoPrt.return.cantEjes ? infoPrt.return.cantEjes : '0'
@@ -406,147 +407,147 @@ export class FlotaControllerController {
           }
 
         }
-        if (docLeasing) {
-          let documentoAdjuntar: any = {}
-          documentoAdjuntar.codigo = 'VEH_CLS'
-          documentoAdjuntar.nombre = 'Contrato de leasing'
-          documentoAdjuntar.ppu = vehiculosDocsLeasing
-          tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar)
-          let documentoAdjuntar2: any = {}
-          documentoAdjuntar2.codigo = 'VEH_AUT'
-          documentoAdjuntar2.nombre = 'Autorización de entidad financiera para salir del país'
-          documentoAdjuntar2.ppu = vehiculosDocsLeasing
-          tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar2)
-        }
-        if (docRevision) {
-          let documentoAdjuntar: any = {}
-          documentoAdjuntar.codigo = 'VEH_RT'
-          documentoAdjuntar.nombre = 'Certificado de revisión técnica'
-          documentoAdjuntar.ppu = vehiculosDocsRevision
-          tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar)
-        }
+      }
+      if (docLeasing) {
+        let documentoAdjuntar: any = {}
+        documentoAdjuntar.codigo = 'VEH_CLS'
+        documentoAdjuntar.nombre = 'Contrato de leasing'
+        documentoAdjuntar.ppu = vehiculosDocsLeasing
+        tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar)
+        let documentoAdjuntar2: any = {}
+        documentoAdjuntar2.codigo = 'VEH_AUT'
+        documentoAdjuntar2.nombre = 'Autorización de entidad financiera para salir del país'
+        documentoAdjuntar2.ppu = vehiculosDocsLeasing
+        tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar2)
+      }
+      if (docRevision) {
+        let documentoAdjuntar: any = {}
+        documentoAdjuntar.codigo = 'VEH_RT'
+        documentoAdjuntar.nombre = 'Certificado de revisión técnica'
+        documentoAdjuntar.ppu = vehiculosDocsRevision
+        tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar)
+      }
 
-        //contabilizacion de Rechazos
-        console.log(ppuRech.length)
-        let ContadorRechazo: any = 0
-        let ContadorRechazo2: any = 0
-        if (vehiculosRechazados3.length >= 1 && ppuRech.length >= 1) {
-          let ContadorRechazo2: any = ppuRech.filter((ppu, indiceActual, arreglo) => arreglo.indexOf(ppu) === indiceActual)
-          ContadorRechazo = ContadorRechazo2.length
-          console.log("tamos limpiando ppu")
-          //vehiculosRechazados3.push(vehiculosRechazados2)
-        } else if (vehiculosRechazados3.length <= 1 && ppuRech.length >= 1) {
-          vehiculosRechazados3.push(vehiculosRechazados2)
-          ContadorRechazo = vehiculosRechazados2.length
-          console.log("tamos limpiando nada")
-        }
-        console.log(vehiculosDocsRevision)
-        console.log(ContadorRechazo2)
-        //console.log (vehiculosRechazados2)
-        if (vehiculosRechazados3.length > 0 && ContadorRechazo2.length > 0) {
-          vehiculosRechazados.push(vehiculosRechazados2)
-        }
+      //contabilizacion de Rechazos
+      console.log(ppuRech.length)
+      let ContadorRechazo: any = 0
+      let ContadorRechazo2: any = 0
+      if (vehiculosRechazados3.length >= 1 && ppuRech.length >= 1) {
+        let ContadorRechazo2: any = ppuRech.filter((ppu, indiceActual, arreglo) => arreglo.indexOf(ppu) === indiceActual)
+        ContadorRechazo = ContadorRechazo2.length
+        console.log("tamos limpiando ppu")
+        //vehiculosRechazados3.push(vehiculosRechazados2)
+      } else if (vehiculosRechazados3.length <= 1 && ppuRech.length >= 1) {
+        vehiculosRechazados3.push(vehiculosRechazados2)
+        ContadorRechazo = vehiculosRechazados2.length
+        console.log("tamos limpiando nada")
+      }
+      console.log(vehiculosDocsRevision)
+      console.log(ContadorRechazo2)
+      //console.log (vehiculosRechazados2)
+      if (vehiculosRechazados3.length > 0 && ContadorRechazo2.length > 0) {
+        vehiculosRechazados.push(vehiculosRechazados2)
+      }
 
-        if (docLeasing && !docRevision && contadorParcial > 1) {
-          tiposDocumentosPosiblesAdjuntar.caso = 1
-        } else if (!docLeasing && docRevision && contadorParcial > 1) {
-          tiposDocumentosPosiblesAdjuntar.caso = 2
-        } else if (docLeasing && docRevision && contadorParcial > 1) {
-          tiposDocumentosPosiblesAdjuntar.caso = 3
+      if (docLeasing && !docRevision && contadorParcial > 1) {
+        tiposDocumentosPosiblesAdjuntar.caso = 1
+      } else if (!docLeasing && docRevision && contadorParcial > 1) {
+        tiposDocumentosPosiblesAdjuntar.caso = 2
+      } else if (docLeasing && docRevision && contadorParcial > 1) {
+        tiposDocumentosPosiblesAdjuntar.caso = 3
+      }
+      controllerLogger.info("El valor de Existe es: " + existe);
+      if (vehiculosRechazados2.length == 0) {
+        resultado.codigoResultado = 1
+        resultado.descripcionResultado = 'Todas las PPUs validadas correctamente'
+        resultado.flotaValidada = vehiculosValidados
+        resultado.resumenFlotaValidada = {
+          cantidadVehiculos: vehiculosValidados.length,
+          capacidadCargaToneladas: totalCarga
         }
-        controllerLogger.info("El valor de Existe es: " + existe);
-        if (vehiculosRechazados2.length == 0) {
-          resultado.codigoResultado = 1
-          resultado.descripcionResultado = 'Todas las PPUs validadas correctamente'
-          resultado.flotaValidada = vehiculosValidados
-          resultado.resumenFlotaValidada = {
-            cantidadVehiculos: vehiculosValidados.length,
-            capacidadCargaToneladas: totalCarga
-          }
-          resultado.resumenFlotaValidadaPorTipo = vehiculosValidadosPorTipo
-          /*resultado.resumenFlotaValidadaPorTipo = {
-            tipo: newTipo,
-            cantidad: cantiVehiculoValidadosPar
-          } */
-          resultado.tiposDocumentosPosiblesAdjuntar = tiposDocumentosPosiblesAdjuntar
-        } else if (contadorParcial.length <= 0 && contadorRechazos.length > 0) {
-          resultado.codigoResultado = 2
-          resultado.descripcionResultado = 'Todas las PPUs rechazadas'
-          //resultado.flotaRechazada.ppu = ContadorRechazo2
-          //resultado.flotaRechazada.motivos = vehiculosRechazados
-          resultado.flotaRechazada = vehiculosRechazados3
-          /*resultado.flotaRechazada ={
-            PPU: ppus,
-            Motivos: vehiculosRechazados
-          }*/
-          resultado.cantidadVehiculosRechazados = ContadorRechazo
-        } else if (contadorParcial.length <= 0 && contadorRechazos.length > 0 && existe.length > 0) {
-          resultado.codigoResultado = 2
-          resultado.descripcionResultado = 'Todas las PPUs rechazadas'
-          //resultado.flotaRechazada.ppu = ContadorRechazo2
-          //resultado.flotaRechazada.motivos = vehiculosRechazados
-          resultado.flotaRechazada = vehiculosRechazados3
-          /*resultado.flotaRechazada ={
-            PPU: ppus,
-            Motivos: vehiculosRechazados
-          }*/
-          resultado.cantidadVehiculosRechazados = ContadorRechazo
-        } else if (contadorParcial.length <= 0 && existe.length > 0) {
-          resultado.codigoResultado = 2
-          resultado.descripcionResultado = 'Todas las PPUs rechazadas'
-          //resultado.flotaRechazada.ppu = ContadorRechazo2
-          //resultado.flotaRechazada.motivos = vehiculosRechazados
-          resultado.flotaRechazada = vehiculosRechazados3
-          /*resultado.flotaRechazada ={
-            PPU: ppus,
-            Motivos: vehiculosRechazados
-          }*/
-          resultado.cantidadVehiculosRechazados = ContadorRechazo
-        } else if (contadorParcial.length >= 1) {
-          resultado.codigoResultado = 3
-          resultado.descripcionResultado = 'PPUs parcialmente validadas'
-          resultado.flotaValidada = vehiculosValidadosPar
-          resultado.resumenFlotaValidada = {
-            cantidadVehiculos: cantiVehiculoValidadosPar,
-            capacidadCargaToneladas: totalCarga
-          }
-          resultado.resumenFlotaValidadaPorTipo = vehiculosValidadosPorTipo
-          /*resultado.resumenFlotaValidadaPorTipo = {
-            tipo: newTipo,
-            cantidad: cantiVehiculoValidadosPar
-          } */
-          //resultado.flotaRechazada.ppu = ContadorRechazo2
-          //resultado.flotaRechazada.motivos = vehiculosRechazados
-          resultado.flotaRechazada = vehiculosRechazados3
-          /*resultado.flotaRechazada ={
-            PPU: ppus,
-            Motivos: vehiculosRechazados
-          }*/
-          resultado.cantidadVehiculosRechazados = ContadorRechazo
-          resultado.tiposDocumentosPosiblesAdjuntar = tiposDocumentosPosiblesAdjuntar
-        } else if (contadorParcial.length >= 1 && existe.length >= 1) {
-          resultado.codigoResultado = 3
-          resultado.descripcionResultado = 'PPUs parcialmente validadas'
-          resultado.flotaValidada = vehiculosValidadosPar;
-          resultado.resumenFlotaValidada = {
-            cantidadVehiculos: cantiVehiculoValidadosPar,
-            capacidadCargaToneladas: totalCarga
-          }
-          resultado.resumenFlotaValidadaPorTipo = vehiculosValidadosPorTipo
-          /*resultado.resumenFlotaValidadaPorTipo = {
-            tipo: newTipo,
-            cantidad: cantiVehiculoValidadosPar
-          } */
-          //resultado.flotaRechazada.ppu = ContadorRechazo2
-          //resultado.flotaRechazada.motivos = vehiculosRechazados
-          resultado.flotaRechazada = vehiculosRechazados3
-          /*resultado.flotaRechazada ={
-            PPU: ppus,
-            Motivos: vehiculosRechazados
-          }*/
-          resultado.cantidadVehiculosRechazados = ContadorRechazo
-          resultado.tiposDocumentosPosiblesAdjuntar = tiposDocumentosPosiblesAdjuntar
+        resultado.resumenFlotaValidadaPorTipo = vehiculosValidadosPorTipo
+        /*resultado.resumenFlotaValidadaPorTipo = {
+          tipo: newTipo,
+          cantidad: cantiVehiculoValidadosPar
+        } */
+        resultado.tiposDocumentosPosiblesAdjuntar = tiposDocumentosPosiblesAdjuntar
+      } else if (contadorParcial.length <= 0 && contadorRechazos.length > 0) {
+        resultado.codigoResultado = 2
+        resultado.descripcionResultado = 'Todas las PPUs rechazadas'
+        //resultado.flotaRechazada.ppu = ContadorRechazo2
+        //resultado.flotaRechazada.motivos = vehiculosRechazados
+        resultado.flotaRechazada = vehiculosRechazados3
+        /*resultado.flotaRechazada ={
+          PPU: ppus,
+          Motivos: vehiculosRechazados
+        }*/
+        resultado.cantidadVehiculosRechazados = ContadorRechazo
+      } else if (contadorParcial.length <= 0 && contadorRechazos.length > 0 && existe.length > 0) {
+        resultado.codigoResultado = 2
+        resultado.descripcionResultado = 'Todas las PPUs rechazadas'
+        //resultado.flotaRechazada.ppu = ContadorRechazo2
+        //resultado.flotaRechazada.motivos = vehiculosRechazados
+        resultado.flotaRechazada = vehiculosRechazados3
+        /*resultado.flotaRechazada ={
+          PPU: ppus,
+          Motivos: vehiculosRechazados
+        }*/
+        resultado.cantidadVehiculosRechazados = ContadorRechazo
+      } else if (contadorParcial.length <= 0 && existe.length > 0) {
+        resultado.codigoResultado = 2
+        resultado.descripcionResultado = 'Todas las PPUs rechazadas'
+        //resultado.flotaRechazada.ppu = ContadorRechazo2
+        //resultado.flotaRechazada.motivos = vehiculosRechazados
+        resultado.flotaRechazada = vehiculosRechazados3
+        /*resultado.flotaRechazada ={
+          PPU: ppus,
+          Motivos: vehiculosRechazados
+        }*/
+        resultado.cantidadVehiculosRechazados = ContadorRechazo
+      } else if (contadorParcial.length >= 1) {
+        resultado.codigoResultado = 3
+        resultado.descripcionResultado = 'PPUs parcialmente validadas'
+        resultado.flotaValidada = vehiculosValidadosPar
+        resultado.resumenFlotaValidada = {
+          cantidadVehiculos: cantiVehiculoValidadosPar,
+          capacidadCargaToneladas: totalCarga
         }
+        resultado.resumenFlotaValidadaPorTipo = vehiculosValidadosPorTipo
+        /*resultado.resumenFlotaValidadaPorTipo = {
+          tipo: newTipo,
+          cantidad: cantiVehiculoValidadosPar
+        } */
+        //resultado.flotaRechazada.ppu = ContadorRechazo2
+        //resultado.flotaRechazada.motivos = vehiculosRechazados
+        resultado.flotaRechazada = vehiculosRechazados3
+        /*resultado.flotaRechazada ={
+          PPU: ppus,
+          Motivos: vehiculosRechazados
+        }*/
+        resultado.cantidadVehiculosRechazados = ContadorRechazo
+        resultado.tiposDocumentosPosiblesAdjuntar = tiposDocumentosPosiblesAdjuntar
+      } else if (contadorParcial.length >= 1 && existe.length >= 1) {
+        resultado.codigoResultado = 3
+        resultado.descripcionResultado = 'PPUs parcialmente validadas'
+        resultado.flotaValidada = vehiculosValidadosPar;
+        resultado.resumenFlotaValidada = {
+          cantidadVehiculos: cantiVehiculoValidadosPar,
+          capacidadCargaToneladas: totalCarga
+        }
+        resultado.resumenFlotaValidadaPorTipo = vehiculosValidadosPorTipo
+        /*resultado.resumenFlotaValidadaPorTipo = {
+          tipo: newTipo,
+          cantidad: cantiVehiculoValidadosPar
+        } */
+        //resultado.flotaRechazada.ppu = ContadorRechazo2
+        //resultado.flotaRechazada.motivos = vehiculosRechazados
+        resultado.flotaRechazada = vehiculosRechazados3
+        /*resultado.flotaRechazada ={
+          PPU: ppus,
+          Motivos: vehiculosRechazados
+        }*/
+        resultado.cantidadVehiculosRechazados = ContadorRechazo
+        resultado.tiposDocumentosPosiblesAdjuntar = tiposDocumentosPosiblesAdjuntar
       }
       controllerLogger.info("resultado es: " + JSON.stringify(resultado.toString()));
       return resultado;
