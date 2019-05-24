@@ -1,4 +1,4 @@
-import { get } from "@loopback/rest";
+import { get, param } from "@loopback/rest";
 import { repository } from "@loopback/repository";
 import { RegionRepository } from "../repositories";
 
@@ -12,29 +12,36 @@ export class RegionesControllerController {
     @repository(RegionRepository) public regionRepository: RegionRepository,
   ) { }
   @get('/tramites/regiones')
-  async getRegiones(): Promise<any> {
+  async getRegiones(@param.query.string('type') type: string): Promise<any> {
     try {
       let resp: any = {
         codigoResultado: 2,
         descripcionResultado: 'No hay regiones disponibles.',
         regiones: []
       }
+      let resp2: any[] = new Array();
       // let regiones = await internacionalGateway.obtenerRegiones()
       let regiones: any = await this.regionRepository.obtenerRegiones();
       if (!regiones || regiones.length === 0) {
         return resp
-        return
       }
       resp.codigoResultado = 1
       resp.descripcionResultado = 'Regiones disponibles.'
       regiones.forEach((r: any, index: any) => {
-        let region = {
-          id: r.id,
-          codigo: r.codigo,
-          nombre: r.nombre
+        if (type == 'select') {
+          resp2.push({ etiqueta: r.nombre, valor: r.id })
         }
-        resp.regiones.push(region)
+        else {
+          let region = {
+            id: r.id,
+            codigo: r.codigo,
+            nombre: r.nombre
+          }
+          resp.regiones.push(region)
+        }
       })
+      if (type == 'select')
+        return resp2;
       return resp
     } catch (ex) {
       console.log(ex)

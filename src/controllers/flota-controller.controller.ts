@@ -4,6 +4,9 @@ import { controllerLogger } from "../logger/logger-config";
 import { repository } from "@loopback/repository";
 import { TraduccionTipoVehiculoEjesCargaRepository, VehiculoRepository } from "../repositories";
 import { serviciosGateway } from "../utils/servicios-gateway";
+import { C_BLOCK_COMMENT_MODE } from "highlight.js";
+import { callbackify } from "util";
+import { HttpError } from "http-errors";
 
 // Uncomment these imports to begin using these cool features!
 
@@ -46,7 +49,9 @@ export class FlotaControllerController {
     try {
       // let params: any = q;
       if (!params || !params.rutSujeto || !params.ppus || params.ppus.length === 0) {
-        throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
+        // throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
+        throw new HttpErrors.NotFound('Parámetros Incorrectos');
+
         // let e: HttpError = new HttpErrors.HttpError('Parámetros incorrectoss');
         // let e: HttpError = new HttpErrors.NotFound('Parámetros incorrectoss');
         // e.statusCode = 404;
@@ -547,8 +552,16 @@ export class FlotaControllerController {
       return resultado;
     } catch (ex) {
       console.log(ex)
-      controllerLogger.error(ex, ex);
-      throw new HttpErrors.InternalServerError(ex.toString());
+      controllerLogger.info(ex.toString());
+      let error: HttpError;
+      if (ex.status == 404)
+        error = new HttpErrors.NotFound(ex.toString());
+      else
+        error = new HttpErrors.InternalServerError(ex.toString());
+      // error.status = ex.status;
+      error.statusCode = ex.status;
+      // error.headers
+      throw error;
     }
   }
 }
