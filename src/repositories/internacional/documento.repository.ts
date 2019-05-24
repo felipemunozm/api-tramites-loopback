@@ -16,4 +16,9 @@ export class DocumentoRepository extends DefaultCrudRepository<
     let query: string = "insert into documento (version, tipo_id, hashing, url, algoritmo, permiso_id) select 0, id, null, $1, null, $2 from tipo_documento where codigo = $3;";
     return this.dataSource.execute(urlDescargaDocumento, codigoTipoDocumento, permisoId);
   }
+
+  public insertDocumentoFV(doc: any, respCreacionPermiso: any): Promise<any> {
+    let query: string = 'insert into documento (version, tipo_id, hashing, url, algoritmo, permiso_id) select 0, id, null, ' + '\'' + doc.urlDescargaDocumento + '\'' + ', null, ' + respCreacionPermiso.id + ' from tipo_documento where codigo = ' + '\'' + doc.codigoTipoDocumento + '\'' + ';';
+    return this.dataSource.execute(query);
+  }
 }

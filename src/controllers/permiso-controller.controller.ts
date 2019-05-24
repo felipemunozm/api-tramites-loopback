@@ -6,6 +6,9 @@ import * as dateFormat from 'dateformat';
 import { ObtenerPDFs } from "../utils/obtener-pdf";
 import { ServiciosGateway, serviciosGateway } from "../utils/servicios-gateway";
 import { httpify } from "caseless";
+import { rejects } from "assert";
+import { controllerLogger } from "../logger/logger-config";
+import { HttpError } from "http-errors";
 
 // Uncomment these imports to begin using these cool features!
 
@@ -50,7 +53,8 @@ export class PermisoControllerController {
         || params.codigoAnalista == undefined || params.nombreAnalista == undefined || params.codigoRegion == undefined
         || params.flotaFinal == undefined || params.flotaFinal.length === 0
         || params.documentosAdjuntos == undefined || params.urlCallback == undefined) {
-        throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
+        throw new HttpErrors.NotFound('Parámteros incorrectos');
+        // throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
       }
       let urlCallback: any = params.urlCallback;
 
@@ -213,7 +217,8 @@ export class PermisoControllerController {
           // let respCreacionPermiso = await internacionalGateway.crearPermiso(permiso)
           let respCreacionPermiso: any = (await this.permisoRepository.crearPermiso(permiso))[0];
           let flotaFinal: any = []
-          params.flotaFinal.forEach(function (flotas: any) {
+          for (let flotas of params.flotaFinal) {
+            // params.flotaFinal.forEach(function (flotas: any) {
             let vehiculoFlota = {
               ejes: flotas.ejes,
               fechaVigenciaLS: flotas.fechaVencimientoLS,
@@ -239,38 +244,9 @@ export class PermisoControllerController {
               vehiculoFlota.fechaVigenciaLS = "01/01/1900"
               //flotaFinal.push(vehiculoFlota)
             }
-
-
-            //flotaFinal.push(vehiculoFlota)
-            console.log("!!!!!!!!!!")
-            console.log(vehiculoFlota.ejes)
-            console.log(vehiculoFlota.fechaVigenciaLS)
-            console.log(vehiculoFlota.ppu)
-            console.log(respCreacionPermiso.id)
-            console.log("!!!!!!!!!!")
-            //console.log(vehiculoFlota)
-            //Inicia conexion DB
-            'use strict';
-            const { Pool, Client } = require('pg')
-            module.exports = exports = {}
-            const client = new Client({
-              user: 'postgres',
-              password: 'postgres',
-              host: '206.189.164.106',
-              database: 'internacional',
-              port: 5432,
-            })
-            client.connect()
-            //Inicia Insert
-            client.query('insert into permiso_sujeto_vehiculo (version, habilitado, sujeto_vehiculo_id, permiso_id, ejes, fecha_vencimiento_ls, observacion, ppu, tipo_vehiculo, marca, modelo, anno, carroceria, chasis, numero_motor, fechavencimientort, estadort, propietario, toneladas) select 0, true, c.id, a.id, ' + '\'' + vehiculoFlota.ejes + '\'' + ',' + '\'' + vehiculoFlota.fechaVigenciaLS + '\'' + ',' + '\'' + vehiculoFlota.observacion + '\'' + ',' + '\'' + vehiculoFlota.ppu + '\'' + ',' + '\'' + vehiculoFlota.tipo + '\'' + ',' + '\'' + vehiculoFlota.marca + '\'' + ',' + '\'' + vehiculoFlota.modelo + '\'' + ',' + '\'' + vehiculoFlota.anno + '\'' + ',' + '\'' + vehiculoFlota.carroceria + '\'' + ',' + '\'' + vehiculoFlota.chasis + '\'' + ',' + '\'' + vehiculoFlota.numeroMotor + '\'' + ',' + '\'' + vehiculoFlota.fechaVencimientoRT + '\'' + ',' + '\'' + vehiculoFlota.estadoRT + '\'' + ',' + '\'' + vehiculoFlota.propietario + '\'' + ',' + '\'' + vehiculoFlota.toneladas + '\'' + 'from permiso a inner join sujeto b on b.id = a.sujeto_id inner join sujeto_vehiculo c on b.id = c.sujeto_id where a.id =' + respCreacionPermiso.id + 'returning id;', (err: any, res: any) => {
-              //console.log(err, res)
-              //var err = err;
-              //console.log(err)
-              client.end()
-            }
-            )
-
-          })
+            await this.permisoSujetoVehiculoRepository.insertPermisoSujetoVehiculoFV(vehiculoFlota, respCreacionPermiso);
+          }
+          // })
           body = {
             codigoResultado: 1,
             descripcionResultado: "Trámite de Creación de Permiso Chile-Chile registrado exitosamente. Permiso creado."
@@ -307,33 +283,16 @@ export class PermisoControllerController {
           })
           //Insert sobre tabla documento
           let documentos: any = []
-          params.documentosAdjuntos.forEach((docs: any) => {
+          for (let docs of params.documentosAdjuntos) {
+            // params.documentosAdjuntos.forEach((docs: any) => {
             let doc = {
               codigoTipoDocumento: docs.codigoTipoDocumento,
               urlDescargaDocumento: docs.urlDescargaDocumento
             }
             documentos.push(doc.urlDescargaDocumento)
             //Inicia conexion DB
-            'use strict';
-            const { Pool, Client } = require('pg')
-            module.exports = exports = {}
-            const client = new Client({
-              user: 'postgres',
-              password: 'postgres',
-              host: '206.189.164.106',
-              database: 'internacional',
-              port: 5432,
-            })
-            client.connect()
-            //Inicia Insert
-            client.query('insert into documento (version, tipo_id, hashing, url, algoritmo, permiso_id) select 0, id, null, ' + '\'' + doc.urlDescargaDocumento + '\'' + ', null, ' + respCreacionPermiso.id + ' from tipo_documento where codigo = ' + '\'' + doc.codigoTipoDocumento + '\'' + ';', (err: any, res: any) => {
-              console.log(err, res)
-              //var err = err;
-              //console.log(err)
-              client.end()
-            }
-            )
-          })
+            await this.documentoRepository.insertDocumentoFV(doc, respCreacionPermiso);
+          }
           console.log("Arrreglo Documento")
           console.log(documentos)
           console.log(documentos.codigoTipoDocumento)
@@ -390,14 +349,27 @@ export class PermisoControllerController {
           console.log(error)
           // ctx.status = 502
           // ctx.body = 'No fue posible crear el permiso.'
-          throw new HttpErrors.InternalServerError('No fue posible crear el permiso.');
+          throw new HttpErrors.BadGateway('No fue posible crear el permiso.');
         })
     } catch (ex) {
       console.log(ex)
       // ctx.status = 502
       // ctx.body = ex.toString()
       // console.log(urlCallback)
-      throw new HttpErrors.InternalServerError(ex.toString());
+      let error: HttpError;
+      if (ex.status == 502) {
+        error = new HttpErrors.BadGateway(ex.toString());
+        error.status = 502
+        throw error;
+      }
+      if (ex.status == 404) {
+        error = new HttpErrors.NotFound(ex.toString());
+        error.status = 404
+        throw error;
+      }
+      error = new HttpErrors.InternalServerError(ex.toString());
+      error.status = 500;
+      throw error;
     }
   }
 
@@ -414,7 +386,7 @@ export class PermisoControllerController {
         || !params.flotaFinal || params.flotaFinal.length === 0
         || !params.empresa || !params.empresa.rut || !params.urlCallback) {
         console.log("inicia tramite");
-        throw 'Parámetros incorrectos';
+        throw new HttpErrors.NotFound('Parámteros incorrectos');
       }
       console.log("inicia tramite");
       // let tiposTramite = await gestionTramitesGateway.obtenerTiposTramites()
@@ -473,7 +445,6 @@ export class PermisoControllerController {
           codigoResultado: 5,
           descripcionResultado: "Ya existe un trámite creado para la solicitud solicitada."
         }
-        return
       }
       // let paisChile = await internacionalGateway.obtenerPaisByCodigo('CL')
       let paisChile = (await this.paisRepository.obtenerPaisByCodigo('CL'))[0];
@@ -561,7 +532,8 @@ export class PermisoControllerController {
           //Nuevo FV
           // let respCreacionPermiso = await internacionalGateway.crearPermiso(permiso)
           let respCreacionPermiso: any = (await this.permisoRepository.crearPermiso(permiso))[0];
-          params.flotaFinal.forEach((flota: any) => {
+          for (let flota of params.flotaFinal) {
+            // params.flotaFinal.forEach((flota: any) => {
             let vehiculoFlota = {
               ejes: flota.ejes,
               fechaVigenciaLS: flota.fechaVencimientoLS,
@@ -580,28 +552,10 @@ export class PermisoControllerController {
 
             console.log(vehiculoFlota.ejes)
             console.log(vehiculoFlota.fechaVigenciaLS)
-            //Inicia conexion DB
-            'use strict';
-            const { Pool, Client } = require('pg')
-            module.exports = exports = {}
-            const client = new Client({
-              user: 'postgres',
-              password: 'postgres',
-              host: '206.189.164.106',
-              database: 'internacional',
-              port: 5432,
-            })
-            client.connect()
-            //Inicia Insert
-            client.query('insert into permiso_sujeto_vehiculo (version, habilitado, permiso_id, sujeto_vehiculo_id, ejes, fecha_vencimiento_ls, observacion) select 0, true, a.id, c.id, ' + '\'' + vehiculoFlota.ejes + '\'' + ',' + '\'' + vehiculoFlota.fechaVigenciaLS + '\'' + ',' + '\'' + vehiculoFlota.observacion + '\'' + ' from permiso a inner join sujeto b on b.id = a.sujeto_id inner join sujeto_vehiculo c on b.id = c.sujeto_id where a.id =' + respCreacionPermiso.id + 'returning id;', (err: any, res: any) => {
-              //console.log(err, res)
-              var err = err;
-              var length = "OK";
-              console.log(err, length)
-              client.end()
-            }
-            )
-          })
+            await this.permisoSujetoVehiculoRepository.insertPermisoSujetoVehiculoFV(vehiculoFlota, respCreacionPermiso).catch(error => {
+              controllerLogger.info("Error en update de permisoSujetoVehiculo\n" + error);
+            });
+          }
           body = {
             codigoResultado: 1,
             descripcionResultado: "Trámite de Creación de Permiso Chile-Chile registrado exitosamente. Permiso creado."
@@ -685,7 +639,7 @@ export class PermisoControllerController {
         })
         .catch((error) => {
           console.log(error)
-          throw 'No fue posible crear el permiso.';
+          throw new HttpErrors.BadGateway('No fue posible crear el permiso');
           // ctx.status = 502
           // ctx.body = 'No fue posible crear el permiso.'
         })
@@ -693,7 +647,20 @@ export class PermisoControllerController {
       console.log(ex)
       // ctx.status = 502
       // ctx.body = ex.toString()
-      throw ex.toString();
+      let error: HttpError;
+      if (ex.status == 502) {
+        error = new HttpErrors.BadGateway(ex.toString());
+        error.status = 502;
+        throw error;
+      }
+      if (ex.status == 404) {
+        error = new HttpErrors.NotFound(ex.toString());
+        error.status = 404
+        throw error;
+      }
+      error = new HttpErrors.InternalServerError(ex.toString());
+      error.status = 500;
+      throw error;
     }
   }
 }
