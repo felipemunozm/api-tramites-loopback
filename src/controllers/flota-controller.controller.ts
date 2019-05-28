@@ -407,49 +407,28 @@ export class FlotaControllerController {
           }
 
         }
-        if (docLeasing) {
-          let documentoAdjuntar: any = {}
-          documentoAdjuntar.codigo = 'VEH_CLS'
-          documentoAdjuntar.nombre = 'Contrato de leasing'
-          documentoAdjuntar.ppu = vehiculosDocsLeasing
-          tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar)
-          let documentoAdjuntar2: any = {}
-          documentoAdjuntar2.codigo = 'VEH_AUT'
-          documentoAdjuntar2.nombre = 'Autorización de entidad financiera para salir del país'
-          documentoAdjuntar2.ppu = vehiculosDocsLeasing
-          tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar2)
-
-          tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RLS", nombre: "Declaracion de responsabilida de vehículos bajo régimen de leasing" })
-        }
-        if (docRevision) {
-          let documentoAdjuntar: any = {}
-          documentoAdjuntar.codigo = 'VEH_RT'
-          documentoAdjuntar.nombre = 'Certificado de revisión técnica'
-          documentoAdjuntar.ppu = vehiculosDocsRevision
-          tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar)
-        }
       }
-      // if (docLeasing) {
-      //   let documentoAdjuntar: any = {}
-      //   documentoAdjuntar.codigo = 'VEH_CLS'
-      //   documentoAdjuntar.nombre = 'Contrato de leasing'
-      //   documentoAdjuntar.ppu = vehiculosDocsLeasing
-      //   tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar)
-      //   let documentoAdjuntar2: any = {}
-      //   documentoAdjuntar2.codigo = 'VEH_AUT'
-      //   documentoAdjuntar2.nombre = 'Autorización de entidad financiera para salir del país'
-      //   documentoAdjuntar2.ppu = vehiculosDocsLeasing
-      //   tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar2)
+      if (docLeasing) {
+        let documentoAdjuntar: any = {}
+        documentoAdjuntar.codigo = 'VEH_CLS'
+        documentoAdjuntar.nombre = 'Contrato de leasing'
+        documentoAdjuntar.ppu = vehiculosDocsLeasing
+        tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar)
+        let documentoAdjuntar2: any = {}
+        documentoAdjuntar2.codigo = 'VEH_AUT'
+        documentoAdjuntar2.nombre = 'Autorización de entidad financiera para salir del país'
+        documentoAdjuntar2.ppu = vehiculosDocsLeasing
+        tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar2)
 
-      //   tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RLS", nombre: "Declaracion de responsabilida de vehículos bajo régimen de leasing" })
-      // }
-      // if (docRevision) {
-      //   let documentoAdjuntar: any = {}
-      //   documentoAdjuntar.codigo = 'VEH_RT'
-      //   documentoAdjuntar.nombre = 'Certificado de revisión técnica'
-      //   documentoAdjuntar.ppu = vehiculosDocsRevision
-      //   tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar)
-      // }
+        tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RLS", nombre: "Declaracion de responsabilida de vehículos bajo régimen de leasing" })
+      }
+      if (docRevision) {
+        let documentoAdjuntar: any = {}
+        documentoAdjuntar.codigo = 'VEH_RT'
+        documentoAdjuntar.nombre = 'Certificado de revisión técnica'
+        documentoAdjuntar.ppu = vehiculosDocsRevision
+        tiposDocumentosPosiblesAdjuntar.data.push(documentoAdjuntar)
+      }
 
       //contabilizacion de Rechazos
       console.log(ppuRech.length)
