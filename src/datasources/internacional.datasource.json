@@ -2,9 +2,9 @@
   "name": "internacional",
   "connector": "postgresql",
   "url": "",
-  "host": "206.189.164.106",
+  "host": "172.25.1.135",
   "port": 5432,
-  "user": "postgres",
-  "password": "postgres",
+  "user": "internacional",
+  "password": "internacional",
   "database": "internacional"
 }
