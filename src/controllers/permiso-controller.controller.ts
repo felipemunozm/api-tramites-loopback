@@ -311,7 +311,7 @@ export class PermisoControllerController {
             encabezado: 'CONFORME A LO ACORDADO EN EL CONVENIO CHILENO-ARGENTINO DE TRANSPORTE TERRESTRE EN TRÁNSITO PARA VINCULAR DOS PUNTOS DE UN MISMO PAÍS, COMUNICO A USTED, HABER AUTORIZADO PERMISO OCASIONAL CON DESTINO A TERRITORIO NACIONAL EN TRÁNSITO POR TERRITORIO ARGENTINO POR PASOS FRONTERIZOS AUTORIZADOS ENTRE LAS REGIONES DE LOS LAGOS, DE AYSÉN Y DE MAGALLANES ANTÁRTICA CHILENA.',
             numeroPermiso: respCreacionPermiso.id,
             fechaInicio: dateFormat("yyyy-mm-dd"),
-            fechaFin: dateFormat("yyyy-mm-dd"),
+            fechaFin: dateFormat("yyyy-mm-dd"), //mas 3 meses
             nombreTransportista: 'TRANSPORTE DE CARGA OSCAR SAMUEL PEREZ LAGOS EIRL',
             tipoCarga: 'CARGA GENERAL',
             flota: flotasPorTipo,
