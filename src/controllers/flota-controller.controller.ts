@@ -1,11 +1,9 @@
-import { param, HttpErrors, post, requestBody } from "@loopback/rest";
+import { HttpErrors, post, requestBody } from "@loopback/rest";
 import * as moment from 'moment';
 import { controllerLogger } from "../logger/logger-config";
 import { repository } from "@loopback/repository";
 import { TraduccionTipoVehiculoEjesCargaRepository, VehiculoRepository } from "../repositories";
 import { serviciosGateway } from "../utils/servicios-gateway";
-import { C_BLOCK_COMMENT_MODE } from "highlight.js";
-import { callbackify } from "util";
 import { HttpError } from "http-errors";
 
 // Uncomment these imports to begin using these cool features!
@@ -43,16 +41,14 @@ export class FlotaControllerController {
     }
   })
   async validarFlota(@requestBody() params: any): Promise<any> {
-    // let matrizConversionCapacidadesCargas = await internacionalGateway.obtenerCapacidadesCargas()
     let matrizConversionCapacidadesCargas = await this.traduccionTipoVehiculosEjesCargaRepository.obtenerCapacidadesCargas();
     let tiposVehiculosAceptados = ['camioneta', 'furgon', 'tractocamion', 'camion', 'semiremolque', 'remolque', 'chasis cabinado', 'CAMION']
     try {
-      // let params: any = q;
+
       if (!params || !params.rutSujeto || !params.ppus || params.ppus.length === 0) {
         throw new HttpErrors.NotFound('Parámetros Incorrectos');
       }
-      let newtipArr = [], vehiculosTipo2 = [], promisesPpus: any[] = [], ppusProcesadas: any[] = [], promisesPrt: any[] = [], vehiculosValidados: any[] = [], vehiculosValidadosPorTipo: any[] = [], motivosRechazos: any[] = [], totalCarga = 0, vehiculosDocsLeasing: any[] = [], vehiculosDocsRevision: any[] = [], vehiculosValidadosPar: any[] = [], contadorRechazos: any[] = [], contadorParcial: any = [], Noexiste: any[] = [], ppuRech: any[] = [], docLeasing = false, docRevision = false, existe: string;
-      existe = "";
+      let ppusProcesadas: any[] = []
       let resultado: any = {};
       resultado.flotaValidada = new Array();
       resultado.tiposDocumentosPosiblesAdjuntar = {};
@@ -127,7 +123,6 @@ export class FlotaControllerController {
 
             // validacion tipo vehiculo
             if (!tiposVehiculosAceptados.includes(vehiculo.tipo.toLowerCase())) {
-              // if (tiposVehiculosAceptados.indexOf(vehiculo.tipo.toLowerCase()) == -1) {
               resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Tipo de vehículo no corresponde a solicitud' });
               continue
             }
@@ -178,7 +173,6 @@ export class FlotaControllerController {
                   });
                 });
                 controllerLogger.info("Realizando Insercion de vehiculo")
-                controllerLogger.info("El valor de Existe es: " + existe);
               } catch (ex) {
                 controllerLogger.info("Existia la patente, actualizando");
                 await this.vehiculoRepository.updateVehiculoFV(vehiculo);
