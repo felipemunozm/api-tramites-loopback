@@ -7,6 +7,7 @@ import { TipoTramiteRepository, IntermediarioTramiteRepository, TipoTramiteEtapa
 // Uncomment these imports to begin using these cool features!
 
 // import {inject} from '@loopback/context';
+//test
 
 
 export class SolicitudControllerController {
