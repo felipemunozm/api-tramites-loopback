@@ -205,12 +205,13 @@ export class FlotaControllerController {
               }
               //revision de Leasing
               let tenedores: any = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
-              if (tenedores != undefined && tenedores.itemTenedores[0].nombre) {
+              controllerLogger.info("Tenedores y nombre: " + JSON.stringify(tenedores) + ", " + tenedores.itemTenedores[0].nombre)
+              if (tenedores != undefined && tenedores.itemTenedores[0].nombres != undefined) {
                 let vehClsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_CLS')
                 let vehCls: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehClsIdx];
                 let vehAutIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_AUT')
                 let vehAut: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehAutIdx];
-                let vehRlsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.map((e: any) => { return e.codigo }).indexOf('VEH_RLS')
+                let vehRlsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RLS')
                 let vehRls: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehRlsIdx];
                 if (vehCls == undefined)
                   resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_CLS", nombre: "Contrato de leasing", ppu: [_ppu] });
