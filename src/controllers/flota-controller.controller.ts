@@ -145,7 +145,7 @@ export class FlotaControllerController {
                 revisionTecnica.estado = infoPrt.return.revisionTecnica.resultado
               }
               controllerLogger.info("Tipo Vehiculo = " + infoPrt.return.tipoVehiculo.toLowerCase().replace(' ', ''));
-              let cap = matrizConversionCapacidadesCargas.find((matriz: any) => matriz.tipo_vehiculo === infoPrt.return.tipoVehiculo.toLowerCase().replace(' ', '') && matriz.cantidad_ejes === infoPrt.return.cantEjes)
+              let cap = matrizConversionCapacidadesCargas.find((matriz: any) => matriz.tipo_vehiculo.toLowerCase() === infoPrt.return.tipoVehiculo.toLowerCase().replace(' ', '') && matriz.cantidad_ejes === infoPrt.return.cantEjes)
               vehiculo.carroceria = infoPrt.return.tipoCarroceria ? infoPrt.return.tipoCarroceria : 'Sin dato'
               vehiculo.numeroMotor = infoPrt.return.numeroMotor ? infoPrt.return.numeroMotor : 'Sin dato'
               vehiculo.ejes = infoPrt && infoPrt.return && infoPrt.return.cantEjes ? infoPrt.return.cantEjes : '0'
@@ -166,12 +166,16 @@ export class FlotaControllerController {
               vehiculo.numeroMotor = infoPrt.return.numeroMotor ? infoPrt.return.numeroMotor : 'Sin dato'
 
               try {
-                this.vehiculoRepository.insertVehiculoFV(vehiculo).catch((Ex) => {
-                  controllerLogger.info("Existia la patente, actualizando");
-                  this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
-                    controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
+                this.vehiculoRepository.insertVehiculoFV(vehiculo)
+                  .then((value: any) => {
+                    controllerLogger.info("Inserción exitosa: " + value)
+                  })
+                  .catch((Ex) => {
+                    controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
+                    this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
+                      controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
+                    });
                   });
-                });
                 controllerLogger.info("Realizando Insercion de vehiculo")
               } catch (ex) {
                 controllerLogger.info("Existia la patente, actualizando");
