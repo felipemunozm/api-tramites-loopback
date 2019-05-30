@@ -2,6 +2,7 @@ import { DefaultCrudRepository } from '@loopback/repository';
 import { Vehiculo } from '../../models';
 import { InternacionalDataSource } from '../../datasources';
 import { inject } from '@loopback/core';
+import { controllerLogger } from '../../logger/logger-config';
 
 export class VehiculoRepository extends DefaultCrudRepository<
   Vehiculo,
@@ -38,7 +39,8 @@ export class VehiculoRepository extends DefaultCrudRepository<
   }
   public insertVehiculoFV(vehiculo: any): Promise<any> {
     let query = 'insert into vehiculo (version, cantidad_ejes, identificador, tipo, cantidad_toneladas_carga, tipo_id_id, modelo, marca, ppu, anno_fabricacion, carroceria, nombre_propietario, vigencia_registro, chasis, num_motor)'
-      + ' values (0,' + '\'' + vehiculo.ejes + '\'' + ', ' + '\'' + vehiculo.identificador + '\'' + ', ' + '\'' + vehiculo.tipo + '\'' + ', ' + '\'' + vehiculo.toneladas + '\'' + ',' + '\'' + vehiculo.tipoid + '\'' + ', ' + '\'' + vehiculo.modelo + '\'' + ', ' + '\'' + vehiculo.marca + '\'' + ', ' + '\'' + vehiculo.ppu + '\'' + ', ' + '\'' + vehiculo.anno + '\'' + ',  ' + '\'' + vehiculo.carroceria + '\'' + ',  ' + '\'' + vehiculo.propietario + '\'' + ', now(), ' + '\'' + vehiculo.chasis + '\'' + ', ' + '\'' + vehiculo.numeroMotor + '\'' + ') returning id;'
+      + ' values (0,' + '\'' + vehiculo.ejes + '\'' + ', ' + '\'' + vehiculo.identificador + '\'' + ', ' + '\'' + vehiculo.tipo + '\'' + ', ' + '\'' + vehiculo.capacidadCargaToneladas + '\'' + ',' + '\'' + vehiculo.tipoid + '\'' + ', ' + '\'' + vehiculo.modelo + '\'' + ', ' + '\'' + vehiculo.marca + '\'' + ', ' + '\'' + vehiculo.ppu + '\'' + ', ' + '\'' + vehiculo.anno + '\'' + ',  ' + '\'' + vehiculo.carroceria + '\'' + ',  ' + '\'' + vehiculo.propietario + '\'' + ', now(), ' + '\'' + vehiculo.chasis + '\'' + ', ' + '\'' + vehiculo.numeroMotor + '\'' + ') returning id;'
+    controllerLogger.info('Query de insercion de vehículo es: ' + query)
     return this.dataSource.execute(query);
   }
 

@@ -145,13 +145,16 @@ export class FlotaControllerController {
                 revisionTecnica.estado = infoPrt.return.revisionTecnica.resultado
               }
               controllerLogger.info("Tipo Vehiculo = " + infoPrt.return.tipoVehiculo.toLowerCase().replace(' ', ''));
-              let cap = matrizConversionCapacidadesCargas.find((matriz: any) => matriz.tipo_vehiculo.toLowerCase() === infoPrt.return.tipoVehiculo.toLowerCase().replace(' ', '') && matriz.cantidad_ejes === infoPrt.return.cantEjes)
+              let cap = matrizConversionCapacidadesCargas.find((matriz: any) => matriz.tipo_vehiculo.toLowerCase() === v.return.tipoVehi.toLowerCase().replace(' ', '') && matriz.cantidad_ejes === infoPrt.return.cantEjes)
               vehiculo.carroceria = infoPrt.return.tipoCarroceria ? infoPrt.return.tipoCarroceria : 'Sin dato'
               vehiculo.numeroMotor = infoPrt.return.numeroMotor ? infoPrt.return.numeroMotor : 'Sin dato'
               vehiculo.ejes = infoPrt && infoPrt.return && infoPrt.return.cantEjes ? infoPrt.return.cantEjes : '0'
               vehiculo.capacidadCargaToneladas = cap ? cap.capacidad_carga : 0
               vehiculo.fechaVencimientoRT = revisionTecnica.fechaVencimiento ? revisionTecnica.fechaVencimiento.format("DD/MM/YYYY") : ''
               vehiculo.estadoRT = revisionTecnica.estado ? revisionTecnica.estado : ''
+              vehiculo.identificador = 'Sin Dato'
+              vehiculo.tipoid = '1'
+              vehiculo.propietario = v.return.propieActual.propact.itemPropact[0].nombres
               let info = {}
               vehiculo.carroceria = infoPrt.tipoCarroceria ? infoPrt.return.tipoCarroceria : 'Sin dato'
               vehiculo.numeroMotor = infoPrt.return.numeroMotor ? infoPrt.return.numeroMotor : 'Sin dato'
@@ -166,6 +169,7 @@ export class FlotaControllerController {
               vehiculo.numeroMotor = infoPrt.return.numeroMotor ? infoPrt.return.numeroMotor : 'Sin dato'
 
               try {
+                // controllerLogger.info("vehiculo a insertar es: " + JSON.stringify(vehiculo))
                 this.vehiculoRepository.insertVehiculoFV(vehiculo)
                   .then((value: any) => {
                     controllerLogger.info("Inserción exitosa: " + value)
