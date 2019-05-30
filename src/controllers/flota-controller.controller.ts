@@ -5,6 +5,7 @@ import { repository } from "@loopback/repository";
 import { TraduccionTipoVehiculoEjesCargaRepository, VehiculoRepository } from "../repositories";
 import { serviciosGateway } from "../utils/servicios-gateway";
 import { HttpError } from "http-errors";
+import { Vehiculo } from "../models";
 
 // Uncomment these imports to begin using these cool features!
 
@@ -66,6 +67,7 @@ export class FlotaControllerController {
           ppu = v.return.patente.split('-')[0]
         } catch (Ex) {
           controllerLogger.info("Saltando PPU: " + _ppu + " no se encontro en SRCeI");
+          resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Vehículo no encontrado en Registro civil' });
           continue;
         }
         let ppuDuplicada = ppusProcesadas.find(p => p.ppu == ppu)
@@ -260,6 +262,16 @@ export class FlotaControllerController {
         capacidadCargaToneladas: capacidadTotal
       }
 
+      let vehRTIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RT')
+      let vehClsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_CLS')
+      if (vehRTIdx == -1 && vehClsIdx != -1)
+        resultado.tiposDocumentosPosiblesAdjuntar.caso = 1
+      else if (vehRTIdx != -1 && vehClsIdx == -1)
+        resultado.tiposDocumentosPosiblesAdjuntar.caso = 2
+      else if (vehRTIdx != -1 && vehClsIdx != -1)
+        resultado.tiposDocumentosPosiblesAdjuntar.caso = 3
+      else if (vehRTIdx == -1 && vehClsIdx == -1)
+        resultado.tiposDocumentosPosiblesAdjuntar.caso = 0
       //Falta revisar si estan todas las PPUs validadas, todas rechazadas o parcial
 
       if (resultado.flotaRechazada.length == 0) {
