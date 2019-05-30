@@ -51,13 +51,17 @@ export class FlotaControllerController {
       }
       let ppusProcesadas: any[] = []
       let resultado: any = {};
-      resultado.flotaValidada = new Array();
-      resultado.tiposDocumentosPosiblesAdjuntar = {};
-      resultado.tiposDocumentosPosiblesAdjuntar.data = new Array();
-      resultado.flotaRechazada = new Array();
       resultado.codigoResultado = 1;
       resultado.descripcionResultado = 'Todas las PPUs validadas correctamente';
+      resultado.flotaValidada = new Array();
+      resultado.resumenFlotaValidada = {}
       resultado.resumenFlotaValidadaPorTipo = new Array();
+      resultado.flotaRechazada = new Array();
+      resultado.cantidadVehiculosRechazados
+      resultado.tiposDocumentosPosiblesAdjuntar = {};
+      resultado.tiposDocumentosPosiblesAdjuntar.caso = 0
+      resultado.tiposDocumentosPosiblesAdjuntar.data = new Array();
+
 
       for (let _ppu of params.ppus) {
         let v: any = await serviciosGateway.obtenerVehiculo(_ppu);
