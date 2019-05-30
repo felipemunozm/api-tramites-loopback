@@ -205,7 +205,8 @@ export class FlotaControllerController {
               }
               //revision de Leasing
               let tenedores: any = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
-              controllerLogger.info("Tenedores y nombre: " + JSON.stringify(tenedores) + ", " + tenedores.itemTenedores[0].nombre)
+              if (tenedores != undefined)
+                controllerLogger.info("Tenedores y nombre: " + JSON.stringify(tenedores) + ", " + tenedores.itemTenedores[0].nombre)
               if (tenedores != undefined && tenedores.itemTenedores[0].nombres != undefined) {
                 let vehClsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_CLS')
                 let vehCls: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehClsIdx];
@@ -224,7 +225,7 @@ export class FlotaControllerController {
                 if (vehRls == undefined)
                   resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RLS", nombre: "Declaracion de responsabilida de vehículos bajo régimen de leasing", ppu: [_ppu] })
                 else
-                  resultado.tiposDocumentosPosiblesAdjuntar.data[vehRlsIdx].push(_ppu)
+                  resultado.tiposDocumentosPosiblesAdjuntar.data[vehRlsIdx].ppu.push(_ppu)
               }
 
             } else {
