@@ -1,11 +1,12 @@
 import { HttpErrors, post, requestBody } from "@loopback/rest";
 import * as moment from 'moment';
 import { controllerLogger } from "../logger/logger-config";
-import { repository } from "@loopback/repository";
+import { repository, DATE } from "@loopback/repository";
 import { TraduccionTipoVehiculoEjesCargaRepository, VehiculoRepository } from "../repositories";
 import { serviciosGateway } from "../utils/servicios-gateway";
 import { HttpError } from "http-errors";
 import { Vehiculo } from "../models";
+import { Rechazo } from "../models/estructuras-validacion/rechazo";
 
 // Uncomment these imports to begin using these cool features!
 
@@ -51,6 +52,7 @@ export class FlotaControllerController {
       }
       let ppusProcesadas: any[] = []
       let resultado: any = {};
+      let lstVehiculosRechazadosParaPersistir: any[] = []
       resultado.codigoResultado = 1;
       resultado.descripcionResultado = 'Todas las PPUs validadas correctamente';
       resultado.flotaValidada = new Array();
@@ -64,7 +66,69 @@ export class FlotaControllerController {
 
 
       for (let _ppu of params.ppus) {
-        let v: any = await serviciosGateway.obtenerVehiculo(_ppu);
+        let vehiculoExistente: Vehiculo
+        let rechazoTipoVehiculo: Rechazo = new Rechazo(), rechazoAntiguedad: Rechazo = new Rechazo(), rechazoCivil: Rechazo = new Rechazo(), rechazoDuplicado: Rechazo = new Rechazo();
+        // let vehiculoBD: any = await this.vehiculoRepository.ObtenerVehiculoPorPPU(_ppu)
+        //   .then((v: Vehiculo) => {
+        //     controllerLogger.info("El resultado del Vehiculo from BD fue: " + JSON.stringify(v))
+        //     vehiculoExistente = v
+        //   })
+        //   .catch((ex) => {
+        //     controllerLogger.info("Exception al traer vehiculo: " + ex)
+        //   })
+        let vehiculoBD: any = await this.vehiculoRepository.ObtenerVehiculoPorPPU(_ppu)
+        if (vehiculoBD.length == 0)
+          vehiculoBD = undefined;
+        else
+          controllerLogger.info('vehiculo BD: ' + JSON.stringify(vehiculoBD[0]));
+        let v: any = {
+          return: {}
+        }
+        let fechaRegistro: Date
+        if (vehiculoBD != undefined) {
+          controllerLogger.info("fecha_vigencia: " + vehiculoBD[0].vigencia_registro)
+          fechaRegistro = vehiculoBD[0].vigencia_registro
+        }
+        else {
+          controllerLogger.info('Sin fecha_vigencia, no exite PPU: ' + _ppu + ' en al BD')
+          fechaRegistro = new Date('')
+        }
+        let hoy: Date = new Date();
+        controllerLogger.info('fecha: ' + (vehiculoBD ? vehiculoBD[0].vigencia_registro : undefined))
+        if (vehiculoBD == undefined) {
+          v = await serviciosGateway.obtenerVehiculo(_ppu)
+        }
+        else {
+          if (fechaRegistro.getFullYear() <= hoy.getFullYear() && fechaRegistro.getMonth() <= hoy.getMonth() && fechaRegistro.getDay() < hoy.getDay())
+            v = await serviciosGateway.obtenerVehiculo(_ppu)
+          else
+            v.return = {
+              aaFabric: vehiculoBD[0].anno_fabricacion,
+              chasis: vehiculoBD[0].chasis,
+              marca: vehiculoBD[0].marca,
+              modelo: vehiculoBD[0].modelo,
+              motor: vehiculoBD[0].num_motor,
+              patente: vehiculoBD[0].ppu + '-',
+              propieActual: {
+                propact: {
+                  itemPropact: [
+                    {
+                      nombres: vehiculoBD[0].nombre_propietario,
+                      rut: vehiculoBD[0].rut_propietario
+                    }
+                  ]
+                }
+              },
+              tipoVehi: vehiculoBD[0].tipo,
+              limita: {
+                itemLimita: [
+                  { empty: true }
+                ]
+              }
+            }
+          controllerLogger.info('vehiculo de civil simulado v: ' + JSON.stringify(v))
+        }
+        controllerLogger.info('Respuesta de Civil: ' + JSON.stringify(v))
         let infoPrt: any = await serviciosGateway.obtenerRevisionTecnica(_ppu);
         let ppu: any;
         try {
@@ -72,40 +136,53 @@ export class FlotaControllerController {
         } catch (Ex) {
           controllerLogger.info("Saltando PPU: " + _ppu + " no se encontro en SRCeI");
           resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Vehículo no encontrado en Registro civil' });
-          continue;
+          rechazoCivil.estado = true
+          rechazoCivil.motivo = 'Vehículo no encontrado en Registro civil'
+          // continue;
         }
         let ppuDuplicada = ppusProcesadas.find(p => p.ppu == ppu)
         ppusProcesadas.push({ ppu: ppu })
         //Condicion de rechazo, propiedad sea diferente o meratenencia, tipo de vehiculo se valida contra una lista, antiguedad del vehiculo
         if (ppuDuplicada != undefined) {
           resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Vehículo duplicado' });
-          continue;
+          rechazoDuplicado.estado = true
+          rechazoDuplicado.motivo = 'Vehículo duplicado'
+          // continue;
         } else {
           if (v.return.marca) {
-            let propietario
-            let tenedores = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
-            if (tenedores && tenedores.itemTenedores[0].nombres) {
-              propietario = tenedores.itemTenedores[0]
-            } else {
-              let itemPropietario = v.return.propieActual.propact.itemPropact[0]
-              propietario = { nombres: itemPropietario.nombres, rut: itemPropietario.rut }
-            }
-            let limitacionesConcatendas = ''
-            let limitaciones = v.return.limita.itemLimita
-            let pos = 0
-            for (let limitacion of limitaciones) {
-              if (limitacion.ACausa) {
-                let textoLimitacion = 'ACausa:' + limitacion.ACausa + ', acreedor:' + limitacion.acreedor + ', autorizante:' + limitacion.autorizante + ', causa:' + limitacion.causa + ', comuna:' + limitacion.comuna +
-                  ', documento:' + limitacion.documento + ', fecReper:' + limitacion.fecReper + ', fechaDoc:' + limitacion.fechaDoc + ', naturaleza:' + limitacion.naturaleza + ', numReper:' + limitacion.numReper +
-                  ', repertorio:' + limitacion.repertorio + ', titulo:' + limitacion.titulo
-                if (pos === 0) {
-                  limitacionesConcatendas = textoLimitacion
-                } else {
-                  limitacionesConcatendas = limitacionesConcatendas + ' @ ' + textoLimitacion
-                }
-                pos++
+            let merotenedor: any, limitacionesConcatendas: any = ''
+            if (vehiculoBD == undefined) {
+              let tenedores = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
+              if (tenedores && tenedores.itemTenedores[0].nombres) {
+                merotenedor = tenedores.itemTenedores[0]
               }
+              let limitaciones = v.return.limita.itemLimita
+              let pos = 0
+              for (let limitacion of limitaciones) {
+                if (limitacion.ACausa) {
+                  let textoLimitacion = 'ACausa:' + limitacion.ACausa + ', acreedor:' + limitacion.acreedor + ', autorizante:' + limitacion.autorizante + ', causa:' + limitacion.causa + ', comuna:' + limitacion.comuna +
+                    ', documento:' + limitacion.documento + ', fecReper:' + limitacion.fecReper + ', fechaDoc:' + limitacion.fechaDoc + ', naturaleza:' + limitacion.naturaleza + ', numReper:' + limitacion.numReper +
+                    ', repertorio:' + limitacion.repertorio + ', titulo:' + limitacion.titulo
+                  if (pos === 0) {
+                    limitacionesConcatendas = textoLimitacion
+                  } else {
+                    limitacionesConcatendas = limitacionesConcatendas + ' @ ' + textoLimitacion
+                  }
+                  pos++
+                }
 
+              }
+            } else {
+              merotenedor = vehiculoBD[0].merotenedor
+              limitacionesConcatendas = vehiculoBD[0].limitaciones
+              //asignar merotenedor a v
+              if (merotenedor != '') {
+                v.return.itemLimita[v.return.itemLimita.length - 1].tenedores = {
+                  nombres: vehiculoBD[0].merotenedor,
+                  rut: vehiculoBD[0].merotenedor.rut_merotenedor
+                }
+              }
+              //asignar limitaciones a v
             }
             let vehiculo: any = {
               ppu: ppu,
@@ -124,13 +201,16 @@ export class FlotaControllerController {
               nombrePropietario: v.return.propieActual.propact.itemPropact[0].nombres,
               rutPropietario: v.return.propieActual.propact.itemPropact[0].rut,
               fechaVencimientoLS: '',
-              limitacion: limitacionesConcatendas
+              limitacion: limitacionesConcatendas,
+              merotenedor: merotenedor ? merotenedor.nombres : '',
+              rutMerotenedor: merotenedor ? merotenedor.rut : ''
             }
-
             // validacion tipo vehiculo
             if (!tiposVehiculosAceptados.includes(vehiculo.tipo.toLowerCase())) {
               resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Tipo de vehículo no corresponde a solicitud' });
-              continue
+              rechazoTipoVehiculo.estado = true
+              rechazoTipoVehiculo.motivo = 'Tipo de vehículo no corresponde a solicitud'
+              // continue
             }
             // validacion año antiguedad
             if (vehiculo.tipo != 'REMOLQUE' && vehiculo.tipo != 'SEMIREMOLQUE') {
@@ -141,7 +221,9 @@ export class FlotaControllerController {
 
               if ((new Date().getFullYear() - vehiculo.anno) > 28) {
                 resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Antigüedad del vehiculo supera la permitida (28 años)' });
-                continue
+                rechazoAntiguedad.estado = true
+                rechazoAntiguedad.motivo = 'Antigüedad del vehiculo supera la permitida (28 años)'
+                // continue
               }
             }
             if (infoPrt && infoPrt.return.revisionTecnica) {
@@ -160,11 +242,8 @@ export class FlotaControllerController {
               vehiculo.estadoRT = revisionTecnica.estado ? revisionTecnica.estado : ''
               vehiculo.identificador = 'Sin Dato'
               vehiculo.tipoid = '1'
-              vehiculo.propietario = v.return.propieActual.propact.itemPropact[0].nombres
+              // vehiculo.propietario = v.return.propieActual.propact.itemPropact[0].nombres
               let info = {}
-              vehiculo.carroceria = infoPrt.tipoCarroceria ? infoPrt.return.tipoCarroceria : 'Sin dato'
-              vehiculo.numeroMotor = infoPrt.return.numeroMotor ? infoPrt.return.numeroMotor : 'Sin dato'
-              vehiculo.ejes = infoPrt && infoPrt.return && infoPrt.return.cantEjes ? infoPrt.return.cantEjes : '0'
               vehiculo.modelo = v.return.modelo ? v.return.modelo : 'Sin Dato'
               vehiculo.marca = v.return.marca ? v.return.marca : 'Sin Dato'
               vehiculo.tipo = v.return.tipoVehi ? v.return.tipoVehi : 'Sin Dato'
@@ -173,26 +252,50 @@ export class FlotaControllerController {
               vehiculo.carroceria = infoPrt.return.marcaCarroceria ? infoPrt.return.marcaCarroceria : 'Sin Dato'
               vehiculo.chasis = infoPrt.return.numeroChasis ? infoPrt.return.numeroChasis : 'Sin dato'
               vehiculo.numeroMotor = infoPrt.return.numeroMotor ? infoPrt.return.numeroMotor : 'Sin dato'
-
               try {
-                // controllerLogger.info("vehiculo a insertar es: " + JSON.stringify(vehiculo))
-                this.vehiculoRepository.insertVehiculoFV(vehiculo)
-                  .then((value: any) => {
-                    controllerLogger.info("Inserción exitosa: " + value)
-                  })
-                  .catch((Ex) => {
-                    controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
-                    this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
-                      controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
+                if (!rechazoAntiguedad.estado || !rechazoCivil.estado || !rechazoDuplicado.estado || !rechazoTipoVehiculo.estado) {
+                  await this.vehiculoRepository.insertVehiculoFV(vehiculo)
+                    .then((value: any) => {
+                      controllerLogger.info("Inserción exitosa: " + value)
+                    })
+                    .catch((Ex) => {
+                      controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
+                      // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
+                      this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
+                        controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
+                      });
                     });
-                  });
-                controllerLogger.info("Realizando Insercion de vehiculo")
+                  controllerLogger.info("Realizando Insercion de vehiculo")
+                } else {
+                  vehiculo.motivoRechazo = rechazoAntiguedad.estado ? rechazoAntiguedad.motivo :
+                    rechazoCivil.estado ? rechazoCivil.motivo :
+                      rechazoDuplicado.estado ? rechazoDuplicado.motivo :
+                        rechazoTipoVehiculo.estado ? rechazoTipoVehiculo.motivo : ''
+                  await this.vehiculoRepository.insertVehiculoFV(vehiculo)
+                    .then((value: any) => {
+                      controllerLogger.info("Inserción exitosa: " + value)
+                    })
+                    .catch((Ex) => {
+                      controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
+                      this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
+                        // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
+                        controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
+                      });
+                    });
+                  controllerLogger.info("Realizando Insercion de vehiculo")
+                  delete vehiculo.motivoRechazo
+                }
               } catch (ex) {
                 controllerLogger.info("Existia la patente, actualizando");
-                await this.vehiculoRepository.updateVehiculoFV(vehiculo);
+                // this.vehiculoRepository.updateVehiculoFV(vehiculo)
+                await this.vehiculoRepository.updateVehiculo(vehiculo)
+                  .then((val: any) => {
+                    controllerLogger.info("vehiculo " + JSON.stringify(val))
+                  })
+                  .catch((Ex) => {
+                    controllerLogger.info("Error actualizando vehiculo" + Ex)
+                  })
               }
-
-
               // validacion revision tecnica
               if (vehiculo.estadoRT != 'A') {
                 let vehRTIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RT')
@@ -201,7 +304,6 @@ export class FlotaControllerController {
                   resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RT", nombre: "Certificado de revisión Técnica", ppu: [_ppu] })
                 else
                   resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx].ppu.push(_ppu)
-
               }
               //revision de Leasing
               let tenedores: any = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
@@ -227,7 +329,6 @@ export class FlotaControllerController {
                 else
                   resultado.tiposDocumentosPosiblesAdjuntar.data[vehRlsIdx].ppu.push(_ppu)
               }
-
             } else {
               let vehRTIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RT')
               let vehRT: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx]
@@ -236,25 +337,20 @@ export class FlotaControllerController {
               else
                 resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx].ppu.push(_ppu)
             }
-            resultado.flotaValidada.push(vehiculo)
+            delete vehiculo.identificador
+            delete vehiculo.tipoid
+            if (!rechazoAntiguedad.estado || !rechazoCivil.estado || !rechazoDuplicado.estado || !rechazoTipoVehiculo.estado)
+              resultado.flotaValidada.push(vehiculo)
           } else {
             resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Vehículo no encontrado en Registro civil' });
           }
-
         }
       }
-
-      //Falta resumenFlotaValidada con las toneladas
-      //falta resumenFlotaValidadaPorTipo
       let capacidadTotal = 0;
       for (let v of resultado.flotaValidada) {
         controllerLogger.info('Tipo de Vehiculo es: ' + v.tipo)
         capacidadTotal += v.capacidadCargaToneladas
         let resumenTipoIdx: any = resultado.resumenFlotaValidadaPorTipo.map((veh: any) => {
-          if (veh.tipoVehiculo == undefined) {
-            controllerLogger.info('Is Undefined tipo')
-            controllerLogger.info('veh.ppu: ' + veh.ppu)
-          }
           return veh.tipoVehiculo.toLowerCase()
         }).indexOf(v.tipo.toLowerCase())
         let resumenTipo: any = resultado.resumenFlotaValidadaPorTipo[resumenTipoIdx]
@@ -278,7 +374,6 @@ export class FlotaControllerController {
         resultado.tiposDocumentosPosiblesAdjuntar.caso = 3
       else if (vehRTIdx == -1 && vehClsIdx == -1)
         resultado.tiposDocumentosPosiblesAdjuntar.caso = 0
-      //Falta revisar si estan todas las PPUs validadas, todas rechazadas o parcial
 
       if (resultado.flotaRechazada.length == 0) {
         resultado.codigoResultado = 1;
