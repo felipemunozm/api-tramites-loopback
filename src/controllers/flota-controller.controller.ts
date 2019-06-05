@@ -103,6 +103,7 @@ export class FlotaControllerController {
             v = await serviciosGateway.obtenerVehiculo(_ppu)
           else
             v.return = {
+              fromDB: true,
               aaFabric: vehiculoBD[0].anno_fabricacion,
               chasis: vehiculoBD[0].chasis,
               marca: vehiculoBD[0].marca,
@@ -259,11 +260,13 @@ export class FlotaControllerController {
                       controllerLogger.info("Inserción exitosa: " + value)
                     })
                     .catch((Ex) => {
-                      controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
-                      // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
-                      this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
-                        controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
-                      });
+                      if (!v.return.fromDB) {
+                        controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
+                        // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
+                        this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
+                          controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
+                        });
+                      }
                     });
                   controllerLogger.info("Realizando Insercion de vehiculo")
                 } else {
@@ -276,11 +279,13 @@ export class FlotaControllerController {
                       controllerLogger.info("Inserción exitosa: " + value)
                     })
                     .catch((Ex) => {
-                      controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
-                      this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
-                        // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
-                        controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
-                      });
+                      if (!v.return.fromDB) {
+                        controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
+                        this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
+                          // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
+                          controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
+                        });
+                      }
                     });
                   controllerLogger.info("Realizando Insercion de vehiculo")
                   delete vehiculo.motivoRechazo
