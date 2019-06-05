@@ -143,7 +143,7 @@ export class FlotaControllerController {
           rechazoDuplicado.motivo = 'Vehículo duplicado'
         } else {
           if (v.return.marca) {
-            let merotenedor: any, limitacionesConcatendas: any = ''
+            let merotenedor: any = {}, limitacionesConcatendas: any = ''
             if (vehiculoBD == undefined || (fechaRegistro.getFullYear() != hoy.getFullYear() || fechaRegistro.getMonth() != hoy.getMonth() || fechaRegistro.getDay() != hoy.getDay())) {
               let tenedores = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
               if (tenedores && tenedores.itemTenedores[0].nombres) {
@@ -166,7 +166,8 @@ export class FlotaControllerController {
 
               }
             } else {
-              merotenedor = vehiculoBD[0].merotenedor
+              merotenedor.nombres = vehiculoBD[0].merotenedor
+              merotenedor.rut = vehiculoBD[0].rut_merotenedor
               limitacionesConcatendas = vehiculoBD[0].limitaciones
               //asignar merotenedor a v
               if (merotenedor != '') {
