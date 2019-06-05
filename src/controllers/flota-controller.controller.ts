@@ -90,7 +90,7 @@ export class FlotaControllerController {
           // controllerLogger.info('Respuesta de Civil para vehiculo nuevo: ' + JSON.stringify(v))
         }
         else {
-          if (fechaRegistro.getFullYear() <= hoy.getFullYear() && fechaRegistro.getMonth() <= hoy.getMonth() && fechaRegistro.getDay() < hoy.getDay()) {
+          if (fechaRegistro.getFullYear() != hoy.getFullYear() || fechaRegistro.getMonth() != hoy.getMonth() || fechaRegistro.getDay() != hoy.getDay()) {
             v = await serviciosGateway.obtenerVehiculo(_ppu)
             // controllerLogger.info('Respuesta de Civil para vehiculo existente: ' + JSON.stringify(v))
           }
@@ -144,7 +144,7 @@ export class FlotaControllerController {
         } else {
           if (v.return.marca) {
             let merotenedor: any, limitacionesConcatendas: any = ''
-            if (vehiculoBD == undefined || (fechaRegistro.getFullYear() <= hoy.getFullYear() && fechaRegistro.getMonth() <= hoy.getMonth() && fechaRegistro.getDay() < hoy.getDay())) {
+            if (vehiculoBD == undefined || (fechaRegistro.getFullYear() != hoy.getFullYear() || fechaRegistro.getMonth() != hoy.getMonth() || fechaRegistro.getDay() != hoy.getDay())) {
               let tenedores = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
               if (tenedores && tenedores.itemTenedores[0].nombres) {
                 merotenedor = tenedores.itemTenedores[0]
@@ -242,7 +242,7 @@ export class FlotaControllerController {
               try {
                 if (!rechazoAntiguedad.estado && !rechazoCivil.estado && !rechazoDuplicado.estado && !rechazoTipoVehiculo.estado) {
                   if (vehiculoBD != undefined) {
-                    if (fechaRegistro.getFullYear() <= hoy.getFullYear() && fechaRegistro.getMonth() <= hoy.getMonth() && fechaRegistro.getDay() < hoy.getDay()) {
+                    if (fechaRegistro.getFullYear() != hoy.getFullYear() || fechaRegistro.getMonth() != hoy.getMonth() || fechaRegistro.getDay() != hoy.getDay()) {
                       controllerLogger.info("Realizando Actualizacion de vehiculo " + vehiculo.ppu + " validado")
                       await this.vehiculoRepository.updateVehiculo(vehiculo)
                     } else {
