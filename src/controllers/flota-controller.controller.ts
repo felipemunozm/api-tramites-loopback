@@ -286,7 +286,7 @@ export class FlotaControllerController {
                     controllerLogger.info("Error actualizando vehiculo " + vehiculo.ppu + "\n" + Ex)
                   })
               }
-              if (rechazoAntiguedad.estado || rechazoCivil.estado || rechazoDuplicado.estado || rechazoTipoVehiculo.estado) {
+              if (!rechazoAntiguedad.estado && !rechazoCivil.estado && !rechazoDuplicado.estado && !rechazoTipoVehiculo.estado) {
                 // validacion revision tecnica
                 if (vehiculo.estadoRT != 'A') {
                   let vehRTIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RT')
