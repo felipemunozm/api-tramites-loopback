@@ -178,9 +178,9 @@ export class FlotaControllerController {
               limitacionesConcatendas = vehiculoBD[0].limitaciones
               //asignar merotenedor a v
               if (merotenedor != '') {
-                v.return.itemLimita[v.return.itemLimita.length - 1].tenedores = {
+                v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores = {
                   nombres: vehiculoBD[0].merotenedor,
-                  rut: vehiculoBD[0].merotenedor.rut_merotenedor
+                  rut: vehiculoBD[0].rut_merotenedor
                 }
               }
               //asignar limitaciones a v
@@ -312,8 +312,8 @@ export class FlotaControllerController {
               //revision de Leasing
               let tenedores: any = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
               if (tenedores != undefined)
-                controllerLogger.info("Tenedores y nombre: " + JSON.stringify(tenedores) + ", " + tenedores.itemTenedores[0].nombre)
-              if (tenedores != undefined && tenedores.itemTenedores[0].nombres != undefined) {
+                controllerLogger.info("Tenedores y nombre: " + JSON.stringify(tenedores) + ", " + tenedores.nombre)
+              if (tenedores != undefined && tenedores.nombres != undefined) {
                 let vehClsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_CLS')
                 let vehCls: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehClsIdx];
                 let vehAutIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_AUT')
