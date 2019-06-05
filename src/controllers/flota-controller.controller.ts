@@ -97,11 +97,14 @@ export class FlotaControllerController {
         controllerLogger.info('fecha: ' + (vehiculoBD ? vehiculoBD[0].vigencia_registro : undefined))
         if (vehiculoBD == undefined) {
           v = await serviciosGateway.obtenerVehiculo(_ppu)
+          controllerLogger.info('Respuesta de Civil para vehiculo nuevo: ' + JSON.stringify(v))
         }
         else {
-          if (fechaRegistro.getFullYear() <= hoy.getFullYear() && fechaRegistro.getMonth() <= hoy.getMonth() && fechaRegistro.getDay() < hoy.getDay())
+          if (fechaRegistro.getFullYear() <= hoy.getFullYear() && fechaRegistro.getMonth() <= hoy.getMonth() && fechaRegistro.getDay() < hoy.getDay()) {
             v = await serviciosGateway.obtenerVehiculo(_ppu)
-          else
+            controllerLogger.info('Respuesta de Civil para vehiculo existente: ' + JSON.stringify(v))
+          }
+          else {
             v.return = {
               fromDB: true,
               aaFabric: vehiculoBD[0].anno_fabricacion,
@@ -127,7 +130,8 @@ export class FlotaControllerController {
                 ]
               }
             }
-          controllerLogger.info('vehiculo de civil simulado v: ' + JSON.stringify(v))
+            controllerLogger.info('vehiculo de civil simulado v: ' + JSON.stringify(v))
+          }
         }
         controllerLogger.info('Respuesta de Civil: ' + JSON.stringify(v))
         let infoPrt: any = await serviciosGateway.obtenerRevisionTecnica(_ppu);
@@ -151,7 +155,7 @@ export class FlotaControllerController {
         } else {
           if (v.return.marca) {
             let merotenedor: any, limitacionesConcatendas: any = ''
-            if (vehiculoBD == undefined) {
+            if (vehiculoBD == undefined || (fechaRegistro.getFullYear() <= hoy.getFullYear() && fechaRegistro.getMonth() <= hoy.getMonth() && fechaRegistro.getDay() < hoy.getDay())) {
               let tenedores = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
               if (tenedores && tenedores.itemTenedores[0].nombres) {
                 merotenedor = tenedores.itemTenedores[0]
@@ -253,43 +257,57 @@ export class FlotaControllerController {
               vehiculo.chasis = infoPrt.return.numeroChasis ? infoPrt.return.numeroChasis : 'Sin dato'
               vehiculo.numeroMotor = infoPrt.return.numeroMotor ? infoPrt.return.numeroMotor : 'Sin dato'
               try {
-                controllerLogger.info("resultado validaciones rechazo: " + (!rechazoAntiguedad.estado && !rechazoCivil.estado && !rechazoDuplicado.estado && !rechazoTipoVehiculo.estado))
                 if (!rechazoAntiguedad.estado && !rechazoCivil.estado && !rechazoDuplicado.estado && !rechazoTipoVehiculo.estado) {
-                  await this.vehiculoRepository.insertVehiculoFV(vehiculo)
-                    .then((value: any) => {
-                      controllerLogger.info("Inserción exitosa: " + value)
-                    })
-                    .catch((Ex) => {
-                      if (!v.return.fromDB) {
-                        controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
-                        // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
-                        this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
-                          controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
-                        });
-                      }
-                    });
-                  controllerLogger.info("Realizando Insercion de vehiculo")
+                  if (vehiculoBD != undefined) {
+                    controllerLogger.info("Realizando Actualizacion de vehiculo validado")
+                    await this.vehiculoRepository.updateVehiculo(vehiculo)
+                  }
+                  else {
+                    controllerLogger.info("Realizando Insercion de vehiculo validado")
+                    await this.vehiculoRepository.insertVehiculoFV(vehiculo)
+                  }
+                  // await this.vehiculoRepository.insertVehiculoFV(vehiculo)
+                  //   .then((value: any) => {
+                  //     controllerLogger.info("Inserción exitosa: " + value)
+                  //   })
+                  //   .catch((Ex) => {
+                  //     if (!v.return.fromDB) {
+                  //       controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
+                  //       // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
+                  //       this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
+                  //         controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
+                  //       });
+                  //     }
+                  //   });
+                  // controllerLogger.info("Realizando Insercion de vehiculo")
                 } else {
                   vehiculo.motivoRechazo = rechazoAntiguedad.estado ? rechazoAntiguedad.motivo :
                     rechazoCivil.estado ? rechazoCivil.motivo :
                       rechazoDuplicado.estado ? rechazoDuplicado.motivo :
                         rechazoTipoVehiculo.estado ? rechazoTipoVehiculo.motivo : ''
-                  await this.vehiculoRepository.insertVehiculoFV(vehiculo)
-                    .then((value: any) => {
-                      controllerLogger.info("Inserción exitosa: " + value)
-                    })
-                    .catch((Ex) => {
-                      controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
-                      this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
-                        // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
-                        controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
-                      });
-                    });
-                  controllerLogger.info("Realizando Insercion de vehiculo")
+                  if (vehiculoBD != undefined) {
+                    controllerLogger.info("Realizando Actualizacion de vehiculo rechazado")
+                    await this.vehiculoRepository.updateVehiculo(vehiculo)
+                  }
+                  else {
+                    controllerLogger.info("Realizando Insercion de vehiculo rechazo")
+                    await this.vehiculoRepository.insertVehiculoFV(vehiculo)
+                  }
+                  // await this.vehiculoRepository.insertVehiculoFV(vehiculo)
+                  //   .then((value: any) => {
+                  //     controllerLogger.info("Inserción exitosa: " + value)
+                  //   })
+                  //   .catch((Ex) => {
+                  //     controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
+                  //     this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
+                  //       // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
+                  //       controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
+                  //     });
+                  //   });
                   delete vehiculo.motivoRechazo
                 }
               } catch (ex) {
-                controllerLogger.info("Existia la patente, actualizando");
+                controllerLogger.info("Existia la patente, actualizando: " + ex);
                 // this.vehiculoRepository.updateVehiculoFV(vehiculo)
                 await this.vehiculoRepository.updateVehiculo(vehiculo)
                   .then((val: any) => {
