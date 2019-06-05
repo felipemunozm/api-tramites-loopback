@@ -254,7 +254,8 @@ export class FlotaControllerController {
               vehiculo.chasis = infoPrt.return.numeroChasis ? infoPrt.return.numeroChasis : 'Sin dato'
               vehiculo.numeroMotor = infoPrt.return.numeroMotor ? infoPrt.return.numeroMotor : 'Sin dato'
               try {
-                if (!rechazoAntiguedad.estado || !rechazoCivil.estado || !rechazoDuplicado.estado || !rechazoTipoVehiculo.estado) {
+                controllerLogger.info("resultado validaciones rechazo: " + (!rechazoAntiguedad.estado && !rechazoCivil.estado && !rechazoDuplicado.estado && !rechazoTipoVehiculo.estado))
+                if (!rechazoAntiguedad.estado && !rechazoCivil.estado && !rechazoDuplicado.estado && !rechazoTipoVehiculo.estado) {
                   await this.vehiculoRepository.insertVehiculoFV(vehiculo)
                     .then((value: any) => {
                       controllerLogger.info("Inserción exitosa: " + value)
@@ -344,7 +345,7 @@ export class FlotaControllerController {
             }
             delete vehiculo.identificador
             delete vehiculo.tipoid
-            if (!rechazoAntiguedad.estado || !rechazoCivil.estado || !rechazoDuplicado.estado || !rechazoTipoVehiculo.estado)
+            if (!rechazoAntiguedad.estado && !rechazoCivil.estado && !rechazoDuplicado.estado && !rechazoTipoVehiculo.estado)
               resultado.flotaValidada.push(vehiculo)
           } else {
             resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Vehículo no encontrado en Registro civil' });
