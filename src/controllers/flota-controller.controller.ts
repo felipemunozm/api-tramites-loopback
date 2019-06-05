@@ -79,8 +79,8 @@ export class FlotaControllerController {
         let vehiculoBD: any = await this.vehiculoRepository.ObtenerVehiculoPorPPU(_ppu)
         if (vehiculoBD.length == 0)
           vehiculoBD = undefined;
-        else
-          controllerLogger.info('vehiculo BD: ' + JSON.stringify(vehiculoBD[0]));
+        // else
+        //   controllerLogger.info('vehiculo BD: ' + JSON.stringify(vehiculoBD[0]));
         let v: any = {
           return: {}
         }
@@ -97,12 +97,12 @@ export class FlotaControllerController {
         controllerLogger.info('fecha: ' + (vehiculoBD ? vehiculoBD[0].vigencia_registro : undefined))
         if (vehiculoBD == undefined) {
           v = await serviciosGateway.obtenerVehiculo(_ppu)
-          controllerLogger.info('Respuesta de Civil para vehiculo nuevo: ' + JSON.stringify(v))
+          // controllerLogger.info('Respuesta de Civil para vehiculo nuevo: ' + JSON.stringify(v))
         }
         else {
           if (fechaRegistro.getFullYear() <= hoy.getFullYear() && fechaRegistro.getMonth() <= hoy.getMonth() && fechaRegistro.getDay() < hoy.getDay()) {
             v = await serviciosGateway.obtenerVehiculo(_ppu)
-            controllerLogger.info('Respuesta de Civil para vehiculo existente: ' + JSON.stringify(v))
+            // controllerLogger.info('Respuesta de Civil para vehiculo existente: ' + JSON.stringify(v))
           }
           else {
             v.return = {
@@ -130,10 +130,9 @@ export class FlotaControllerController {
                 ]
               }
             }
-            controllerLogger.info('vehiculo de civil simulado v: ' + JSON.stringify(v))
+            // controllerLogger.info('vehiculo de civil simulado v: ' + JSON.stringify(v))
           }
         }
-        controllerLogger.info('Respuesta de Civil: ' + JSON.stringify(v))
         let infoPrt: any = await serviciosGateway.obtenerRevisionTecnica(_ppu);
         let ppu: any;
         try {
@@ -266,20 +265,6 @@ export class FlotaControllerController {
                     controllerLogger.info("Realizando Insercion de vehiculo validado")
                     await this.vehiculoRepository.insertVehiculoFV(vehiculo)
                   }
-                  // await this.vehiculoRepository.insertVehiculoFV(vehiculo)
-                  //   .then((value: any) => {
-                  //     controllerLogger.info("Inserción exitosa: " + value)
-                  //   })
-                  //   .catch((Ex) => {
-                  //     if (!v.return.fromDB) {
-                  //       controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
-                  //       // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
-                  //       this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
-                  //         controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
-                  //       });
-                  //     }
-                  //   });
-                  // controllerLogger.info("Realizando Insercion de vehiculo")
                 } else {
                   vehiculo.motivoRechazo = rechazoAntiguedad.estado ? rechazoAntiguedad.motivo :
                     rechazoCivil.estado ? rechazoCivil.motivo :
@@ -293,17 +278,6 @@ export class FlotaControllerController {
                     controllerLogger.info("Realizando Insercion de vehiculo rechazo")
                     await this.vehiculoRepository.insertVehiculoFV(vehiculo)
                   }
-                  // await this.vehiculoRepository.insertVehiculoFV(vehiculo)
-                  //   .then((value: any) => {
-                  //     controllerLogger.info("Inserción exitosa: " + value)
-                  //   })
-                  //   .catch((Ex) => {
-                  //     controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
-                  //     this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
-                  //       // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
-                  //       controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
-                  //     });
-                  //   });
                   delete vehiculo.motivoRechazo
                 }
               } catch (ex) {
@@ -328,8 +302,8 @@ export class FlotaControllerController {
               }
               //revision de Leasing
               let tenedores: any = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
-              if (tenedores != undefined)
-                controllerLogger.info("Tenedores y nombre: " + JSON.stringify(tenedores) + ", " + tenedores.nombre)
+              // if (tenedores != undefined)
+              //   controllerLogger.info("Tenedores y nombre: " + JSON.stringify(tenedores) + ", " + tenedores.nombre)
               if (tenedores != undefined && tenedores.nombres != undefined) {
                 let vehClsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_CLS')
                 let vehCls: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehClsIdx];
@@ -408,7 +382,7 @@ export class FlotaControllerController {
         resultado.codigoResultado = 2
         resultado.descripcionResultado = 'Todas las PPUs rechazadas';
       }
-      controllerLogger.info("resultado es: " + JSON.stringify(resultado));
+      // controllerLogger.info("resultado es: " + JSON.stringify(resultado));
       resultado.cantidadVehiculosRechazados = resultado.flotaRechazada.length
       return resultado;
     } catch (ex) {
