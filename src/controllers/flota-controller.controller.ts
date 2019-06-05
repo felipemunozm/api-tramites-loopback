@@ -215,7 +215,7 @@ export class FlotaControllerController {
               }
             }
             //validacion de Propietario
-            if (params.rutSujeto != vehiculo.rutPropietario || params.rutSujeto != vehiculo.rutMerotenedor) {
+            if (params.rutSujeto != vehiculo.rutPropietario || vehiculo.rutMerotenedor != '' ? (params.rutSujeto != vehiculo.rutMerotenedor) : false) {
               rechazoCivil.estado = true
               rechazoCivil.motivo = 'Propietario del vehículo no corresponde al solicitante'
               resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Propietario del vehículo no corresponde al solicitante' })
