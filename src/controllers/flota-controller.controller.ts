@@ -286,8 +286,43 @@ export class FlotaControllerController {
                     controllerLogger.info("Error actualizando vehiculo " + vehiculo.ppu + "\n" + Ex)
                   })
               }
-              // validacion revision tecnica
-              if (vehiculo.estadoRT != 'A') {
+              if (rechazoAntiguedad.estado || rechazoCivil.estado || rechazoDuplicado.estado || rechazoTipoVehiculo.estado) {
+                // validacion revision tecnica
+                if (vehiculo.estadoRT != 'A') {
+                  let vehRTIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RT')
+                  let vehRT: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx]
+                  if (vehRT == undefined)
+                    resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RT", nombre: "Certificado de revisión Técnica", ppu: [_ppu] })
+                  else
+                    resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx].ppu.push(_ppu)
+                }
+                //revision de Leasing
+                let tenedores: any = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
+                // if (tenedores != undefined)
+                //   controllerLogger.info("Tenedores y nombre: " + JSON.stringify(tenedores) + ", " + tenedores.nombre)
+                if (tenedores != undefined && tenedores.nombres != undefined) {
+                  let vehClsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_CLS')
+                  let vehCls: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehClsIdx];
+                  let vehAutIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_AUT')
+                  let vehAut: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehAutIdx];
+                  let vehRlsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RLS')
+                  let vehRls: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehRlsIdx];
+                  if (vehCls == undefined)
+                    resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_CLS", nombre: "Contrato de leasing", ppu: [_ppu] });
+                  else
+                    resultado.tiposDocumentosPosiblesAdjuntar.data[vehClsIdx].ppu.push(_ppu)
+                  if (vehAut == undefined)
+                    resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_AUT", nombre: "Autorización de entidad financiera para salir del país", ppu: [_ppu] });
+                  else
+                    resultado.tiposDocumentosPosiblesAdjuntar.data[vehAutIdx].ppu.push(_ppu)
+                  if (vehRls == undefined)
+                    resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RLS", nombre: "Declaracion de responsabilida de vehículos bajo régimen de leasing", ppu: [_ppu] })
+                  else
+                    resultado.tiposDocumentosPosiblesAdjuntar.data[vehRlsIdx].ppu.push(_ppu)
+                }
+              }
+            } else {
+              if (rechazoAntiguedad.estado || rechazoCivil.estado || rechazoDuplicado.estado || rechazoTipoVehiculo.estado) {
                 let vehRTIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RT')
                 let vehRT: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx]
                 if (vehRT == undefined)
@@ -295,37 +330,6 @@ export class FlotaControllerController {
                 else
                   resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx].ppu.push(_ppu)
               }
-              //revision de Leasing
-              let tenedores: any = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
-              // if (tenedores != undefined)
-              //   controllerLogger.info("Tenedores y nombre: " + JSON.stringify(tenedores) + ", " + tenedores.nombre)
-              if (tenedores != undefined && tenedores.nombres != undefined) {
-                let vehClsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_CLS')
-                let vehCls: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehClsIdx];
-                let vehAutIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_AUT')
-                let vehAut: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehAutIdx];
-                let vehRlsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RLS')
-                let vehRls: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehRlsIdx];
-                if (vehCls == undefined)
-                  resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_CLS", nombre: "Contrato de leasing", ppu: [_ppu] });
-                else
-                  resultado.tiposDocumentosPosiblesAdjuntar.data[vehClsIdx].ppu.push(_ppu)
-                if (vehAut == undefined)
-                  resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_AUT", nombre: "Autorización de entidad financiera para salir del país", ppu: [_ppu] });
-                else
-                  resultado.tiposDocumentosPosiblesAdjuntar.data[vehAutIdx].ppu.push(_ppu)
-                if (vehRls == undefined)
-                  resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RLS", nombre: "Declaracion de responsabilida de vehículos bajo régimen de leasing", ppu: [_ppu] })
-                else
-                  resultado.tiposDocumentosPosiblesAdjuntar.data[vehRlsIdx].ppu.push(_ppu)
-              }
-            } else {
-              let vehRTIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RT')
-              let vehRT: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx]
-              if (vehRT == undefined)
-                resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RT", nombre: "Certificado de revisión Técnica", ppu: [_ppu] })
-              else
-                resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx].ppu.push(_ppu)
             }
             delete vehiculo.identificador
             delete vehiculo.tipoid
