@@ -68,19 +68,9 @@ export class FlotaControllerController {
       for (let _ppu of params.ppus) {
         let vehiculoExistente: Vehiculo
         let rechazoTipoVehiculo: Rechazo = new Rechazo(), rechazoAntiguedad: Rechazo = new Rechazo(), rechazoCivil: Rechazo = new Rechazo(), rechazoDuplicado: Rechazo = new Rechazo();
-        // let vehiculoBD: any = await this.vehiculoRepository.ObtenerVehiculoPorPPU(_ppu)
-        //   .then((v: Vehiculo) => {
-        //     controllerLogger.info("El resultado del Vehiculo from BD fue: " + JSON.stringify(v))
-        //     vehiculoExistente = v
-        //   })
-        //   .catch((ex) => {
-        //     controllerLogger.info("Exception al traer vehiculo: " + ex)
-        //   })
         let vehiculoBD: any = await this.vehiculoRepository.ObtenerVehiculoPorPPU(_ppu)
         if (vehiculoBD.length == 0)
           vehiculoBD = undefined;
-        // else
-        //   controllerLogger.info('vehiculo BD: ' + JSON.stringify(vehiculoBD[0]));
         let v: any = {
           return: {}
         }
@@ -217,11 +207,6 @@ export class FlotaControllerController {
             }
             // validacion año antiguedad
             if (vehiculo.tipo != 'REMOLQUE' && vehiculo.tipo != 'SEMIREMOLQUE') {
-              controllerLogger.info('validacion de años')
-              controllerLogger.info('new Date().getFullYear() ' + new Date().getFullYear())
-              controllerLogger.info('vehiculo.anno' + vehiculo.anno)
-              controllerLogger.info('diferencia: ' + (new Date().getFullYear() - vehiculo.anno));
-
               if ((new Date().getFullYear() - vehiculo.anno) > 28) {
                 resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Antigüedad del vehiculo supera la permitida (28 años)' });
                 rechazoAntiguedad.estado = true
@@ -257,11 +242,15 @@ export class FlotaControllerController {
               try {
                 if (!rechazoAntiguedad.estado && !rechazoCivil.estado && !rechazoDuplicado.estado && !rechazoTipoVehiculo.estado) {
                   if (vehiculoBD != undefined) {
-                    controllerLogger.info("Realizando Actualizacion de vehiculo validado")
-                    await this.vehiculoRepository.updateVehiculo(vehiculo)
+                    if (fechaRegistro.getFullYear() <= hoy.getFullYear() && fechaRegistro.getMonth() <= hoy.getMonth() && fechaRegistro.getDay() < hoy.getDay()) {
+                      controllerLogger.info("Realizando Actualizacion de vehiculo " + vehiculo.ppu + " validado")
+                      await this.vehiculoRepository.updateVehiculo(vehiculo)
+                    } else {
+                      controllerLogger.info("Vehiculo " + vehiculo.ppu + " con Registro de hoy vigente, no se actualiza")
+                    }
                   }
                   else {
-                    controllerLogger.info("Realizando Insercion de vehiculo validado")
+                    controllerLogger.info("Realizando Insercion de vehiculo " + vehiculo.ppu + " validado")
                     await this.vehiculoRepository.insertVehiculoFV(vehiculo)
                   }
                 } else {
@@ -270,24 +259,24 @@ export class FlotaControllerController {
                       rechazoDuplicado.estado ? rechazoDuplicado.motivo :
                         rechazoTipoVehiculo.estado ? rechazoTipoVehiculo.motivo : ''
                   if (vehiculoBD != undefined) {
-                    controllerLogger.info("Realizando Actualizacion de vehiculo rechazado")
+                    controllerLogger.info("Realizando Actualizacion de vehiculo " + vehiculo.ppu + " rechazado")
                     await this.vehiculoRepository.updateVehiculo(vehiculo)
                   }
                   else {
-                    controllerLogger.info("Realizando Insercion de vehiculo rechazo")
+                    controllerLogger.info("Realizando Insercion de vehiculo " + vehiculo.ppu + " rechazo")
                     await this.vehiculoRepository.insertVehiculoFV(vehiculo)
                   }
                   delete vehiculo.motivoRechazo
                 }
               } catch (ex) {
-                controllerLogger.info("Existia la patente, actualizando: " + ex);
+                controllerLogger.info("Existia la patente, actualizando:  " + vehiculo.ppu + "\n" + ex);
                 // this.vehiculoRepository.updateVehiculoFV(vehiculo)
                 await this.vehiculoRepository.updateVehiculo(vehiculo)
                   .then((val: any) => {
                     controllerLogger.info("vehiculo " + JSON.stringify(val))
                   })
                   .catch((Ex) => {
-                    controllerLogger.info("Error actualizando vehiculo" + Ex)
+                    controllerLogger.info("Error actualizando vehiculo " + vehiculo.ppu + "\n" + Ex)
                   })
               }
               // validacion revision tecnica
