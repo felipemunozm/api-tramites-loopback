@@ -322,7 +322,7 @@ export class FlotaControllerController {
                 }
               }
             } else {
-              if (rechazoAntiguedad.estado || rechazoCivil.estado || rechazoDuplicado.estado || rechazoTipoVehiculo.estado) {
+              if (!rechazoAntiguedad.estado && !rechazoCivil.estado && !rechazoDuplicado.estado && !rechazoTipoVehiculo.estado) {
                 let vehRTIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RT')
                 let vehRT: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx]
                 if (vehRT == undefined)
