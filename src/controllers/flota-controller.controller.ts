@@ -201,25 +201,38 @@ export class FlotaControllerController {
             }
             // validacion tipo vehiculo
             if (!tiposVehiculosAceptados.includes(vehiculo.tipo.toLowerCase())) {
-              resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Tipo de vehículo no corresponde a solicitud' });
-              rechazoTipoVehiculo.estado = true
-              rechazoTipoVehiculo.motivo = 'Tipo de vehículo no corresponde a solicitud'
-              // continue
+              //buscar si el vehiculo ya existe en la flota rechazada para no duplicarlo
+              if (resultado.flotaRechazada.find((value: any) => {
+                if (value.ppu == _ppu) return value
+              }) == undefined) {
+                resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Tipo de vehículo no corresponde a solicitud' });
+                rechazoTipoVehiculo.estado = true
+                rechazoTipoVehiculo.motivo = 'Tipo de vehículo no corresponde a solicitud'
+                // continue
+              }
             }
             // validacion año antiguedad
             if (vehiculo.tipo != 'REMOLQUE' && vehiculo.tipo != 'SEMIREMOLQUE') {
               if ((new Date().getFullYear() - vehiculo.anno) > 28) {
-                resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Antigüedad del vehiculo supera la permitida (28 años)' });
-                rechazoAntiguedad.estado = true
-                rechazoAntiguedad.motivo = 'Antigüedad del vehiculo supera la permitida (28 años)'
-                // continue
+                if (resultado.flotaRechazada.find((value: any) => {
+                  if (value.ppu == _ppu) return value
+                }) == undefined) {
+                  resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Antigüedad del vehiculo supera la permitida (28 años)' });
+                  rechazoAntiguedad.estado = true
+                  rechazoAntiguedad.motivo = 'Antigüedad del vehiculo supera la permitida (28 años)'
+                  // continue
+                }
               }
             }
             //validacion de Propietario
             if (params.rutSujeto != vehiculo.rutPropietario || vehiculo.rutMerotenedor != '' ? (params.rutSujeto != vehiculo.rutMerotenedor) : false) {
-              rechazoCivil.estado = true
-              rechazoCivil.motivo = 'Propietario del vehículo no corresponde al solicitante'
-              resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Propietario del vehículo no corresponde al solicitante' })
+              if (resultado.flotaRechazada.find((value: any) => {
+                if (value.ppu == _ppu) return value
+              }) == undefined) {
+                rechazoCivil.estado = true
+                rechazoCivil.motivo = 'Propietario del vehículo no corresponde al solicitante'
+                resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Propietario del vehículo no corresponde al solicitante' })
+              }
             }
             if (infoPrt && infoPrt.return.revisionTecnica) {
               let revisionTecnica: any = {}
