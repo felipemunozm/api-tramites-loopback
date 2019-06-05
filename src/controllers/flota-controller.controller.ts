@@ -1,4 +1,4 @@
-import { HttpErrors, post, requestBody } from "@loopback/rest";
+import { HttpErrors, post, requestBody, param } from "@loopback/rest";
 import * as moment from 'moment';
 import { controllerLogger } from "../logger/logger-config";
 import { repository, DATE } from "@loopback/repository";
@@ -213,6 +213,12 @@ export class FlotaControllerController {
                 rechazoAntiguedad.motivo = 'Antigüedad del vehiculo supera la permitida (28 años)'
                 // continue
               }
+            }
+            //validacion de Propietario
+            if (params.rutSujeto != vehiculo.rutPropietario || params.rutSujeto != vehiculo.rutMerotenedor) {
+              rechazoCivil.estado = true
+              rechazoCivil.motivo = 'Propietario del vehículo no corresponde al solicitante'
+              resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Propietario del vehículo no corresponde al solicitante' })
             }
             if (infoPrt && infoPrt.return.revisionTecnica) {
               let revisionTecnica: any = {}
