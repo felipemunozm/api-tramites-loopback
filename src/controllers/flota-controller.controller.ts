@@ -235,7 +235,6 @@ export class FlotaControllerController {
                 revisionTecnica.fechaVencimiento = moment(infoPrt.return.revisionTecnica.fechaVencimiento)
                 revisionTecnica.estado = infoPrt.return.revisionTecnica.resultado
               }
-              controllerLogger.info("Tipo Vehiculo = " + infoPrt.return.tipoVehiculo.toLowerCase().replace(' ', ''));
               let cap = matrizConversionCapacidadesCargas.find((matriz: any) => matriz.tipo_vehiculo.toLowerCase() === v.return.tipoVehi.toLowerCase().replace(' ', '') && matriz.cantidad_ejes === infoPrt.return.cantEjes)
               vehiculo.carroceria = infoPrt.return.tipoCarroceria ? infoPrt.return.tipoCarroceria : 'Sin dato'
               vehiculo.numeroMotor = infoPrt.return.numeroMotor ? infoPrt.return.numeroMotor : 'Sin dato'
@@ -343,7 +342,6 @@ export class FlotaControllerController {
       }
       let capacidadTotal = 0;
       for (let v of resultado.flotaValidada) {
-        controllerLogger.info('Tipo de Vehiculo es: ' + v.tipo)
         capacidadTotal += v.capacidadCargaToneladas
         let resumenTipoIdx: any = resultado.resumenFlotaValidadaPorTipo.map((veh: any) => {
           return veh.tipoVehiculo.toLowerCase()
