@@ -148,7 +148,6 @@ export class FlotaControllerController {
           resultado.flotaRechazada.push({ ppu: _ppu, motivoRechazo: 'Vehículo duplicado' });
           rechazoDuplicado.estado = true
           rechazoDuplicado.motivo = 'Vehículo duplicado'
-          // continue;
         } else {
           if (v.return.marca) {
             let merotenedor: any, limitacionesConcatendas: any = ''
@@ -158,18 +157,18 @@ export class FlotaControllerController {
                 merotenedor = tenedores.itemTenedores[0]
               }
               let limitaciones = v.return.limita.itemLimita
-              let pos = 0
+              let primeraLimitacion: boolean = true
               for (let limitacion of limitaciones) {
                 if (limitacion.ACausa) {
                   let textoLimitacion = 'ACausa:' + limitacion.ACausa + ', acreedor:' + limitacion.acreedor + ', autorizante:' + limitacion.autorizante + ', causa:' + limitacion.causa + ', comuna:' + limitacion.comuna +
                     ', documento:' + limitacion.documento + ', fecReper:' + limitacion.fecReper + ', fechaDoc:' + limitacion.fechaDoc + ', naturaleza:' + limitacion.naturaleza + ', numReper:' + limitacion.numReper +
                     ', repertorio:' + limitacion.repertorio + ', titulo:' + limitacion.titulo
-                  if (pos === 0) {
+                  if (primeraLimitacion) {
                     limitacionesConcatendas = textoLimitacion
+                    primeraLimitacion = false
                   } else {
                     limitacionesConcatendas = limitacionesConcatendas + ' @ ' + textoLimitacion
                   }
-                  pos++
                 }
 
               }
