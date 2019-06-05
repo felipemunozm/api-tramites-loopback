@@ -280,13 +280,11 @@ export class FlotaControllerController {
                       controllerLogger.info("Inserción exitosa: " + value)
                     })
                     .catch((Ex) => {
-                      if (!v.return.fromDB) {
-                        controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
-                        this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
-                          // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
-                          controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
-                        });
-                      }
+                      controllerLogger.info("Existia la patente, actualizando\n el Error es: " + Ex);
+                      this.vehiculoRepository.updateVehiculo(vehiculo).then((res) => {
+                        // this.vehiculoRepository.updateVehiculoFV(vehiculo).then((res) => {
+                        controllerLogger.info("Vehiculo: " + vehiculo.ppu + " actualizado")
+                      });
                     });
                   controllerLogger.info("Realizando Insercion de vehiculo")
                   delete vehiculo.motivoRechazo
