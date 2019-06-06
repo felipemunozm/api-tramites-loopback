@@ -129,7 +129,6 @@ export class EmpresaControllerController {
           // jha let persona: any = await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(representanteLegal.identificador);
           let persona = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(representanteLegal.identificador))[0];
 
-          //let idx = { algo: persona.id }
           if (persona == undefined) {
             persona = {
               nombreCompleto: representanteLegal.nombreCompleto,
@@ -160,13 +159,13 @@ export class EmpresaControllerController {
           }
           // let respuestaCreacionPersonaJuridica = await internacionalGateway.crearPersonaJuridica(personaJuridica)
           let respuestaCreacionPersonaJuridica = (await this.personaJuridicaRepository.crearPersonaJuridica(personaJuridica))[0];
-          console.log('Paso 8')
+          console.log('Paso 9')
           // let tipoEmpresa = await internacionalGateway.obtenerTipoEmpresaByCodigo(params.empresa.tipoEmpresa)
           let tipoEmpresa = (await this.tipoEmpresaRepository.obtenerTipoEmpresaByCodigo(params.empresa.tipoEmpresa))[0];
 
           // let empresaCreada = await internacionalGateway.crearEmpresa(respuestaCreacionPersonaJuridica.id, tipoEmpresa.id)
           let empresaCreada: any = (await this.empresaRepository.crearEmpresa(respuestaCreacionPersonaJuridica.id, tipoEmpresa.id))[0];
-
+          console.log('Paso 10')
           let domicilio = {
             codigoRegion: params.empresa.direccion.codigoRegionIntermediario,
             codigoComuna: params.empresa.direccion.codigoComunaIntermediario,
@@ -178,9 +177,10 @@ export class EmpresaControllerController {
           }
           // await internacionalGateway.crearDomicilioEmpresa(domicilio)
           await this.domicilioEmpresaRepository.crearDomicilioEmpresa(domicilio);
-
+          console.log('Paso 11')
           // let solicitante = await internacionalGateway.obtenerPersonaNaturalByRut(params.solicitante.rut)
           let solicitante: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(params.solicitante.rut))[0];
+          console.log('Paso 12')
           if (solicitante == undefined) {
             let personaSolicitante: any = {}
             personaSolicitante.nombreCompleto = params.solicitante.nombre
@@ -195,27 +195,33 @@ export class EmpresaControllerController {
             // await internacionalGateway.crearSolicitanteAutorizado(empresaCreada.id, solicitante.id, params.relacionSolicitanteEmpresa)
             await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresaCreada.id, solicitante.id, params.relacionSolicitanteEmpresa);
           }
-
+          console.log('Paso 13')
           await params.documentosAdjuntos.forEach(async (documento: any) => {
             // let tipoDocumento = await internacionalGateway.obtenerTipoDocumentoByCodigo(documento.codigoTipoDocumento)
             let tipoDocumento = (await this.tipoDocumentoRepository.obtenerTipoDocumentoByCodigo(documento.codigoTipoDocumento));
+            //let persona = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(representanteLegal.identificador))[0];
 
             // await internacionalGateway.crearDocumentoEmpresa(tipoDocumento[0].id, empresaCreada.id, documento.urlDescargaDocumento)
-            //(await this.documentoEmpresaRepository.crearDocumentoEmpresa(tipoDocumento.id, empresaCreada.id, documento.urlDescargaDocumento))[0];
-            await this.documentoEmpresaRepository.crearDocumentoEmpresa(tipoDocumento[0].id, empresaCreada.id, documento.urlDescargaDocumento);
+            (await this.documentoEmpresaRepository.crearDocumentoEmpresa(tipoDocumento[0].id, empresaCreada.id, documento.urlDescargaDocumento))[0];
+
           })
 
-
-          console.log('tramite')
-          console.log(resp[0])
-          // await gestionTramitesGateway.crearEstadoTramite(resp.id, 7)
-          await this.estadoTramiteRepository.crearEstadoTramite(resp[0].id, 7);
-
-
-          return {
-            codigoResultado: 1,
-            descripcionResultado: "Trámite de Creación de Empresa registrado exitosamente. Empresa creada."
+          console.log('Paso 14 Final')
+          //  console.log(resp[0])
+          try {
+            let estadoTramite: any = (await this.estadoTramiteRepository.crearEstadoTramite(resp[0].id, 7))[0];
+            if (estadoTramite != undefined) {
+              return {
+                codigoResultado: 1,
+                descripcionResultado: "Trámite de Creación de empresa éxitosa"
+              }
+            }
+          } catch (ex) {
+            console.log(ex);
+            controllerLogger.error(ex, ex);
+            throw new HttpErrors.InternalServerError(ex.toString());
           }
+
         })
         .catch((error: any) => {
           console.log(error)
