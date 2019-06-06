@@ -89,7 +89,7 @@ export class PermisoControllerController {
       } else {
         if (analista.nombre_completo !== params.nombreAnalista || analista.region_id.toString() !== params.codigoRegion) {
           // await gestionTramitesGateway.actualizarAnalista(analista)
-          await this.analistaRepository.actualizarAnalista(analista);
+          await this.analistaRepository.actualizarAnalista(params.nombreAnalista, params.codigoRegion, params.codigoAnalista);
         }
       }
       // let solicitante = await internacionalGateway.obtenerPersonaNaturalByRut(params.solicitante.rut)
@@ -419,7 +419,7 @@ export class PermisoControllerController {
       } else {
         if (analista.nombre_completo !== params.nombreAnalista || analista.region_id.toString() !== params.codigoRegion) {
           // await gestionTramitesGateway.actualizarAnalista(analista)
-          await this.analistaRepository.actualizarAnalista(analista);
+          await this.analistaRepository.actualizarAnalista(params.nombreAnalista, params.codigoRegion, params.codigoAnalista);
         }
       }
       // let empresa = await internacionalGateway.obtenerEmpresaByRut(params.empresa.rut)

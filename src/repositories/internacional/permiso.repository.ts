@@ -18,7 +18,7 @@ export class PermisoRepository extends DefaultCrudRepository<
   typeof Permiso.prototype.id
   > {
   constructor(
-    @inject('datasources.internacional') dataSource: InternacionalDataSource,
+    @inject('datasources.gestionTramites') dataSource: GestionTramitesDataSource,
   ) {
     super(Permiso, dataSource);
   }
@@ -31,7 +31,7 @@ export class PermisoRepository extends DefaultCrudRepository<
     return this.dataSource.execute(query, [rut]);
   }
   public crearTramite(tramite: any): Promise<any> {
-    let query: string = "insert into tramite (version, identificador_intermediario, analista_aprobacion_id, solicitud_id, metadata, codigo, fecha_hora_creacion, tipo_tramite_id, intermediario_id) ";
+    let query: string = "insert into tramite (version, identificador_intermediario, analista_aprobacion_id, solicitud_id, metadata, codigo, fecha_hora_creacion, tipo_tramite_id, intermediario_id) values (0, $1, $2, $3, $4, $5, $6, $7, $8) returning id";
     return this.dataSource.execute(query, [tramite.identificadorIntermediario, tramite.analistaId, tramite.solicitudId, tramite.metadata, tramite.codigo, tramite.fechaHoraCreacion, tramite.tipoTramiteId, tramite.intermediarioId]);
   }
   public crearPermiso(permiso: any): Promise<any> {

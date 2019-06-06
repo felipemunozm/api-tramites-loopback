@@ -6,6 +6,7 @@ import { controllerLogger } from "../logger/logger-config";
 import { getHeapStatistics } from "v8";
 import { SolicitanteAutorizado } from "../models";
 import { httpify } from "caseless";
+import { Any } from "json2typescript";
 
 // Uncomment these imports to begin using these cool features!
 
@@ -64,6 +65,7 @@ export class EmpresaControllerController {
       // let analistas = await gestionTramitesGateway.obtenerAnalistas()
       let analistas: any = await this.analistaRepository.obtenerAnalistas();
       let analista = analistas.find((analista: any) => analista.codigo === params.codigoAnalista)
+      console.log('Paso 3')
       if (analista.id == undefined) {
         analista = {
           codigo: params.codigoAnalista,
@@ -76,17 +78,25 @@ export class EmpresaControllerController {
       } else {
         if (analista.nombre_completo !== params.nombreAnalista || analista.region_id.toString() !== params.codigoRegion) {
           // await gestionTramitesGateway.actualizarAnalista(analista)
-          await this.analistaRepository.actualizarAnalista(analista);
+          await this.analistaRepository.actualizarAnalista(params.nombreAnalista, params.codigoRegion, params.codigoAnalista);
         }
       }
+      console.log('Paso 4')
       // let empresa = await internacionalGateway.obtenerEmpresaByRut(params.empresa.rut)
-      let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(params.empresa.rut))[0];
-      if (empresa.id != undefined) {
-        return {
-          codigoResultado: 4,
-          descripcionResultado: "Ya existe una empresa registrada con el rut " + params.empresa.rut + "."
+      try {
+        let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(params.empresa.rut))[0];
+        if (empresa != undefined) {
+          return {
+            codigoResultado: 4,
+            descripcionResultado: "Ya existe una empresa registrada con el rut " + params.empresa.rut + "."
+          }
         }
+      } catch (ex) {
+        console.log(ex);
+        controllerLogger.error(ex, ex);
+        throw new HttpErrors.InternalServerError(ex.toString());
       }
+      console.log('Paso 5')
       let tramite = {
         identificadorIntermediario: params.identificadorIntermediario,
         analistaId: analista.id,
@@ -101,7 +111,8 @@ export class EmpresaControllerController {
         tipoTramiteId: tipoTramite.id,
         intermediarioId: intermediarios[0].id
       }
-
+      console.log('Paso 6')
+      console.log(tramite)
       // await gestionTramitesGateway.crearTramite(tramite)
       await this.permisoRepository.crearTramite(tramite)
         .then(async (resp: any) => {
@@ -114,9 +125,11 @@ export class EmpresaControllerController {
             identificador: params.empresa.representanteLegal.rut,
             tipoIdentificadorId: tipoIdRut.id
           }
+          console.log('Paso 7')
           // let persona = await internacionalGateway.obtenerPersonaNaturalByRut(representanteLegal.identificador)
           let persona: any = await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(representanteLegal.identificador);
-          if (persona.id == undefined) {
+          //let idx = { algo: persona.id }
+          if (persona.length === 0) {
             persona = {
               nombreCompleto: representanteLegal.nombreCompleto,
               identificador: representanteLegal.identificador,
@@ -135,16 +148,17 @@ export class EmpresaControllerController {
             // await internacionalGateway.crearDireccionPersonaNatural(direccionParticularRepresentante)
             await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante);
           }
-
+          console.log('Paso 8')
           let personaJuridica = {
             razonSocial: params.empresa.razonSocial,
             identificador: params.empresa.rut,
             tipoIdentificadorId: tipoIdRut.id,
             nombreFantasia: params.empresa.nombreFantasia,
-            representanteLegalId: persona.id
+            representanteLegalId: params.persona.id
           }
           // let respuestaCreacionPersonaJuridica = await internacionalGateway.crearPersonaJuridica(personaJuridica)
           let respuestaCreacionPersonaJuridica = (await this.personaJuridicaRepository.crearPersonaJuridica(personaJuridica))[0];
+          console.log('Paso 8')
           // let tipoEmpresa = await internacionalGateway.obtenerTipoEmpresaByCodigo(params.empresa.tipoEmpresa)
           let tipoEmpresa = (await this.tipoEmpresaRepository.obtenerTipoEmpresaByCodigo(params.empresa.tipoEmpresa))[0];
 
@@ -165,7 +179,7 @@ export class EmpresaControllerController {
 
           // let solicitante = await internacionalGateway.obtenerPersonaNaturalByRut(params.solicitante.rut)
           let solicitante: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(params.solicitante.rut))[0];
-          if (solicitante.id == undefined) {
+          if (solicitante == undefined) {
             let personaSolicitante: any = {}
             personaSolicitante.nombreCompleto = params.solicitante.nombre
             personaSolicitante.identificador = params.solicitante.rut
@@ -187,6 +201,7 @@ export class EmpresaControllerController {
             (await this.documentoEmpresaRepository.crearDocumentoEmpresa(tipoDocumento[0].id, empresaCreada.id, documento.urlDescargaDocumento))[0];
 
           })
+
 
           console.log('tramite')
           console.log(resp[0])
@@ -228,7 +243,7 @@ export class EmpresaControllerController {
       // let regiones = await internacionalGateway.obtenerRegiones()
       let regiones: any = await this.regionRepository.obtenerRegiones();
       let region = regiones.find((r: any) => r.codigo === params.analista.codigoRegion)
-      if (region.id == undefined) {
+      if (region == undefined) {
         return {
           codigoResultado: 3,
           descripcionResultado: "No existe una región con el código " + params.analista.codigoRegion + "."
@@ -237,7 +252,7 @@ export class EmpresaControllerController {
       // let analistas = await gestionTramitesGateway.obtenerAnalistas()
       let analistas: any = await this.analistaRepository.obtenerAnalistas();
       let analista = analistas.find((analista: any) => analista.codigo === params.analista.codigo)
-      if (analista.id == undefined) {
+      if (analista == undefined) {
         analista = {
           codigo: params.analista.codigo,
           nombre_completo: params.analista.nombre,
@@ -249,13 +264,13 @@ export class EmpresaControllerController {
       } else {
         if (analista.nombre_completo !== params.analista.nombre || analista.region_id.toString() !== params.analista.codigoRegion) {
           // await gestionTramitesGateway.actualizarAnalista(analista)
-          await this.analistaRepository.actualizarAnalista(analista);
+          await this.analistaRepository.actualizarAnalista(params.nombreAnalista, params.codigoRegion, params.codigoAnalista);
         }
       }
       // let empresa = await internacionalGateway.obtenerEmpresaByRut(params.rutEmpresa)
       let empresa: any = await this.empresaRepository.obtenerEmpresaByRut(params.rutEmpresa);
       if (empresa.id == undefined) throw new Error('Empresa con rut ' + params.rutEmpresa + ' no existe.')
-      // let tiposIdentificadores = await internacionalGateway.obtenerTiposIdentificadoresPersonas()
+      // let tiposIdentificadores = await internacionalGateway.obtenerTiposIdentificadoresPersonas()lll
       let tiposIdentificadores: any = await this.tipoIdPersonaRepository.obtenerTiposIdentificadoresPersonas();
       let tipoIdRut = tiposIdentificadores.find((tipo: any) => tipo.codigo === 'RUT')
       if (tipoIdRut == undefined) throw new Error('Debe crear el tipo de identificador con código RUT')
@@ -361,7 +376,7 @@ export class EmpresaControllerController {
       // let empresa = await internacionalGateway.obtenerEmpresaByRut(rutEmpresa)
       let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(rutEmpresa))[0];
       let solicitantes: any = [], sol: any = [], documentos = [], direccionRepresentanteLegal = {}
-      if (empresa.id == undefined) {
+      if (empresa == undefined) {
         return {
           codigoResultado: 2,
           descripcionResultado: "No hay una empresa registrada con el rut " + rutEmpresa + "."
