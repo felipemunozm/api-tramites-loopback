@@ -170,7 +170,7 @@ export class FlotaControllerController {
               merotenedor.rut = vehiculoBD[0].rut_merotenedor
               limitacionesConcatendas = vehiculoBD[0].limitaciones
               //asignar merotenedor a v
-              if (merotenedor != '') {
+              if (merotenedor.nombres != '') {
                 v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores = {
                   nombres: vehiculoBD[0].merotenedor,
                   rut: vehiculoBD[0].rut_merotenedor
@@ -225,7 +225,7 @@ export class FlotaControllerController {
               }
             }
             //validacion de Propietario
-            if (params.rutSujeto != vehiculo.rutPropietario || vehiculo.rutMerotenedor != '' ? (params.rutSujeto != vehiculo.rutMerotenedor) : false) {
+            if (params.rutSujeto != vehiculo.rutPropietario || (vehiculo.rutMerotenedor != '' && vehiculo.rutMerotenedor != null) ? (params.rutSujeto != vehiculo.rutMerotenedor) : false) {
               if (resultado.flotaRechazada.find((value: any) => {
                 if (value.ppu == _ppu) return value
               }) == undefined) {
