@@ -130,14 +130,15 @@ export class EmpresaControllerController {
           let persona = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(representanteLegal.identificador))[0];
 
           //let idx = { algo: persona.id }
-          if (persona.length === 0) {
+          if (persona == undefined) {
             persona = {
               nombreCompleto: representanteLegal.nombreCompleto,
               identificador: representanteLegal.identificador,
               tipoIdentificadorId: representanteLegal.tipoIdentificadorId
             }
             // let respuestaCreacionPersonaNatural = await internacionalGateway.crearPersonaNatural(persona)
-            let respuestaCreacionPersonaNatural: any = await this.personaNaturalrepsitory.crearPersonaNatural(persona);
+            // jha let respuestaCreacionPersonaJuridica = (await this.personaJuridicaRepository.crearPersonaJuridica(personaJuridica))[0];
+            let respuestaCreacionPersonaNatural = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
             persona.id = respuestaCreacionPersonaNatural.id;
             let direccionParticularRepresentante = {
               codigo_region: params.empresa.representanteLegal.direccion.codigoRegionIntermediario,
@@ -197,10 +198,11 @@ export class EmpresaControllerController {
 
           await params.documentosAdjuntos.forEach(async (documento: any) => {
             // let tipoDocumento = await internacionalGateway.obtenerTipoDocumentoByCodigo(documento.codigoTipoDocumento)
-            let tipoDocumento: any = await this.tipoDocumentoRepository.obtenerTipoDocumentoByCodigo(documento.codigoTipoDocumento);
-            // await internacionalGateway.crearDocumentoEmpresa(tipoDocumento[0].id, empresaCreada.id, documento.urlDescargaDocumento)
-            (await this.documentoEmpresaRepository.crearDocumentoEmpresa(tipoDocumento[0].id, empresaCreada.id, documento.urlDescargaDocumento))[0];
+            let tipoDocumento = (await this.tipoDocumentoRepository.obtenerTipoDocumentoByCodigo(documento.codigoTipoDocumento));
 
+            // await internacionalGateway.crearDocumentoEmpresa(tipoDocumento[0].id, empresaCreada.id, documento.urlDescargaDocumento)
+            //(await this.documentoEmpresaRepository.crearDocumentoEmpresa(tipoDocumento.id, empresaCreada.id, documento.urlDescargaDocumento))[0];
+            await this.documentoEmpresaRepository.crearDocumentoEmpresa(tipoDocumento[0].id, empresaCreada.id, documento.urlDescargaDocumento);
           })
 
 
