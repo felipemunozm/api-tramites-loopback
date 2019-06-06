@@ -52,8 +52,7 @@ export class EmpresaControllerController {
       // let intermediarios = await gestionTramitesGateway.obtenerIntermediarios()
       let intermediarios: any = await this.intermediarioTramiteRepository.obtenerIntermediarios();
       // let regiones = await internacionalGateway.obtenerRegiones()
-      let regiones: any = await this.regionRepository.obtenerRegiones();
-      let region = regiones.find((r: any) => r.codigo === params.codigoRegion)
+      let region = (await this.regionRepository.obtenerRegionesByCodigo(params.codigoRegion))[0]
       console.log('Paso 2')
       console.log(region)
       if (region.id == undefined) {
@@ -127,7 +126,9 @@ export class EmpresaControllerController {
           }
           console.log('Paso 7')
           // let persona = await internacionalGateway.obtenerPersonaNaturalByRut(representanteLegal.identificador)
-          let persona: any = await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(representanteLegal.identificador);
+          // jha let persona: any = await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(representanteLegal.identificador);
+          let persona = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(representanteLegal.identificador))[0];
+
           //let idx = { algo: persona.id }
           if (persona.length === 0) {
             persona = {
@@ -154,7 +155,7 @@ export class EmpresaControllerController {
             identificador: params.empresa.rut,
             tipoIdentificadorId: tipoIdRut.id,
             nombreFantasia: params.empresa.nombreFantasia,
-            representanteLegalId: params.persona.id
+            representanteLegalId: persona.id
           }
           // let respuestaCreacionPersonaJuridica = await internacionalGateway.crearPersonaJuridica(personaJuridica)
           let respuestaCreacionPersonaJuridica = (await this.personaJuridicaRepository.crearPersonaJuridica(personaJuridica))[0];
