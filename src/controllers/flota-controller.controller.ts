@@ -171,10 +171,12 @@ export class FlotaControllerController {
               limitacionesConcatendas = vehiculoBD[0].limitaciones
               //asignar merotenedor a v
               if (merotenedor.nombres != '') {
-                v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores = {
+                v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores = {}
+                v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores.itemTenedores = new Array()
+                v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores.itemTenedores.push({
                   nombres: vehiculoBD[0].merotenedor,
                   rut: vehiculoBD[0].rut_merotenedor
-                }
+                })
               }
               //asignar limitaciones a v
             }
@@ -225,7 +227,7 @@ export class FlotaControllerController {
               }
             }
             //validacion de Propietario
-            if (params.rutSujeto != vehiculo.rutPropietario || (vehiculo.rutMerotenedor != '' && vehiculo.rutMerotenedor != null) ? (params.rutSujeto != vehiculo.rutMerotenedor) : false) {
+            if (params.rutSujeto != vehiculo.rutPropietario && params.rutSujeto != vehiculo.rutMerotenedor) {// || (vehiculo.rutMerotenedor != '' && vehiculo.rutMerotenedor != null) ? (params.rutSujeto != vehiculo.rutMerotenedor) : false) {
               if (resultado.flotaRechazada.find((value: any) => {
                 if (value.ppu == _ppu) return value
               }) == undefined) {
@@ -313,7 +315,7 @@ export class FlotaControllerController {
                 let tenedores: any = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
                 // if (tenedores != undefined)
                 //   controllerLogger.info("Tenedores y nombre: " + JSON.stringify(tenedores) + ", " + tenedores.nombre)
-                if (tenedores != undefined && tenedores.nombres != undefined) {
+                if (tenedores != undefined && tenedores.itemTenedores[0].nombres != undefined) {
                   let vehClsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_CLS')
                   let vehCls: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehClsIdx];
                   let vehAutIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_AUT')
