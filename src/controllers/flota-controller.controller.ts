@@ -227,7 +227,7 @@ export class FlotaControllerController {
               }
             }
             //validacion de Propietario
-            if (params.rutSujeto != vehiculo.rutPropietario && params.rutSujeto != vehiculo.rutMerotenedor) {// || (vehiculo.rutMerotenedor != '' && vehiculo.rutMerotenedor != null) ? (params.rutSujeto != vehiculo.rutMerotenedor) : false) {
+            if (params.rutSujeto != vehiculo.rutPropietario && params.rutSujeto != vehiculo.rutMerotenedor) {
               if (resultado.flotaRechazada.find((value: any) => {
                 if (value.ppu == _ppu) return value
               }) == undefined) {
