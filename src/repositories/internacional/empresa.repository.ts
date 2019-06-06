@@ -30,3 +30,4 @@ export class EmpresaRepository extends DefaultCrudRepository<
     return this.dataSource.execute(query, [personaJuridicaId, tipoEmpresa]);
   }
 }
+

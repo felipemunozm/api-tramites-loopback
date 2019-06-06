@@ -13,7 +13,7 @@ export class PersonaNaturalRepository extends DefaultCrudRepository<
     super(PersonaNatural, dataSource);
   }
   public obtenerPersonaNaturalByRut(rut: any): Promise<any> {
-    let query: string = "select id, nombre_completo nombreCompleto, identificador, tipo_id_id tipoIdentificadorId from persona_natural where identificador = $1 and tipo_id_id = 1";
+    let query: string = "select id id, nombre_completo nombreCompleto, identificador, tipo_id_id tipoIdentificadorId from persona_natural where identificador = $1 and tipo_id_id = 1";
     return this.dataSource.execute(query, [rut]);
   }
 

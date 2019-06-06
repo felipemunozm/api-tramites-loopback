@@ -357,7 +357,7 @@ export class SolicitudControllerController {
       } else {
         if (analista.nombre_completo !== params.analista.nombre || analista.region_id.toString() !== params.analista.codigoRegion) {
           // await gestionTramitesGateway.actualizarAnalista(analista)
-          await this.analistaRepository.actualizarAnalista(analista);
+          await this.analistaRepository.actualizarAnalista(params.nombreAnalista, params.codigoRegion, params.codigoAnalista);
         }
       }
       // let solicitud = await gestionTramitesGateway.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario)
