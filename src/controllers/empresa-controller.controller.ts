@@ -122,6 +122,7 @@ export class EmpresaControllerController {
           let representanteLegal = {
             nombreCompleto: params.empresa.representanteLegal.nombre,
             identificador: params.empresa.representanteLegal.rut,
+            email: params.empresa.representanteLegal.direccion.email,
             tipoIdentificadorId: tipoIdRut.id
           }
           console.log('Paso 7')
@@ -133,7 +134,8 @@ export class EmpresaControllerController {
             persona = {
               nombreCompleto: representanteLegal.nombreCompleto,
               identificador: representanteLegal.identificador,
-              tipoIdentificadorId: representanteLegal.tipoIdentificadorId
+              tipoIdentificadorId: representanteLegal.tipoIdentificadorId,
+              email: representanteLegal.email
             }
             // let respuestaCreacionPersonaNatural = await internacionalGateway.crearPersonaNatural(persona)
             // jha let respuestaCreacionPersonaJuridica = (await this.personaJuridicaRepository.crearPersonaJuridica(personaJuridica))[0];
