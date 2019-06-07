@@ -25,7 +25,7 @@ export class AnalistaRepository extends DefaultCrudRepository<
     return this.dataSource.execute(query, [analista.nombre_completo, analista.region_id, analista.codigo]);
   }
   public actualizarAnalista(nombre: any, region: any, codigo: any): Promise<any> {
-    let query = "update analista set version = version + 1, nombre_completo = $1, region_id = $2 where codigo = $3";
+    let query = "update analista set version = version + 1, nombre_completo = $1 where codigo = $3 and region_id = $2";
     return this.dataSource.execute(query, [nombre, region, codigo]);
   }
 }
