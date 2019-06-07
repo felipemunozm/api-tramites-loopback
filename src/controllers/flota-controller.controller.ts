@@ -130,7 +130,7 @@ export class FlotaControllerController {
           if (resultado.flotaRechazada.find((value: any) => {
             if (value.ppu == _ppu[0]) return value
           }) == undefined) {
-            resultado.flotaRechazada.push({ ppu: _ppu[0], motivoRechazo: 'Vehículo no encontrado en Registro civil 1' });
+            resultado.flotaRechazada.push({ ppu: _ppu[0], motivoRechazo: 'Vehículo no encontrado en Registro civil' });
           }
           rechazoCivil.estado = true
           rechazoCivil.motivo = 'Vehículo no encontrado en Registro civil'
@@ -196,8 +196,8 @@ export class FlotaControllerController {
               //capacidadCargaToneladas: 0,
               fechaVencimientoRT: '',
               estadoRT: '',
-              nombrePropietario: v.return.propieActual.propact.itemPropact[0].nombres,
-              rutPropietario: v.return.propieActual.propact.itemPropact[0].rut,
+              nombrePropietario: v.return.propieActual.propact.itemPropact.find((prop: any) => prop.rut == params.rutSujeto) ? v.return.propieActual.propact.itemPropact.find((prop: any) => prop.rut == params.rutSujeto).nombres : v.return.propieActual.propact.itemPropact[0].nombres,
+              rutPropietario: v.return.propieActual.propact.itemPropact.find((prop: any) => prop.rut == params.rutSujeto) ? v.return.propieActual.propact.itemPropact.find((prop: any) => prop.rut == params.rutSujeto).rut : v.return.propieActual.propact.itemPropact[0].rut,
               fechaVencimientoLS: '',
               limitacion: limitacionesConcatendas,
               merotenedor: merotenedor ? merotenedor.nombres : '',
@@ -356,7 +356,7 @@ export class FlotaControllerController {
             if (resultado.flotaRechazada.find((value: any) => {
               if (value.ppu == _ppu) return value
             }) == undefined) {
-              resultado.flotaRechazada.push({ ppu: _ppu[0], motivoRechazo: 'Vehículo no encontrado en Registro civil 3' });
+              resultado.flotaRechazada.push({ ppu: _ppu[0], motivoRechazo: 'Vehículo no encontrado en Registro civil' });
             }
           }
         }
