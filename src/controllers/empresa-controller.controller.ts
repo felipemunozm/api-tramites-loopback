@@ -15,7 +15,6 @@ import {
   RegionRepository,
   AnalistaRepository,
   EmpresaRepository,
-  PermisoRepository,
   TipoIdPersonaRepository,
   PersonaNaturalRepository,
   PersonaJuridicaRepository,
@@ -52,7 +51,6 @@ export class EmpresaControllerController {
     @repository(RegionRepository) public regionRepository: RegionRepository,
     @repository(AnalistaRepository) public analistaRepository: AnalistaRepository,
     @repository(EmpresaRepository) public empresaRepository: EmpresaRepository,
-    @repository(PermisoRepository) public permisoRepository: PermisoRepository,
     @repository(TipoIdPersonaRepository) public tipoIdPersonaRepository: TipoIdPersonaRepository,
     @repository(PersonaNaturalRepository) public personaNaturalrepsitory: PersonaNaturalRepository,
     @repository(PersonaJuridicaRepository) public personaJuridicaRepository: PersonaJuridicaRepository,
@@ -391,7 +389,7 @@ export class EmpresaControllerController {
         intermediarioId: intermediarios[0].id
       }
       // await gestionTramitesGateway.crearTramite(tramite)
-      await this.permisoRepository.crearTramite(tramite)
+      await this.tramiteRepository.crearTramite(tramite)
         .then(async (resp: any) => {
           return {
             codigoResultado: 1,
