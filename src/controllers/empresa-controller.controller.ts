@@ -314,8 +314,8 @@ export class EmpresaControllerController {
           case 1:
             if (modificacion.solicitantes.length === 0) throw new Error('Falta datos del o los solicitantes.')
             modificacion.solicitantes.forEach(async (solicitante: any) => {
-              if (['Representante Legal', 'Mandatario'].indexOf(modificacion.solicitante.relacionEmpresa) === -1) {
-                throw new Error('Relación ' + modificacion.solicitante.relacionEmpresa + ' desconocida.')
+              if (['Representante Legal', 'Mandatario'].indexOf(solicitante.relacionEmpresa) === -1) {
+                throw new Error('Relación ' + solicitante.relacionEmpresa + ' desconocida.')
               }
               // let persona = await internacionalGateway.obtenerPersonaNaturalByRut(solicitante.rut)
               let persona: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(solicitante.rut))[0];
@@ -399,19 +399,14 @@ export class EmpresaControllerController {
         intermediarioId: intermediarios[0].id
       }
       console.log('Modificacion 9')
-      // await gestionTramitesGateway.crearTramite(tramite)
-      await this.tramiteRepository.crearTramite(tramite)
-        .then(async (resp: any) => {
-          return {
-            codigoResultado: 1,
-            descripcionResultado: "Trámite de Modificación de Empresa registrado exitosamente. Modificaciones realizadas: " + mensajes.join('; ')
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-          throw new HttpErrors.InternalServerError('No fue posible crear el trámite.');
-        })
-      console.log('Modificacion 10')
+      let resultadoCrearTramite: any = (await this.tramiteRepository.crearTramite(tramite))[0]
+      if (resultadoCrearTramite != undefined) {
+        return {
+          codigoResultado: 1,
+          descripcionResultado: "Trámite de Modificación de Empresa registrado exitosamente. Modificaciones realizadas: " + mensajes.join('; ')
+        }
+      }
+
     } catch (ex) {
       console.log(ex)
       throw new HttpErrors.InternalServerError(ex.toString());
