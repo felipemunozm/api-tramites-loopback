@@ -122,7 +122,7 @@ export class EmpresaControllerController {
         controllerLogger.error(ex, ex);
         throw new HttpErrors.InternalServerError(ex.toString());
       }
-      console.log('Paso 5')
+      //console.log('Paso 5')
       let tramite = {
         identificadorIntermediario: params.identificadorIntermediario,
         analistaId: analista.id,
@@ -171,7 +171,7 @@ export class EmpresaControllerController {
             }
             await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante);
           }
-          //console.log('Paso 8')
+          //  console.log('Paso 8')
           let personaJuridica = {
             razonSocial: params.empresa.razonSocial,
             identificador: params.empresa.rut,
@@ -180,10 +180,10 @@ export class EmpresaControllerController {
             representanteLegalId: persona.id
           }
           let respuestaCreacionPersonaJuridica = (await this.personaJuridicaRepository.crearPersonaJuridica(personaJuridica))[0];
-          //                  console.log('Paso 9')
+          //  console.log('Paso 9')
           let tipoEmpresa = (await this.tipoEmpresaRepository.obtenerTipoEmpresaByCodigo(params.empresa.tipoEmpresa))[0];
           let empresaCreada: any = (await this.empresaRepository.crearEmpresa(respuestaCreacionPersonaJuridica.id, tipoEmpresa.id))[0];
-          //                  console.log('Paso 10')
+          //   console.log('Paso 10')
           let domicilio = {
             codigoRegion: params.empresa.direccion.codigoRegionIntermediario,
             codigoComuna: params.empresa.direccion.codigoComunaIntermediario,
@@ -194,9 +194,9 @@ export class EmpresaControllerController {
             empresaId: empresaCreada.id
           }
           await this.domicilioEmpresaRepository.crearDomicilioEmpresa(domicilio);
-          //console.log('Paso 11')
+          //  console.log('Paso 11')
           let solicitante: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(params.solicitante.rut))[0];
-          //console.log('Paso 12')
+          //  console.log('Paso 12')
           if (solicitante == undefined) {
             let personaSolicitante: any = {}
             personaSolicitante.nombreCompleto = params.solicitante.nombre
@@ -263,6 +263,7 @@ export class EmpresaControllerController {
           descripcionResultado: "No existe una región con el código " + params.analista.codigoRegion + "."
         }
       }
+      console.log('Modificacion 1')
       // let analistas = await gestionTramitesGateway.obtenerAnalistas()
       let analistas: any = await this.analistaRepository.obtenerAnalistas();
       let analista = analistas.find((analista: any) => analista.codigo === params.analista.codigo)
@@ -281,6 +282,7 @@ export class EmpresaControllerController {
         await this.analistaRepository.actualizarAnalista(params.analista.nombre, params.analista.codigoRegion, params.analista.codigo);
         // }
       }
+      console.log('Modificacion 2')
       // let empresa = await internacionalGateway.obtenerEmpresaByRut(params.rutEmpresa)
       let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(params.rutEmpresa))[0];
       try {
@@ -295,7 +297,7 @@ export class EmpresaControllerController {
         controllerLogger.error(ex, ex);
         throw new HttpErrors.InternalServerError(ex.toString());
       }
-
+      console.log('Modificacion 3')
       //let empresa: any = await this.empresaRepository.obtenerEmpresaByRut(params.rutEmpresa);
       //if (empresa == undefined) throw new Error('Empresa con rut ' + params.rutEmpresa + ' no existe.')
       // let tiposIdentificadores = await internacionalGateway.obtenerTiposIdentificadoresPersonas()lll
@@ -312,7 +314,9 @@ export class EmpresaControllerController {
           case 1:
             if (modificacion.solicitantes.length === 0) throw new Error('Falta datos del o los solicitantes.')
             modificacion.solicitantes.forEach(async (solicitante: any) => {
-              if (['Representante Legal', 'Mandatario'].indexOf(modificacion.solicitante.relacionEmpresa) === -1) throw new Error('Relación ' + modificacion.solicitante.relacionEmpresa + ' desconocida.')
+              if (['Representante Legal', 'Mandatario'].indexOf(modificacion.solicitante.relacionEmpresa) === -1) {
+                throw new Error('Relación ' + modificacion.solicitante.relacionEmpresa + ' desconocida.')
+              }
               // let persona = await internacionalGateway.obtenerPersonaNaturalByRut(solicitante.rut)
               let persona: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(solicitante.rut))[0];
               if (persona == undefined) {
@@ -325,12 +329,14 @@ export class EmpresaControllerController {
                 let respuestaCreacionPersonaNatural: any = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
                 persona.id = respuestaCreacionPersonaNatural.id;
               }
+              console.log('Modificacion 4')
               // await internacionalGateway.crearSolicitanteAutorizado(empresa.id, persona.id, solicitante.relacionEmpresa)
               await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresa.id, persona.id, solicitante.relacionEmpresa);
               mensajes.push('Nuevo solicitante autorizado creado: ' + solicitante.nombre)
             })
             break
           case 2:
+            console.log('Modificacion 5')
             if (!modificacion.domicilio || !modificacion.domicilio.codigoRegionIntermediario || !modificacion.domicilio.codigoComunaIntermediario ||
               !modificacion.domicilio.textoDireccion || !modificacion.domicilio.telefonoFijo || !modificacion.domicilio.telefonoMovil || !modificacion.domicilio.email) {
               throw new Error('Parámetros de modificación de domicilio incorrectos.')
@@ -350,12 +356,14 @@ export class EmpresaControllerController {
             mensajes.push('Nuevo domicilio de empresa creado: ' + domicilio.texto)
             break
           case 3:
+            console.log('Modificacion 6')
             if (modificacion.razonSocial == undefined) throw new Error('No viene la Razón Social a cambiar.')
             // await internacionalGateway.actualizarRazonSocialPersonaJuridica(empresa.persona_juridica_id, modificacion.razonSocial)
             await this.personaJuridicaRepository.actualizarRazonSocialPersonaJuridica(empresa.persona_juridica_id, modificacion.razonSocial);
             mensajes.push('Razón Social modificada a "' + modificacion.razonSocial + '"')
             break
           case 4:
+            console.log('Modificacion 7')
             if (modificacion.representanteLegal == undefined || modificacion.representanteLegal.rut == undefined || modificacion.representanteLegal.nombre == undefined) throw new Error('Parámetros de Representante Legal incorrectos.')
             // let persona = await internacionalGateway.obtenerPersonaNaturalByRut(modificacion.representanteLegal.rut)
             //let persona: any = await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(modificacion.representanteLegal.rut);
@@ -370,6 +378,7 @@ export class EmpresaControllerController {
               let respuestaCreacionPersonaNatural: any = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
               persona.id = respuestaCreacionPersonaNatural.id;
             }
+
             // await internacionalGateway.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id)
             await this.personaJuridicaRepository.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id);
             mensajes.push('Representante Legal cambiado a: ' + persona.nombreCompleto)
@@ -378,6 +387,7 @@ export class EmpresaControllerController {
             throw new Error('Tipo ' + modificacion.tipo + ' desconocido.')
         }
       })
+      console.log('Modificacion 8')
       let tramite = {
         identificadorIntermediario: params.identificadorIntermediario,
         analistaId: analista.id,
@@ -388,6 +398,7 @@ export class EmpresaControllerController {
         tipoTramiteId: tipoTramite.id,
         intermediarioId: intermediarios[0].id
       }
+      console.log('Modificacion 9')
       // await gestionTramitesGateway.crearTramite(tramite)
       await this.tramiteRepository.crearTramite(tramite)
         .then(async (resp: any) => {
@@ -400,6 +411,7 @@ export class EmpresaControllerController {
           console.log(error)
           throw new HttpErrors.InternalServerError('No fue posible crear el trámite.');
         })
+      console.log('Modificacion 10')
     } catch (ex) {
       console.log(ex)
       throw new HttpErrors.InternalServerError(ex.toString());
