@@ -3,6 +3,7 @@ import { PermisoRepository, TipoPermisoRepository, SujetoRepository, DireccionPe
 import { get, param, HttpErrors } from "@loopback/rest";
 import { controllerLogger } from "../logger/logger-config";
 import * as moment from 'moment';
+import { TipoPermiso } from "../models";
 
 
 // Uncomment these imports to begin using these cool features!
@@ -28,30 +29,26 @@ export class PersonasControllerController {
       let params: any[] = q.replace(/\{/g, '').replace(/\}/g, '').split('=')
       if (params[0] !== "'rut'") throw 'Parámetros incorrectos'
       let rut = params[1].replace(/\'/g, '')
-      console.log("rut:" + rut)
-      // let permiso = await internacionalGateway.obtenerPermisoVigenteByRut(rut);
+      console.log("rut:" + rut);
       let permiso: any = (await this.permisoRepository.obtenerPermisoVigenteByRut(rut))[0];
-      controllerLogger.info("permiso: " + permiso.id);
-
       let resp: { [k: string]: any } = {};
       resp = {
         rutSolicitante: rut,
         codigoResultado: 1,
         descripcionResultado: 'No tiene permiso vigente'
       }
-      if (permiso.id == undefined) {
+      if (permiso == undefined) {
         return resp;
+      } else {
+        controllerLogger.info("permiso: " + permiso.id);
+        resp.codigoResultado = 2
+        resp.descripcionResultado = 'Tiene permiso vigente'
       }
-      resp.codigoResultado = 2
-      resp.descripcionResultado = 'Tiene permiso vigente'
-      // let tipoPermiso = await internacionalGateway.obtenerTipoPermisoById(permiso.tipo_id)
-      let tipoPermiso = await this.tipoPermisoRepository.findById(new Number(permiso.tipo_id));
-      // let sujeto      = await internacionalGateway.obtenerSujetoById(permiso.sujeto_id)
+
+      let tipoPermiso = await this.tipoPermisoRepository.findById(permiso.tipo_id);
       let sujeto = (await this.sujetoRepository.obtenerSujetoById(permiso.sujeto_id))[0];
-      // let direccionSujeto = await internacionalGateway.obtenerDireccionByPersonaId(sujeto.persona_natural_id)
-      let direccionSujeto = (await this.direccionPersonaNaturalRepository.obtenerDireccionByPersonaId(sujeto.persona_natural_id))[0];
-      // let vehiculos = await internacionalGateway.obtenerVehiculosByPermisoId(permiso.id)
-      let vehiculos = await this.vehiculoRepository.obtenerVehiculosByPermisoId(permiso.id.toString());
+      let direccionSujeto = (await this.direccionPersonaNaturalRepository.obtenerDireccionByPersonaId(sujeto.id))[0];
+      let vehiculos = await this.vehiculoRepository.obtenerVehiculosByPermisoId(permiso.id);
       let flota: any[] = [], contabilizacion: { [k: string]: any } = {}
       let tonelada: any[] = []
       let resumen = {
@@ -70,12 +67,10 @@ export class PersonasControllerController {
           capacidadCargaToneladas: v.cantidad_toneladas_carga,
           fechaVencimiento: '',
           nombrePropietario: v.nombre_propietario,
-          //Campos Agregados FV
           chasis: v.chasis,
           NumeroMotor: v.num_motor
         }
         flota.push(vehiculo)
-        // let contabilizacion: { [k: string]: any } = {};
         contabilizacion[v.tipo] = (contabilizacion[v.tipo] ? contabilizacion[v.tipo] : 0.0) + 1
       })
       //Logica de calculo toneladas
