@@ -5,11 +5,9 @@ import { controllerLogger } from "../logger/logger-config";
 import * as moment from 'moment';
 import { TipoPermiso } from "../models";
 
-
 // Uncomment these imports to begin using these cool features!
 
 // import {inject} from '@loopback/context';
-
 
 export class PersonasControllerController {
   constructor(@repository(PermisoRepository) public permisoRepository: PermisoRepository,
@@ -125,15 +123,13 @@ export class PersonasControllerController {
         codigoResultado: 1,
         descripcionResultado: 'Empresa no registrada'
       }
-      // let empresa = await internacionalGateway.obtenerEmpresaByRut(rutEmpresa)
       let empresa: any = (await this.emrpesaRepository.obtenerEmpresaByRut(rutEmpresa))[0];
-      if (empresa.id == undefined) {
+      if (empresa == undefined) {
         return resp;
       }
       resp.codigoResultado = 3
       resp.descripcionResultado = 'Empresa Registrada, Usuario No Autorizado'
       if (empresa.identificador_representante_legal !== rutSolicitante) {
-        // let autorizados = await internacionalGateway.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id)
         let autorizados: any[] = await this.solicitanteAutorizadoRepository.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id);
         if (!autorizados.find((auth: any) => auth.identificador === rutSolicitante)) {
           return resp;
@@ -146,7 +142,6 @@ export class PersonasControllerController {
       resp.empresa.direccion = {
         codigo_comuna: empresa.codigo_comuna,
         codigo_region: empresa.codigo_region,
-        //comuna, tipo empresa y region agregados FV
         nombre_comuna: empresa.nombre_comuna,
         nombre_region: empresa.nombre_region,
         tipo_empresa: empresa.tipo_empresa,
@@ -158,18 +153,14 @@ export class PersonasControllerController {
       }
       resp.codigoResultado = 2
       resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado Sin Permiso Vigente'
-      // let permiso = await internacionalGateway.obtenerPermisoVigenteByRut(rutEmpresa)
       let permiso: any = (await this.permisoRepository.obtenerPermisoVigenteByRut(rutEmpresa))[0];
-      if (permiso.id == undefined) {
+      if (permiso == undefined) {
         return resp;
       }
       resp.codigoResultado = 4
       resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene Permiso Vigente'
-      // let tipoPermiso = await internacionalGateway.obtenerTipoPermisoById(permiso.tipo_id)
       let tipoPermiso = await this.tipoPermisoRepository.findById(new Number(permiso.tipo_id));
-      // let sujeto = await internacionalGateway.obtenerSujetoById(permiso.sujeto_id)
       let sujeto = (await this.sujetoRepository.obtenerSujetoById(permiso.sujeto_id))[0];
-      // let vehiculos = await internacionalGateway.obtenerVehiculosByPermisoId(permiso.id)
       let vehiculos = await this.vehiculoRepository.obtenerVehiculosByPermisoId(permiso.id.toString());
       let flota: any[] = [], contabilizacion: { [k: string]: any } = {}
       let resumen = {
@@ -194,7 +185,6 @@ export class PersonasControllerController {
         }
         flota.push(vehiculo)
         contabilizacion[v.tipo] = (contabilizacion[v.tipo] ? contabilizacion[v.tipo] : 0.0) + 1
-        //resumen.capacidadCargaToneladas += v.cantidad_toneladas_carga
       })
       //Logica de calculo toneladas
       console.log("Contabilizacion toneladas")
