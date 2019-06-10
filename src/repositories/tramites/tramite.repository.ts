@@ -25,4 +25,8 @@ export class TramiteRepository extends DefaultCrudRepository<
     let query = "delete from tramite where solicitud_id = $1";
     return this.dataSource.execute(query, [id]);
   }
+  public DeleteTramiteByIdentificadorIntermediario(identificadorIntermediario: any): Promise<any> {
+    let query = "delete from tramite where  identificador_intermediario = $1";
+    return this.dataSource.execute(query, [identificadorIntermediario]);
+  }
 }

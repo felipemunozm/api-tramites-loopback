@@ -28,7 +28,7 @@ export class VehiculoRepository extends DefaultCrudRepository<
   }
   public ObtenerPPUVehiculo(ppu: any): Promise<any> {
     let query: string = "select ppu from vehiculo where ppu=$1";
-    return this.dataSource.execute(query);
+    return this.dataSource.execute(query, [ppu]);
   }
   public ObtenerVehiculo(ppu: any): Promise<any> {
     let query: string = "select id from vehiculo where ppu=$1";

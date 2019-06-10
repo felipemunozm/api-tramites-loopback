@@ -3,6 +3,7 @@ import { TipoPermiso } from '../../models';
 import { inject } from '@loopback/core';
 import { InternacionalDataSource } from '../../datasources';
 import { TramiteRepository } from '../tramites/tramite.repository';
+import { controllerLogger } from '../../logger/logger-config';
 
 export class TipoPermisoRepository extends DefaultCrudRepository<
   TipoPermiso,
