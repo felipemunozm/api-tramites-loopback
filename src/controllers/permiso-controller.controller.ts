@@ -297,8 +297,10 @@ export class PermisoControllerController {
         titulo: 'Permiso Ocasional País-País',
         encabezado: 'CONFORME A LO ACORDADO EN EL CONVENIO CHILENO-ARGENTINO DE TRANSPORTE TERRESTRE EN TRÁNSITO PARA VINCULAR DOS PUNTOS DE UN MISMO PAÍS, COMUNICO A USTED, HABER AUTORIZADO PERMISO OCASIONAL CON DESTINO A TERRITORIO NACIONAL EN TRÁNSITO POR TERRITORIO ARGENTINO POR PASOS FRONTERIZOS AUTORIZADOS ENTRE LAS REGIONES DE LOS LAGOS, DE AYSÉN Y DE MAGALLANES ANTÁRTICA CHILENA.',
         numeroPermiso: respCreacionPermiso.id,
-        fechaInicio: dateFormat(now, "yyyy-mm-dd"),
-        fechaFin: dateFormat(now.setMonth(now.getMonth() + 3), "yyyy-mm-dd"), //mas 3 meses
+        // fechaInicio: dateFormat(now, "yyyy-mm-dd"),
+        fechaInicio: permiso.fechaFinVigencia,
+        // fechaFin: dateFormat(now.setMonth(now.getMonth() + 3), "yyyy-mm-dd"), //mas 3 meses
+        fechaFin: permiso.fechaFinVigencia,
         nombreTransportista: params.solicitante.nombre,
         tipoCarga: 'CARGA GENERAL',
         flota: flotasPorTipo,
@@ -405,21 +407,21 @@ export class PermisoControllerController {
         }
       }
       // let solicitud = await gestionTramitesGateway.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario)
-      let solicitud: any = (await this.solicitudTramiteRepository.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario))[0];
-      if (solicitud == undefined) {
-        return {
-          codigoResultado: 2,
-          descripcionResultado: "No existe una solicitud con el identificador de intermediario " + params.identificadorIntermediario + "."
-        }
-      }
+      // let solicitud: any = (await this.solicitudTramiteRepository.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario))[0];
+      // if (solicitud == undefined) {
+      //   return {
+      //     codigoResultado: 2,
+      //     descripcionResultado: "No existe una solicitud con el identificador de intermediario " + params.identificadorIntermediario + "."
+      //   }
+      // }
       // let tram = await gestionTramitesGateway.obtenerTramiteBySolicitudId(solicitud.id)
-      let tram: any = (await this.tramiteRepository.obtenerTramiteBySolicitudId(solicitud.id))[0];
-      if (tram != undefined) {
-        return {
-          codigoResultado: 5,
-          descripcionResultado: "Ya existe un trámite creado para la solicitud solicitada."
-        }
-      }
+      // let tram: any = (await this.tramiteRepository.obtenerTramiteBySolicitudId(solicitud.id))[0];
+      // if (tram != undefined) {
+      //   return {
+      //     codigoResultado: 5,
+      //     descripcionResultado: "Ya existe un trámite creado para la solicitud solicitada."
+      //   }
+      // }
       // let paisChile = await internacionalGateway.obtenerPaisByCodigo('CL')
       let paisChile = (await this.paisRepository.obtenerPaisByCodigo('CL'))[0];
       if (!paisChile) console.error('Debe registrar a Chile como país con código CL.')
@@ -432,7 +434,7 @@ export class PermisoControllerController {
       let tramite = {
         identificadorIntermediario: params.identificadorIntermediario,
         analistaId: analista.id,
-        solicitudId: solicitud.id,
+        solicitudId: null,
         metadata: JSON.stringify({
           //relacionSolicitanteEmpresa: '',
           solicitante: params.solicitante,
@@ -444,178 +446,183 @@ export class PermisoControllerController {
         intermediarioId: intermediarios[0].id
       }
       // await gestionTramitesGateway.crearTramite(tramite)
-      await this.tramiteRepository.crearTramite(tramite)
-        .then(async (resp: any) => {
-          // let tiposIdentificadores = await internacionalGateway.obtenerTiposIdentificadoresPersonas()
-          let tiposIdentificadores: any = await this.tipoIdPersonaRepository.obtenerTiposIdentificadoresPersonas();
-          let tipoIdRut = tiposIdentificadores.find((tipo: any) => tipo.codigo === 'RUT')
-          if (!tipoIdRut) console.error('Debe crear el tipo de identificador con código RUT')
-          // let tipoIdCarroceria = await internacionalGateway.obtenerTipoIdentificadorVehiculoByCodigo('CARROCERIA')
-          let tipoIdCarroceria: any = (await this.tipoIdVehiculoRepository.obtenerTipoIdentificadorVehiculoByCodigo('CARROCERIA'))[0];
-          if (!tipoIdCarroceria) console.error('Debe crear el tipo de identificador de vehículo con código CARROCERIA')
-          // let respCreacionSujeto = await internacionalGateway.crearSujeto('Juridica', empresa.persona_juridica_id)
-          let respCreacionSujeto: any = (await this.sujetoRepository.crearSujeto('Juridica', empresa.persona_juridica_id))[0];
-          let sujetosVehiculosIds: any = []
-          params.flotaFinal.forEach(async (vehiculo: any) => {
-            //Lo nuevo FV
-            vehiculo.tipoId = tipoIdCarroceria.id,
-              vehiculo.ppu = vehiculo.ppu
-            console.log(vehiculo.ppu)
-            console.log(solicitud.id)
-            console.log("#########")
-            // let respObtenerPPUVehiculo = await internacionalGateway.ObtenerPPUVehiculo(vehiculo.ppu)
-            let respObtenerPPUVehiculo: any = (await this.vehiculoRepository.ObtenerPPUVehiculo(vehiculo.ppu))[0];
-            if (respObtenerPPUVehiculo == '') {
-              console.error('PPU no existe en tabla Vehiculo, recuerde validar flota')
-              console.log(vehiculo.ppu)
-              // let DelTramite = await gestionTramitesGateway.DeleteTramite(solicitud.id)
-              await this.tramiteRepository.DeleteTramite(solicitud.id);
-              console.error('Tramite no sera generado.')
-            } else {
-              console.log(respObtenerPPUVehiculo)
-              // let respObtenerVehiculo = await internacionalGateway.ObtenerVehiculo(vehiculo.ppu)
-              let respObtenerVehiculo: any = (await this.vehiculoRepository.ObtenerVehiculo(vehiculo.ppu))[0];
-              if (respObtenerVehiculo.id == undefined) {
-                return resp[0]
-              }
-              console.log(respObtenerVehiculo)
-              var id = respObtenerVehiculo
-              // response = id
-              // console.log(response)
-              // let respCreacionSujetoVehiculo = await internacionalGateway.crearSujetoVehiculo(respCreacionSujeto.id, respObtenerVehiculo.id)
-              let respCreacionSujetoVehiculo: any = (await this.sujetoVehiculoRepository.crearSujetoVehiculo(respCreacionSujeto.id, respObtenerVehiculo.id))[0];
-
-              sujetosVehiculosIds.push(respCreacionSujetoVehiculo.id)
-            }
-            /* //LO VIEJO
-            vehiculo.tipoId = tipoIdCarroceria.id
-            let respCreacionVehiculo = await internacionalGateway.crearVehiculo(vehiculo)//ya no va.
-            let respCreacionSujetoVehiculo = await internacionalGateway.crearSujetoVehiculo(respCreacionSujeto.id, respCreacionVehiculo.id)
-            sujetosVehiculosIds.push(respCreacionSujetoVehiculo.id)*/
-          })
-          let permiso = {
-            sujetoId: respCreacionSujeto.id,
-            paisId: paisChile.id,
-            tipoCargaId: tiposCargas[0].id,
-            tipoId: tipoPermisoChileChile.id,
-            urlCallback: params.urlCallback,
-            fechaHoraCreacion: moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").toDate(),
-            fechaFinVigencia: moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").add(tipoPermisoChileChile.meses_vigencia, "M").toDate()
+      let tramiteCreado = await this.tramiteRepository.crearTramite(tramite)
+      // .then(async (resp: any) => {
+      // let tiposIdentificadores = await internacionalGateway.obtenerTiposIdentificadoresPersonas()
+      let tiposIdentificadores: any = await this.tipoIdPersonaRepository.obtenerTiposIdentificadoresPersonas();
+      let tipoIdRut = tiposIdentificadores.find((tipo: any) => tipo.codigo === 'RUT')
+      if (!tipoIdRut) console.error('Debe crear el tipo de identificador con código RUT')
+      // let tipoIdCarroceria = await internacionalGateway.obtenerTipoIdentificadorVehiculoByCodigo('CARROCERIA')
+      let tipoIdCarroceria: any = (await this.tipoIdVehiculoRepository.obtenerTipoIdentificadorVehiculoByCodigo('CARROCERIA'))[0];
+      if (!tipoIdCarroceria) console.error('Debe crear el tipo de identificador de vehículo con código CARROCERIA')
+      // let respCreacionSujeto = await internacionalGateway.crearSujeto('Juridica', empresa.persona_juridica_id)
+      let respCreacionSujeto: any = (await this.sujetoRepository.crearSujeto('Juridica', empresa.persona_juridica_id))[0];
+      let sujetosVehiculosIds: any = []
+      // params.flotaFinal.forEach(async (vehiculo: any) => {
+      for (let vehiculo of params.flotaFinal) {
+        //Lo nuevo FV
+        vehiculo.tipoId = tipoIdCarroceria.id,
+          vehiculo.ppu = vehiculo.ppu
+        console.log(vehiculo.ppu)
+        console.log("#########")
+        // let respObtenerPPUVehiculo = await internacionalGateway.ObtenerPPUVehiculo(vehiculo.ppu)
+        let respObtenerPPUVehiculo: any = (await this.vehiculoRepository.ObtenerPPUVehiculo(vehiculo.ppu))[0];
+        if (respObtenerPPUVehiculo == '') {
+          console.error('PPU no existe en tabla Vehiculo, recuerde validar flota')
+          console.log(vehiculo.ppu)
+          // let DelTramite = await gestionTramitesGateway.DeleteTramite(solicitud.id)
+          // await this.tramiteRepository.DeleteTramite(solicitud.id);
+          console.error('Tramite no sera generado.')
+        } else {
+          console.log(respObtenerPPUVehiculo)
+          // let respObtenerVehiculo = await internacionalGateway.ObtenerVehiculo(vehiculo.ppu)
+          let respObtenerVehiculo: any = (await this.vehiculoRepository.ObtenerVehiculo(vehiculo.ppu))[0];
+          if (respObtenerVehiculo.id == undefined) {
+            return tramiteCreado[0]
           }
-          //Nuevo FV
-          // let respCreacionPermiso = await internacionalGateway.crearPermiso(permiso)
-          let respCreacionPermiso: any = (await this.permisoRepository.crearPermiso(permiso))[0];
-          for (let flota of params.flotaFinal) {
-            // params.flotaFinal.forEach((flota: any) => {
-            let vehiculoFlota = {
-              ejes: flota.ejes,
-              fechaVigenciaLS: flota.fechaVencimientoLS,
-              observacion: flota.limitacion
-            }
-            if (vehiculoFlota.ejes == "Sin dato" || vehiculoFlota.ejes == "Sin Dato" || vehiculoFlota.ejes == "") {
-              vehiculoFlota.ejes = 0
-            } else {
-              vehiculoFlota.ejes = vehiculoFlota.ejes
-            }
-            if (vehiculoFlota.fechaVigenciaLS == "") {
-              vehiculoFlota.fechaVigenciaLS = "01/01/1900"
-            } else {
-              vehiculoFlota.fechaVigenciaLS = vehiculoFlota.fechaVigenciaLS
-            }
+          console.log(respObtenerVehiculo)
+          var id = respObtenerVehiculo
+          // response = id
+          // console.log(response)
+          // let respCreacionSujetoVehiculo = await internacionalGateway.crearSujetoVehiculo(respCreacionSujeto.id, respObtenerVehiculo.id)
+          let respCreacionSujetoVehiculo: any = (await this.sujetoVehiculoRepository.crearSujetoVehiculo(respCreacionSujeto.id, respObtenerVehiculo.id))[0];
 
-            console.log(vehiculoFlota.ejes)
-            console.log(vehiculoFlota.fechaVigenciaLS)
-            await this.permisoSujetoVehiculoRepository.insertPermisoSujetoVehiculoFV(vehiculoFlota, respCreacionPermiso).catch(error => {
-              controllerLogger.info("Error en update de permisoSujetoVehiculo\n" + error);
-            });
-          }
-          body = {
-            codigoResultado: 1,
-            descripcionResultado: "Trámite de Creación de Permiso Chile-Chile registrado exitosamente. Permiso creado."
-          }
+          sujetosVehiculosIds.push(respCreacionSujetoVehiculo.id)
+        }
+        /* //LO VIEJO
+        vehiculo.tipoId = tipoIdCarroceria.id
+        let respCreacionVehiculo = await internacionalGateway.crearVehiculo(vehiculo)//ya no va.
+        let respCreacionSujetoVehiculo = await internacionalGateway.crearSujetoVehiculo(respCreacionSujeto.id, respCreacionVehiculo.id)
+        sujetosVehiculosIds.push(respCreacionSujetoVehiculo.id)*/
+      }
+      let permiso = {
+        sujetoId: respCreacionSujeto.id,
+        paisId: paisChile.id,
+        tipoCargaId: tiposCargas[0].id,
+        tipoId: tipoPermisoChileChile.id,
+        urlCallback: params.urlCallback,
+        fechaHoraCreacion: moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").toDate(),
+        fechaFinVigencia: moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").add(tipoPermisoChileChile.meses_vigencia, "M").toDate()
+      }
+      //Nuevo FV
+      // let respCreacionPermiso = await internacionalGateway.crearPermiso(permiso)
+      let respCreacionPermiso: any = (await this.permisoRepository.crearPermiso(permiso))[0];
+      for (let flota of params.flotaFinal) {
+        // params.flotaFinal.forEach((flota: any) => {
+        let vehiculoFlota = {
+          ejes: flota.ejes,
+          fechaVigenciaLS: flota.fechaVencimientoLS,
+          observacion: flota.limitacion
+        }
+        if (vehiculoFlota.ejes == "Sin dato" || vehiculoFlota.ejes == "Sin Dato" || vehiculoFlota.ejes == "") {
+          vehiculoFlota.ejes = 0
+        } else {
+          vehiculoFlota.ejes = vehiculoFlota.ejes
+        }
+        if (vehiculoFlota.fechaVigenciaLS == "") {
+          vehiculoFlota.fechaVigenciaLS = "01/01/1900"
+        } else {
+          vehiculoFlota.fechaVigenciaLS = vehiculoFlota.fechaVigenciaLS
+        }
 
-          let flotasPorTipo: any = []
-          let flotasResumen: any = []
-          params.flotaFinal.forEach((flota: any) => {
-            let vehiculoFlota = {
-              tipo: flota.tipo,
-              marca: flota.marca,
-              anno: flota.anno,
-              chasis: flota.carroceria,
-              ejes: flota.ejes,
-              capacidadCarga: flota.capacidadCargaToneladas,
-              patente: flota.ppu
-            }
-            if (vehiculoFlota.ejes == 'Sin dato' || vehiculoFlota.ejes == 'Sin Dato' || vehiculoFlota.ejes == 'Sin datos' || vehiculoFlota.ejes == 'Sin Datos') {
-              vehiculoFlota.ejes = 0
-            }
-            let flotaTipo = flotasPorTipo.find((flotaPorTipo: any) => flotaPorTipo.tipo === flota.tipo)
-            if (flotaTipo) {
-              console.log("#1")
-              flotasPorTipo.push(vehiculoFlota)
-              let flotaResumen = flotasResumen.find((resumen: any) => resumen.tipoVehiculo === flota.tipo)
-              flotaResumen.cantidadVehiculos = flotaResumen.cantidadVehiculos + 1
-            } else {
-              flotaTipo = {
-                tipo: flota.tipo,
-                vehiculos: []
-              }
-              console.log("#2")
-              flotasPorTipo.push(vehiculoFlota)
-              let flotaResumen = {
-                tipoVehiculo: flota.tipo,
-                cantidadVehiculos: 1
-              }
-              flotasResumen.push(flotaResumen)
+        console.log(vehiculoFlota.ejes)
+        console.log(vehiculoFlota.fechaVigenciaLS)
+        await this.permisoSujetoVehiculoRepository.insertPermisoSujetoVehiculoFV(vehiculoFlota, respCreacionPermiso).catch(error => {
+          controllerLogger.info("Error en update de permisoSujetoVehiculo\n" + error);
+        });
+      }
+      body = {
+        codigoResultado: 1,
+        descripcionResultado: "Trámite de Creación de Permiso Chile-Chile registrado exitosamente. Permiso creado."
+      }
 
-            }
-          })
-          console.log("Genero XML")
-          let certificado = {
-            titulo: 'Permiso Ocasional País-País',
-            encabezado: 'CONFORME A LO ACORDADO EN EL CONVENIO CHILENO-ARGENTINO DE TRANSPORTE TERRESTRE EN TRÁNSITO PARA VINCULAR DOS PUNTOS DE UN MISMO PAÍS, COMUNICO A USTED, HABER AUTORIZADO PERMISO OCASIONAL CON DESTINO A TERRITORIO NACIONAL EN TRÁNSITO POR TERRITORIO ARGENTINO POR PASOS FRONTERIZOS AUTORIZADOS ENTRE LAS REGIONES DE LOS LAGOS, DE AYSÉN Y DE MAGALLANES ANTÁRTICA CHILENA.',
-            numeroPermiso: respCreacionPermiso.id,
-            fechaInicio: dateFormat("yyyy-mm-dd"),
-            fechaFin: dateFormat("yyyy-mm-dd"),
-            nombreTransportista: 'TRANSPORTE DE CARGA OSCAR SAMUEL PEREZ LAGOS EIRL',
-            tipoCarga: 'CARGA GENERAL',
-            flota: flotasPorTipo,
-            resumen: flotasResumen
+      let flotasPorTipo: any = []
+      let flotasResumen: any = []
+      // params.flotaFinal.forEach((flota: any) => {
+      for (let flota of params.flotaFinal) {
+        let vehiculoFlota = {
+          tipo: flota.tipo,
+          marca: flota.marca,
+          anno: flota.anno,
+          chasis: flota.carroceria,
+          ejes: flota.ejes,
+          capacidadCarga: flota.capacidadCargaToneladas,
+          patente: flota.ppu
+        }
+        if (vehiculoFlota.ejes == 'Sin dato' || vehiculoFlota.ejes == 'Sin Dato' || vehiculoFlota.ejes == 'Sin datos' || vehiculoFlota.ejes == 'Sin Datos') {
+          vehiculoFlota.ejes = 0
+        }
+        let flotaTipo = flotasPorTipo.find((flotaPorTipo: any) => flotaPorTipo.tipo === flota.tipo)
+        if (flotaTipo) {
+          console.log("#1")
+          flotasPorTipo.push(vehiculoFlota)
+          let flotaResumen = flotasResumen.find((resumen: any) => resumen.tipoVehiculo === flota.tipo)
+          flotaResumen.cantidadVehiculos = flotaResumen.cantidadVehiculos + 1
+        } else {
+          flotaTipo = {
+            tipo: flota.tipo,
+            vehiculos: []
           }
+          console.log("#2")
+          flotasPorTipo.push(vehiculoFlota)
+          let flotaResumen = {
+            tipoVehiculo: flota.tipo,
+            cantidadVehiculos: 1
+          }
+          flotasResumen.push(flotaResumen)
 
-          console.log('llamando al firmador')
-          // let responseFirmador = await serviciosGateway.firmar(params.codigoRegion, certificado)
-          let responseFirmador: any = (await serviciosGateway.firmar(params.codigoRegion, certificado))[0];
-          // internacionalGateway.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return)
-          this.permisoRepository.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return)
-          console.log('responseFirmador')
-          console.log(responseFirmador.return)
-          if (responseFirmador.return < 0) {
-            // await gestionTramitesGateway.DeleteTramite(solicitud.id)
-            await this.tramiteRepository.DeleteTramite(solicitud.id);
-            console.log(respCreacionPermiso)
-            // await internacionalGateway.borrarPermisoSujetoVehiculo(respCreacionPermiso.id)
-            await this.permisoSujetoVehiculoRepository.borrarPermisoSujetoVehiculo(respCreacionPermiso.id);
-            //console.log(borrarPermisoSujetoVehiculo)
-            // await internacionalGateway.borrarPermiso(respCreacionPermiso.id)
-            await this.permisoRepository.borrarPermiso(respCreacionPermiso.id);
-            // await internacionalGateway.borrarSujetoVehiculo(respCreacionPermiso.id)
-            await this.sujetoVehiculoRepository.borrarSujetoVehiculo(respCreacionPermiso.id);
-            console.error('Permiso debera ser borrado.')
-            console.error('Tramite no sera generado.')
-            body = {
-              codigoResultado: 7,
-              descripcionResultado: "Por Problemas en respuesta del servicio firmador, el tramite no será generado, intente nuevamente."
-            }
-          }
-          return body;
-        })
-        .catch((error) => {
-          console.log(error)
-          throw new HttpErrors.BadGateway('No fue posible crear el permiso');
-          // ctx.status = 502
-          // ctx.body = 'No fue posible crear el permiso.'
-        })
+        }
+      }
+      let opdf: ObtenerPDFs = new ObtenerPDFs();
+      for (let doc of params.documentosAdjuntos) {
+        // params.documentosAdjuntos.forEach((docs: any) => {
+        try {
+          doc.idPersistido = (await this.documentoRepository.insertarDocumento(doc.urlDescargaDocumento, doc.codigoTipoDocumento, respCreacionPermiso.id))[0].id
+        } catch (err) {
+          controllerLogger.info("Error insertando documento: " + err)
+        }
+        opdf.obtenerVehiculo(doc.urlDescargaDocumento, respCreacionPermiso.id, doc.idPersistido)
+      }
+      console.log("Genero XML")
+      let now: Date = new Date()
+      let certificado = {
+        titulo: 'Permiso Ocasional País-País',
+        encabezado: 'CONFORME A LO ACORDADO EN EL CONVENIO CHILENO-ARGENTINO DE TRANSPORTE TERRESTRE EN TRÁNSITO PARA VINCULAR DOS PUNTOS DE UN MISMO PAÍS, COMUNICO A USTED, HABER AUTORIZADO PERMISO OCASIONAL CON DESTINO A TERRITORIO NACIONAL EN TRÁNSITO POR TERRITORIO ARGENTINO POR PASOS FRONTERIZOS AUTORIZADOS ENTRE LAS REGIONES DE LOS LAGOS, DE AYSÉN Y DE MAGALLANES ANTÁRTICA CHILENA.',
+        numeroPermiso: respCreacionPermiso.id,
+        fechaInicio: dateFormat(now, "yyyy-mm-dd"),
+        fechaFin: dateFormat(now.setMonth(now.getMonth() + 3), "yyyy-mm-dd"),
+        nombreTransportista: params.solicitante.nombre,
+        tipoCarga: 'CARGA GENERAL',
+        flota: flotasPorTipo,
+        resumen: flotasResumen
+      }
+
+      console.log('llamando al firmador')
+      // let responseFirmador = await serviciosGateway.firmar(params.codigoRegion, certificado)
+      let responseFirmador: any = (await serviciosGateway.firmar(params.codigoRegion, certificado))[0];
+      // internacionalGateway.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return)
+      this.permisoRepository.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return)
+      console.log('responseFirmador')
+      console.log(responseFirmador.return)
+      if (responseFirmador.return < 0) {
+        // await gestionTramitesGateway.DeleteTramite(solicitud.id)
+        // await this.tramiteRepository.DeleteTramite(solicitud.id);
+        console.log(respCreacionPermiso)
+        // await internacionalGateway.borrarPermisoSujetoVehiculo(respCreacionPermiso.id)
+        await this.permisoSujetoVehiculoRepository.borrarPermisoSujetoVehiculo(respCreacionPermiso.id);
+        //console.log(borrarPermisoSujetoVehiculo)
+        // await internacionalGateway.borrarPermiso(respCreacionPermiso.id)
+        await this.permisoRepository.borrarPermiso(respCreacionPermiso.id);
+        // await internacionalGateway.borrarSujetoVehiculo(respCreacionPermiso.id)
+        await this.sujetoVehiculoRepository.borrarSujetoVehiculo(respCreacionPermiso.id);
+        console.error('Permiso debera ser borrado.')
+        console.error('Tramite no sera generado.')
+        body = {
+          codigoResultado: 7,
+          descripcionResultado: "Por Problemas en respuesta del servicio firmador, el tramite no será generado, intente nuevamente."
+        }
+      }
+      return body;
     } catch (ex) {
       console.log(ex)
       // ctx.status = 502
