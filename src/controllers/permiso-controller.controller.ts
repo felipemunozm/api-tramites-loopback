@@ -73,7 +73,7 @@ export class PermisoControllerController {
         }
       }
       // let analistas = await gestionTramitesGateway.obtenerAnalistas()
-      let analista: any = (await this.analistaRepository.obtenerAnalistasByCodigo(params.codigoAnalista))[0]
+      let analista: any = (await this.analistaRepository.obtenerAnalistasByCodigo(params.codigoAnalista, params.codigoRegion))[0]
       if (analista == undefined) {
         analista = {
           codigo: params.codigoAnalista,
@@ -148,7 +148,7 @@ export class PermisoControllerController {
       try {
         idTramiteCreado = (await this.tramiteRepository.crearTramite(tramite))[0]
       } catch (err) {
-        console.log(err)
+        controllerLogger.info(err)
         // ctx.status = 502
         // ctx.body = 'No fue posible crear el permiso.'
         throw new HttpErrors.BadGateway('No fue posible crear el permiso.');
@@ -201,10 +201,8 @@ export class PermisoControllerController {
           } else {
             i = 1
           }
-          console.log("##########")
         } while (i != 0)
       }
-      console.log("entre!")
       let permiso = {
         sujetoId: respCreacionSujeto.id,
         paisId: paisChile.id,
@@ -284,40 +282,16 @@ export class PermisoControllerController {
 
       }
       //Insert sobre tabla documento
-      let documentos: any = []
-      for (let docs of params.documentosAdjuntos) {
-        // params.documentosAdjuntos.forEach((docs: any) => {
-        let doc = {
-          codigoTipoDocumento: docs.codigoTipoDocumento,
-          urlDescargaDocumento: docs.urlDescargaDocumento
-        }
-        documentos.push(doc.urlDescargaDocumento)
-        //Inicia conexion DB
-        await this.documentoRepository.insertDocumentoFV(doc, respCreacionPermiso);
-      }
-      console.log("Arrreglo Documento")
-      console.log(documentos)
-      console.log(documentos.codigoTipoDocumento)
-      console.log(params.documentosAdjuntos.urlDescargaDocumento)
-      // await internacionalGateway.insertarDocumento(respCreacionPermiso.id, params.documentosAdjuntos)
-      //FIX para persistir arreglo de documento
       let opdf: ObtenerPDFs = new ObtenerPDFs();
-      for (let doc of documentos) {
+      for (let doc of params.documentosAdjuntos) {
+        // params.documentosAdjuntos.forEach((docs: any) => {
         try {
-          await this.documentoRepository.insertarDocumento(respCreacionPermiso.id, doc.codigoTipoDocumento, respCreacionPermiso.id);
+          doc.idPersistido = (await this.documentoRepository.insertarDocumento(doc.urlDescargaDocumento, doc.codigoTipoDocumento, respCreacionPermiso.id))[0].id
         } catch (err) {
           controllerLogger.info("Error insertando documento: " + err)
         }
-        opdf.obtenerVehiculo(documentos, respCreacionPermiso.id)
+        opdf.obtenerVehiculo(doc.urlDescargaDocumento, respCreacionPermiso.id, doc.idPersistido)
       }
-      // await this.documentoRepository.insertarDocumento(respCreacionPermiso.id, params.documentosAdjuntos, respCreacionPermiso.id);
-
-      //Enviar a disco el PDF
-
-      // obtenerPDF.obtenerVehiculo(documentos, respCreacionPermiso.id)
-      console.log(flotasPorTipo)
-      console.log(flotasResumen)
-      console.log("Genero XML")
       let now: Date = new Date()
       let certificado = {
         titulo: 'Permiso Ocasional País-País',
@@ -332,13 +306,9 @@ export class PermisoControllerController {
       }
 
       let serviciosGateway: ServiciosGateway = new ServiciosGateway();
-      console.log('llamando al firmador')
       let responseFirmador: any = await serviciosGateway.firmar(params.codigoRegion, certificado);
       // internacionalGateway.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return)
       this.permisoRepository.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return);
-
-      console.log('responseFirmador')
-      console.log(responseFirmador.return)
       if (responseFirmador.return < 0) {
         let DelTramite: any = (await this.tramiteRepository.DeleteTramiteByIdentificadorIntermediario(params.identificadorIntermediario))[0];
         //  gestionTramitesGateway.DeleteTramite(solicitud.id)
@@ -410,7 +380,7 @@ export class PermisoControllerController {
         }
       }
       // let analistas = await gestionTramitesGateway.obtenerAnalistas()
-      let analista: any = (await this.analistaRepository.obtenerAnalistasByCodigo(params.codigoAnalista))[0]
+      let analista: any = (await this.analistaRepository.obtenerAnalistasByCodigo(params.codigoAnalista, params.codigoRegion))[0]
       if (analista == undefined) {
         analista = {
           codigo: params.codigoAnalista,
@@ -507,7 +477,6 @@ export class PermisoControllerController {
               let respObtenerVehiculo: any = (await this.vehiculoRepository.ObtenerVehiculo(vehiculo.ppu))[0];
               if (respObtenerVehiculo.id == undefined) {
                 return resp[0]
-                return
               }
               console.log(respObtenerVehiculo)
               var id = respObtenerVehiculo
