@@ -237,7 +237,6 @@ export class EmpresaControllerController {
   @put('/tramites/internacional/chile-chile/empresa')
   public async modificarTramiteEmpresa(@requestBody() params: any): Promise<any> {
     try {
-      // let params = ctx.request.body
       if (!params || !params.identificadorIntermediario || !params.fechaHoraCreacion || !params.rutSolicitante ||
         !params.rutEmpresa || !params.modificaciones || !params.documentosAdjuntos || params.modificaciones.length === 0 ||
         !params.analista || !params.analista.codigo || !params.analista.nombre || !params.analista.codigoRegion) {
@@ -248,13 +247,10 @@ export class EmpresaControllerController {
           }
         };
       }
-      // let tiposTramite = await gestionTramitesGateway.obtenerTiposTramites()l
       let tiposTramite: any = await this.tipoTramiteRepository.obtenerTipoTramites();
       let tipoTramite = tiposTramite.find((tipo: any) => tipo.codigo === 'modifica-empresa')
       if (!tipoTramite) console.error('Debe crear un Tipo de Trámite con código modificacion-empresa.')
-      // let intermediarios = await gestionTramitesGateway.obtenerIntermediarios()
       let intermediarios: any = await this.intermediarioTramiteRepository.obtenerIntermediarios();
-      // let regiones = await internacionalGateway.obtenerRegiones()
       let regiones: any = await this.regionRepository.obtenerRegiones();
       let region = regiones.find((r: any) => r.codigo === params.analista.codigoRegion)
       if (region == undefined) {
@@ -264,7 +260,6 @@ export class EmpresaControllerController {
         }
       }
       console.log('Modificacion 1')
-      // let analistas = await gestionTramitesGateway.obtenerAnalistas()
       let analistas: any = await this.analistaRepository.obtenerAnalistas();
       let analista = analistas.find((analista: any) => analista.codigo === params.analista.codigo)
       if (analista == undefined) {
@@ -273,34 +268,24 @@ export class EmpresaControllerController {
           nombre_completo: params.analista.nombre,
           region_id: region.id
         }
-        // let resultadoCreacionAnalista = await gestionTramitesGateway.crearAnalista(analista)
         let resultadoCreacionAnalista: any = (await this.analistaRepository.crearAnalista(analista))[0];
         analista.id = resultadoCreacionAnalista.id;
       } else {
-        //if (analista.nombre_completo !== params.analista.nombre || analista.region_id.toString() !== params.analista.codigoRegion) {
-        // await gestionTramitesGateway.actualizarAnalista(analista)
         await this.analistaRepository.actualizarAnalista(params.analista.nombre, params.analista.codigoRegion, params.analista.codigo);
-        // }
       }
       console.log('Modificacion 2')
-      // let empresa = await internacionalGateway.obtenerEmpresaByRut(params.rutEmpresa)
       let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(params.rutEmpresa))[0];
       try {
-        // let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(params.rutEmpresa))[0];
         if (empresa == undefined) {
           return {
             descripcionResultado: 'Empresa con rut ' + params.rutEmpresa + ' no existe.'
           }
         }
       } catch (ex) {
-        //console.log(ex);
         controllerLogger.error(ex, ex);
         throw new HttpErrors.InternalServerError(ex.toString());
       }
       console.log('Modificacion 3')
-      //let empresa: any = await this.empresaRepository.obtenerEmpresaByRut(params.rutEmpresa);
-      //if (empresa == undefined) throw new Error('Empresa con rut ' + params.rutEmpresa + ' no existe.')
-      // let tiposIdentificadores = await internacionalGateway.obtenerTiposIdentificadoresPersonas()lll
       let tiposIdentificadores: any = await this.tipoIdPersonaRepository.obtenerTiposIdentificadoresPersonas();
       let tipoIdRut = tiposIdentificadores.find((tipo: any) => tipo.codigo === 'RUT')
       if (tipoIdRut == undefined) throw new Error('Debe crear el tipo de identificador con código RUT')
@@ -314,25 +299,27 @@ export class EmpresaControllerController {
           case 1:
             if (modificacion.solicitantes.length === 0) throw new Error('Falta datos del o los solicitantes.')
             modificacion.solicitantes.forEach(async (solicitante: any) => {
-              if (['Representante Legal', 'Mandatario'].indexOf(solicitante.relacionEmpresa) === -1) {
+              if (solicitante.relacionEmpresa === 'Representante Legal' || solicitante.relacionEmpresa === 'Mandatario') {
+                let persona: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(solicitante.rut))[0];
+                if (persona == undefined) {
+                  persona = {
+                    nombreCompleto: solicitante.nombre,
+                    identificador: solicitante.rut,
+                    tipoIdentificadorId: tipoIdRut.id
+                  }
+                  let respuestaCreacionPersonaNatural: any = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
+                  persona.id = respuestaCreacionPersonaNatural.id;
+                }
+                else {
+                  await this.personaNaturalrepsitory.actualizarPersonaNaturalByRut(solicitante.nombre, solicitante.rut);
+                }
+                console.log('Modificacion 4')
+                await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresa.id, persona.id, solicitante.relacionEmpresa);
+                mensajes.push('Nuevo solicitante autorizado creado: ' + solicitante.nombre)
+              }
+              else {
                 throw new Error('Relación ' + solicitante.relacionEmpresa + ' desconocida.')
               }
-              // let persona = await internacionalGateway.obtenerPersonaNaturalByRut(solicitante.rut)
-              let persona: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(solicitante.rut))[0];
-              if (persona == undefined) {
-                persona = {
-                  nombreCompleto: solicitante.nombre,
-                  identificador: solicitante.rut,
-                  tipoIdentificadorId: tipoIdRut.id
-                }
-                // let respuestaCreacionPersonaNatural = await internacionalGateway.crearPersonaNatural(persona)
-                let respuestaCreacionPersonaNatural: any = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
-                persona.id = respuestaCreacionPersonaNatural.id;
-              }
-              console.log('Modificacion 4')
-              // await internacionalGateway.crearSolicitanteAutorizado(empresa.id, persona.id, solicitante.relacionEmpresa)
-              await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresa.id, persona.id, solicitante.relacionEmpresa);
-              mensajes.push('Nuevo solicitante autorizado creado: ' + solicitante.nombre)
             })
             break
           case 2:
@@ -350,7 +337,6 @@ export class EmpresaControllerController {
               email: modificacion.domicilio.email,
               empresaId: empresa.id
             }
-            // let resultadoCreacionDomicilio = await internacionalGateway.crearDomicilioEmpresa(domicilio)
             let resultadoCreacionDomicilio: any = await this.domicilioEmpresaRepository.crearDomicilioEmpresa(domicilio);
             domicilio.id = resultadoCreacionDomicilio.id;
             mensajes.push('Nuevo domicilio de empresa creado: ' + domicilio.texto)
@@ -358,15 +344,12 @@ export class EmpresaControllerController {
           case 3:
             console.log('Modificacion 6')
             if (modificacion.razonSocial == undefined) throw new Error('No viene la Razón Social a cambiar.')
-            // await internacionalGateway.actualizarRazonSocialPersonaJuridica(empresa.persona_juridica_id, modificacion.razonSocial)
             await this.personaJuridicaRepository.actualizarRazonSocialPersonaJuridica(empresa.persona_juridica_id, modificacion.razonSocial);
             mensajes.push('Razón Social modificada a "' + modificacion.razonSocial + '"')
             break
           case 4:
             console.log('Modificacion 7')
             if (modificacion.representanteLegal == undefined || modificacion.representanteLegal.rut == undefined || modificacion.representanteLegal.nombre == undefined) throw new Error('Parámetros de Representante Legal incorrectos.')
-            // let persona = await internacionalGateway.obtenerPersonaNaturalByRut(modificacion.representanteLegal.rut)
-            //let persona: any = await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(modificacion.representanteLegal.rut);
             let persona: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(modificacion.representanteLegal.rut))[0];
             if (persona == undefined) {
               persona = {
@@ -374,12 +357,9 @@ export class EmpresaControllerController {
                 identificador: modificacion.representanteLegal.rut,
                 tipoIdentificadorId: tipoIdRut.id
               }
-              // let respuestaCreacionPersonaNatural = await internacionalGateway.crearPersonaNatural(persona)
               let respuestaCreacionPersonaNatural: any = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
               persona.id = respuestaCreacionPersonaNatural.id;
             }
-
-            // await internacionalGateway.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id)
             await this.personaJuridicaRepository.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id);
             mensajes.push('Representante Legal cambiado a: ' + persona.nombreCompleto)
             break
