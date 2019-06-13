@@ -56,8 +56,6 @@ export class PermisoControllerController {
         throw new HttpErrors.NotFound('Parámteros incorrectos');
         // throw { error: { statusCode: 502, message: 'Parámetros incorrectos' } };
       }
-      let urlCallback: any = params.urlCallback;
-
       console.log("inicia tramite");
       // let tiposTramite = await gestionTramitesGateway.obtenerTiposTramites()
       let tipoTramite: any = (await this.tipoTramiteRepository.obtenerTipoTramitesByCodigo('chile-chile'))[0]
@@ -297,10 +295,10 @@ export class PermisoControllerController {
         titulo: 'Permiso Ocasional País-País',
         encabezado: 'CONFORME A LO ACORDADO EN EL CONVENIO CHILENO-ARGENTINO DE TRANSPORTE TERRESTRE EN TRÁNSITO PARA VINCULAR DOS PUNTOS DE UN MISMO PAÍS, COMUNICO A USTED, HABER AUTORIZADO PERMISO OCASIONAL CON DESTINO A TERRITORIO NACIONAL EN TRÁNSITO POR TERRITORIO ARGENTINO POR PASOS FRONTERIZOS AUTORIZADOS ENTRE LAS REGIONES DE LOS LAGOS, DE AYSÉN Y DE MAGALLANES ANTÁRTICA CHILENA.',
         numeroPermiso: respCreacionPermiso.id,
-        // fechaInicio: dateFormat(now, "yyyy-mm-dd"),
-        fechaInicio: permiso.fechaFinVigencia,
-        // fechaFin: dateFormat(now.setMonth(now.getMonth() + 3), "yyyy-mm-dd"), //mas 3 meses
-        fechaFin: permiso.fechaFinVigencia,
+        fechaInicio: dateFormat(now, "yyyy-mm-dd"),
+        // fechaInicio: permiso.fechaFinVigencia,
+        fechaFin: dateFormat(now.setMonth(now.getMonth() + 3), "yyyy-mm-dd"), //mas 3 meses
+        // fechaFin: permiso.fechaFinVigencia,
         nombreTransportista: params.solicitante.nombre,
         tipoCarga: 'CARGA GENERAL',
         flota: flotasPorTipo,
@@ -429,8 +427,10 @@ export class PermisoControllerController {
       let tiposCargas: any = await this.tipoCargaRepository.obtenerTiposCargas();
       if (!tiposCargas) console.error('Debe registrar Tipos de Cargas.')
       // let tipoPermisoChileChile = await internacionalGateway.obtenerTipoPermisoByCodigo('permiso-chile-chile')
-      let tipoPermisoChileChile: any = (await this.tipoPermisoRepository.obtenerTipoPermisoByCodigo('permiso-chile-chile'))[0];
-      if (!tipoPermisoChileChile) console.error('Debe registrar el Tipo de Permiso con código permiso-chile-chile.')
+      // let tipoPermisoChileChile: any = (await this.tipoPermisoRepository.obtenerTipoPermisoByCodigo('permiso-chile-chile'))[0];
+      // if (!tipoPermisoChileChile) console.error('Debe registrar el Tipo de Permiso con código permiso-chile-chile.')
+      let tipoPermisoChileChile: any = (await this.tipoPermisoRepository.obtenerTipoPermisoByCodigo('CHILE-CHILE'))[0]
+      if (tipoPermisoChileChile == undefined) console.error('Debe registrar el Tipo de Permiso con código CHILE-CHILE.')
       let tramite = {
         identificadorIntermediario: params.identificadorIntermediario,
         analistaId: analista.id,
@@ -467,26 +467,15 @@ export class PermisoControllerController {
         console.log("#########")
         // let respObtenerPPUVehiculo = await internacionalGateway.ObtenerPPUVehiculo(vehiculo.ppu)
         let respObtenerPPUVehiculo: any = (await this.vehiculoRepository.ObtenerPPUVehiculo(vehiculo.ppu))[0];
-        if (respObtenerPPUVehiculo == '') {
+        if (respObtenerPPUVehiculo == undefined) {
           console.error('PPU no existe en tabla Vehiculo, recuerde validar flota')
           console.log(vehiculo.ppu)
           // let DelTramite = await gestionTramitesGateway.DeleteTramite(solicitud.id)
           // await this.tramiteRepository.DeleteTramite(solicitud.id);
           console.error('Tramite no sera generado.')
+          throw new HttpErrors.InternalServerError('Vehículo no validado. Validar Flota para PPU: ' + vehiculo.ppu);
         } else {
-          console.log(respObtenerPPUVehiculo)
-          // let respObtenerVehiculo = await internacionalGateway.ObtenerVehiculo(vehiculo.ppu)
-          let respObtenerVehiculo: any = (await this.vehiculoRepository.ObtenerVehiculo(vehiculo.ppu))[0];
-          if (respObtenerVehiculo.id == undefined) {
-            return tramiteCreado[0]
-          }
-          console.log(respObtenerVehiculo)
-          var id = respObtenerVehiculo
-          // response = id
-          // console.log(response)
-          // let respCreacionSujetoVehiculo = await internacionalGateway.crearSujetoVehiculo(respCreacionSujeto.id, respObtenerVehiculo.id)
-          let respCreacionSujetoVehiculo: any = (await this.sujetoVehiculoRepository.crearSujetoVehiculo(respCreacionSujeto.id, respObtenerVehiculo.id))[0];
-
+          let respCreacionSujetoVehiculo: any = (await this.sujetoVehiculoRepository.crearSujetoVehiculo(respCreacionSujeto.id, respObtenerPPUVehiculo.id))[0];
           sujetosVehiculosIds.push(respCreacionSujetoVehiculo.id)
         }
         /* //LO VIEJO
@@ -589,8 +578,10 @@ export class PermisoControllerController {
         titulo: 'Permiso Ocasional País-País',
         encabezado: 'CONFORME A LO ACORDADO EN EL CONVENIO CHILENO-ARGENTINO DE TRANSPORTE TERRESTRE EN TRÁNSITO PARA VINCULAR DOS PUNTOS DE UN MISMO PAÍS, COMUNICO A USTED, HABER AUTORIZADO PERMISO OCASIONAL CON DESTINO A TERRITORIO NACIONAL EN TRÁNSITO POR TERRITORIO ARGENTINO POR PASOS FRONTERIZOS AUTORIZADOS ENTRE LAS REGIONES DE LOS LAGOS, DE AYSÉN Y DE MAGALLANES ANTÁRTICA CHILENA.',
         numeroPermiso: respCreacionPermiso.id,
-        fechaInicio: dateFormat(now, "yyyy-mm-dd"),
-        fechaFin: dateFormat(now.setMonth(now.getMonth() + 3), "yyyy-mm-dd"),
+        // fechaInicio: dateFormat(now, "yyyy-mm-dd"),
+        fechaInicio: permiso.fechaHoraCreacion,
+        // fechaFin: dateFormat(now.setMonth(now.getMonth() + 3), "yyyy-mm-dd"),
+        fechaFin: permiso.fechaFinVigencia,
         nombreTransportista: params.solicitante.nombre,
         tipoCarga: 'CARGA GENERAL',
         flota: flotasPorTipo,
