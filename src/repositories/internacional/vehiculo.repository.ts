@@ -14,7 +14,7 @@ export class VehiculoRepository extends DefaultCrudRepository<
   ) {
     super(Vehiculo, dataSource);
   }
-  public obtenerVehiculosByPermisoId(id: string): Promise<any> {
+  public obtenerVehiculosByPermisoId(id: any): Promise<any> {
     let query = "select distinct v.ppu, a.habilitado, v.cantidad_ejes, v.tipo, v.cantidad_toneladas_carga, v.modelo, v.marca, v.chasis, v.num_motor, \n" +
       "v.anno_fabricacion, v.carroceria, v.nombre_propietario\n" +
       "from permiso_sujeto_vehiculo a inner join sujeto_vehiculo sv on sv.id = a.sujeto_vehiculo_id\n" +
@@ -27,8 +27,8 @@ export class VehiculoRepository extends DefaultCrudRepository<
     return this.dataSource.execute(query, vehiculo);
   }
   public ObtenerPPUVehiculo(ppu: any): Promise<any> {
-    let query: string = "select ppu from vehiculo where ppu=$1";
-    return this.dataSource.execute(query);
+    let query: string = "select id,ppu from vehiculo where ppu=$1";
+    return this.dataSource.execute(query, [ppu]);
   }
   public ObtenerVehiculo(ppu: any): Promise<any> {
     let query: string = "select id from vehiculo where ppu=$1";

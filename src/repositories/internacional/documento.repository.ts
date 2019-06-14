@@ -2,6 +2,7 @@ import { DefaultCrudRepository } from '@loopback/repository';
 import { Documento } from '../../models';
 import { InternacionalDataSource } from '../../datasources';
 import { inject } from '@loopback/core';
+import { controllerLogger } from '../../logger/logger-config';
 
 export class DocumentoRepository extends DefaultCrudRepository<
   Documento,
@@ -13,8 +14,8 @@ export class DocumentoRepository extends DefaultCrudRepository<
     super(Documento, dataSource);
   }
   public insertarDocumento(urlDescargaDocumento: any, codigoTipoDocumento: any, permisoId: any): Promise<any> {
-    let query: string = "insert into documento (version, tipo_id, hashing, url, algoritmo, permiso_id) select 0, id, null, $1, null, $2 from tipo_documento where codigo = $3;";
-    return this.dataSource.execute(urlDescargaDocumento, codigoTipoDocumento, permisoId);
+    let query: string = "insert into documento (version, tipo_id, hashing, url, algoritmo, permiso_id) select 0, id, null, $1, null, $3 from tipo_documento where codigo = $2 returning id";
+    return this.dataSource.execute(query, [urlDescargaDocumento, codigoTipoDocumento, permisoId]);
   }
 
   public insertDocumentoFV(doc: any, respCreacionPermiso: any): Promise<any> {

@@ -18,4 +18,8 @@ export class TipoTramiteRepository extends DefaultCrudRepository<
     return this.dataSource.execute(query);
   }
 
+  public obtenerTipoTramitesByCodigo(codigo: any): Promise<any> {
+    let query: string = "select id, codigo, nombre from tipo_tramite where codigo = $1";
+    return this.dataSource.execute(query, [codigo]);
+  }
 }

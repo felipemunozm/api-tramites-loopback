@@ -16,5 +16,8 @@ export class TipoIdPersonaRepository extends DefaultCrudRepository<
     let query: string = "select id, codigo, pais_id, nombre from tipo_id_persona";
     return this.dataSource.execute(query);
   }
-
+  public obtenerTiposIdentificadoresPersonasByCodigo(codigo: any): Promise<any> {
+    let query: string = "select id, codigo, pais_id, nombre from tipo_id_persona where codigo = $1";
+    return this.dataSource.execute(query, [codigo]);
+  }
 }
