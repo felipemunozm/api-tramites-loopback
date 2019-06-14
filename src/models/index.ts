@@ -45,3 +45,4 @@ export * from './internacional/comuna.model';
 export * from './internacional/traduccion-tipo-vehiculo-ejes-carga.model';
 export * from './internacional/sujeto-id.model';
 export * from './internacional/permiso-sujeto-vehiculo.model';
+export * from './internacional/response_simple.model';

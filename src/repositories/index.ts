@@ -45,3 +45,4 @@ export * from './internacional/tipo-permiso.repository';
 export * from './internacional/traduccion-tipo-vehiculo-ejes-carga.repository';
 export * from './internacional/tripulante.repository';
 export * from './internacional/vehiculo.repository';
+export * from './internacional/response_simple.repository';
