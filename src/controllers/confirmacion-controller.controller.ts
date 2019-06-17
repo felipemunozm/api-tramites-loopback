@@ -2,10 +2,9 @@
 import { controllerLogger } from "../logger/logger-config";
 import { post, requestBody, HttpErrors, put, param, get, patch } from "@loopback/rest";
 import { repository } from "@loopback/repository";
-import { response_simpleRepository } from "../repositories";
-import * as http from 'http'
 import * as request from 'request';
 import { HttpError } from "http-errors";
+import { response_simpleRepository } from "../repositories/internacional/response_simple.repository";
 //
 
 export class ConfirmacionControllerController {
