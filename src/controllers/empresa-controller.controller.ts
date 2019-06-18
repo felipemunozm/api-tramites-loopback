@@ -85,7 +85,7 @@ export class EmpresaControllerController {
       if (tipoTramite.id == undefined) console.error('Debe crear un Tipo de Trámite con código creacion-empresa.')
       let intermediarios: any = await this.intermediarioTramiteRepository.obtenerIntermediarios();
       let region = (await this.regionRepository.obtenerRegionesByCodigo(params.codigoRegion))[0]
-      // console.log('Paso 2')
+      //console.log('Paso 2')
       // console.log(region)
       if (region.id == undefined) {
         return {
@@ -151,7 +151,7 @@ export class EmpresaControllerController {
             email: params.empresa.representanteLegal.direccion.email,
             tipoIdentificadorId: tipoIdRut.id
           }
-          //console.log('Paso 7')
+          //  console.log('Paso 7')
           let persona = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(representanteLegal.identificador))[0];
           if (persona == undefined) {
             persona = {
@@ -171,7 +171,7 @@ export class EmpresaControllerController {
             }
             await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante);
           }
-          //  console.log('Paso 8')
+          //console.log('Paso 8')
           let personaJuridica = {
             razonSocial: params.empresa.razonSocial,
             identificador: params.empresa.rut,
@@ -180,10 +180,14 @@ export class EmpresaControllerController {
             representanteLegalId: persona.id
           }
           let respuestaCreacionPersonaJuridica = (await this.personaJuridicaRepository.crearPersonaJuridica(personaJuridica))[0];
-          //  console.log('Paso 9')
+          //console.log('Paso 9')
           let tipoEmpresa = (await this.tipoEmpresaRepository.obtenerTipoEmpresaByCodigo(params.empresa.tipoEmpresa))[0];
-          let empresaCreada: any = (await this.empresaRepository.crearEmpresa(respuestaCreacionPersonaJuridica.id, tipoEmpresa.id))[0];
-          //   console.log('Paso 10')
+          if (tipoEmpresa === undefined) return {
+            codigoResultado: 5,
+            descripcionResultado: "El tipo de empresa no existe " + params.empresa.tipoEmpresa + "."
+          }
+          let empresaCreada = (await this.empresaRepository.crearEmpresa(respuestaCreacionPersonaJuridica.id, tipoEmpresa.id))[0];
+          //console.log('Paso 10')
           let domicilio = {
             codigoRegion: params.empresa.direccion.codigoRegionIntermediario,
             codigoComuna: params.empresa.direccion.codigoComunaIntermediario,
@@ -194,9 +198,9 @@ export class EmpresaControllerController {
             empresaId: empresaCreada.id
           }
           await this.domicilioEmpresaRepository.crearDomicilioEmpresa(domicilio);
-          //  console.log('Paso 11')
+          //console.log('Paso 11')
           let solicitante: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(params.solicitante.rut))[0];
-          //  console.log('Paso 12')
+          //console.log('Paso 12')
           if (solicitante == undefined) {
             let personaSolicitante: any = {}
             personaSolicitante.nombreCompleto = params.solicitante.nombre
@@ -215,7 +219,7 @@ export class EmpresaControllerController {
           })
           //console.log('Paso 14 Final')
           let estadoTramite: any = (await this.estadoTramiteRepository.crearEstadoTramite(resultadoCrearTramite.id, 7))[0]
-          //  console.log(resp[0])
+          //console.log(resp[0])
           if (estadoTramite != undefined) {
             return {
               codigoResultado: 1,
