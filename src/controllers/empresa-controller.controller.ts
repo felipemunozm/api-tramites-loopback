@@ -179,13 +179,13 @@ export class EmpresaControllerController {
             nombreFantasia: params.empresa.nombreFantasia,
             representanteLegalId: persona.id
           }
-          let respuestaCreacionPersonaJuridica = (await this.personaJuridicaRepository.crearPersonaJuridica(personaJuridica))[0];
           //console.log('Paso 9')
           let tipoEmpresa = (await this.tipoEmpresaRepository.obtenerTipoEmpresaByCodigo(params.empresa.tipoEmpresa))[0];
           if (tipoEmpresa === undefined) return {
             codigoResultado: 5,
             descripcionResultado: "El tipo de empresa no existe " + params.empresa.tipoEmpresa + "."
           }
+          let respuestaCreacionPersonaJuridica = (await this.personaJuridicaRepository.crearPersonaJuridica(personaJuridica))[0];
           let empresaCreada = (await this.empresaRepository.crearEmpresa(respuestaCreacionPersonaJuridica.id, tipoEmpresa.id))[0];
           //console.log('Paso 10')
           let domicilio = {
