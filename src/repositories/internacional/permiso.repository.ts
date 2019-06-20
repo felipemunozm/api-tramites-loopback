@@ -34,11 +34,10 @@ export class PermisoRepository extends DefaultCrudRepository<
     let query: string = "insert into permiso (version, sujeto_id, pais_id, tipo_carga_id, tipo_id, fecha_creacion, fecha_fin_vigencia, url_callback) values (0, $1, $2, $3, $4, $5, $6, $7) returning id";
     return this.dataSource.execute(query, [permiso.sujetoId, permiso.paisId, permiso.tipoCargaId, permiso.tipoId, permiso.fechaHoraCreacion, permiso.fechaFinVigencia, permiso.urlCallback]);
   }
-  public actualizarCertificadoEnPermisoById(permisoId: any, certificadoId: any): Promise<any> {
-    let query: string = "update permiso set certificado = $2 where id = $1 returning id";
-    return this.dataSource.execute(query, [permisoId, certificadoId]);
+  public actualizarCertificadoEnPermisoById(permisoId: any, certificadoId: any, tipoEstadoPermisoId: any): Promise<any> {
+    let query: string = "update permiso set certificado = $2, tipo_estado_permiso_id = $3 where id = $1 returning id";
+    return this.dataSource.execute(query, [permisoId, certificadoId, tipoEstadoPermisoId]);
   }
-
   public borrarPermiso(borrarPermisoSujetoVehiculo: any): Promise<any> {
     let query: string = "Delete from permiso where id = $1 returning id;";
     return this.dataSource.execute(query, [borrarPermisoSujetoVehiculo]);

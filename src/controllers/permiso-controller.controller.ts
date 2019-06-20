@@ -1,5 +1,5 @@
 import { post, requestBody, HttpErrors } from "@loopback/rest";
-import { TipoTramiteRepository, IntermediarioTramiteRepository, RegionRepository, AnalistaRepository, EmpresaRepository, TipoIdPersonaRepository, PermisoRepository, PersonaJuridicaRepository, PersonaNaturalRepository, DomicilioEmpresaRepository, TipoEmpresaRepository, SolicitanteAutorizadoRepository, TipoDocumentoRepository, DocumentoEmpresaRepository, EstadoTramiteRepository, SolicitudTramiteRepository, TramiteRepository, PaisRepository, TipoCargaRepository, TipoPermisoRepository, TipoIdVehiculoRepository, SujetoRepository, VehiculoRepository, SujetoVehiculoRepository, DocumentoRepository, PermisoSujetoVehiculoRepository } from "../repositories";
+import { TipoTramiteRepository, IntermediarioTramiteRepository, RegionRepository, AnalistaRepository, EmpresaRepository, TipoIdPersonaRepository, PermisoRepository, PersonaJuridicaRepository, PersonaNaturalRepository, DomicilioEmpresaRepository, TipoEmpresaRepository, SolicitanteAutorizadoRepository, TipoDocumentoRepository, DocumentoEmpresaRepository, EstadoTramiteRepository, SolicitudTramiteRepository, TramiteRepository, PaisRepository, TipoCargaRepository, TipoPermisoRepository, TipoIdVehiculoRepository, SujetoRepository, VehiculoRepository, SujetoVehiculoRepository, DocumentoRepository, PermisoSujetoVehiculoRepository, EstadoPermisoRepository } from "../repositories";
 import { repository } from "@loopback/repository";
 import * as moment from 'moment';
 import * as dateFormat from 'dateformat';
@@ -9,6 +9,7 @@ import { httpify } from "caseless";
 import { rejects } from "assert";
 import { controllerLogger } from "../logger/logger-config";
 import { HttpError } from "http-errors";
+import { stringify } from "querystring";
 
 // Uncomment these imports to begin using these cool features!
 
@@ -43,6 +44,7 @@ export class PermisoControllerController {
     @repository(SujetoVehiculoRepository) public sujetoVehiculoRepository: SujetoVehiculoRepository,
     @repository(DocumentoRepository) public documentoRepository: DocumentoRepository,
     @repository(PermisoSujetoVehiculoRepository) public permisoSujetoVehiculoRepository: PermisoSujetoVehiculoRepository,
+    @repository(EstadoPermisoRepository) public estadoPermisoRepository: EstadoPermisoRepository
   ) { }
   @post('/tramites/internacional/chile-chile/permiso/persona')
   async crearPermisoChileChilePersona(@requestBody() params: any): Promise<any> {
@@ -281,7 +283,19 @@ export class PermisoControllerController {
           descripcionResultado: "Por Problemas en respuesta del servicio firmador, el tramite no será generado, intente nuevamente."
         }
       } else {
-        this.permisoRepository.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return);
+        // tipo_estado_permiso_id = 1 En espera de firma
+        const tipo_estado_permiso_id = 1;
+        let respPermisoId: any = await this.permisoRepository.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return, tipo_estado_permiso_id)
+        if (respPermisoId != undefined) {
+          let estadoPermiso = {
+            fecha_hora_cambio: permiso.fechaHoraCreacion,
+            permiso_id: respPermisoId.rows[0].id,
+            tipo_estado_permiso_id: tipo_estado_permiso_id
+          }
+          //Guardar el detalle de cada estado del permiso
+          let resEstadoPermiso = (await this.estadoPermisoRepository.crearEstadoPermiso(estadoPermiso))[0]
+          if (resEstadoPermiso != undefined) { console.log("Estado Permiso creado OK:" + resEstadoPermiso.id) }
+        }
       }
       return body;
     } catch (ex) {
@@ -552,7 +566,19 @@ export class PermisoControllerController {
           descripcionResultado: "Por Problemas en respuesta del servicio firmador, el tramite no será generado, intente nuevamente."
         }
       } else {
-        this.permisoRepository.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return);
+        // tipo_estado_permiso_id = 1 En espera de firma
+        const tipo_estado_permiso_id = 1;
+        let respPermisoId: any = await this.permisoRepository.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return, tipo_estado_permiso_id)
+        if (respPermisoId != undefined) {
+          let estadoPermiso = {
+            fecha_hora_cambio: permiso.fechaHoraCreacion,
+            permiso_id: respPermisoId.rows[0].id,
+            tipo_estado_permiso_id: tipo_estado_permiso_id
+          }
+          //Guardar el detalle de cada estado del permiso
+          let resEstadoPermiso = (await this.estadoPermisoRepository.crearEstadoPermiso(estadoPermiso))[0]
+          if (resEstadoPermiso != undefined) { console.log("Estado Permiso creado OK:" + resEstadoPermiso.id) }
+        }
       }
       return body;
     } catch (ex) {
@@ -574,3 +600,4 @@ export class PermisoControllerController {
     }
   }
 }
+
