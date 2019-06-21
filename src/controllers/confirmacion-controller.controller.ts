@@ -3,13 +3,16 @@ import { controllerLogger } from "../logger/logger-config";
 import { post, requestBody, HttpErrors, put, param, get, patch } from "@loopback/rest";
 import { repository } from "@loopback/repository";
 import * as request from 'request';
+import * as moment from 'moment';
 import { HttpError } from "http-errors";
-import { response_simpleRepository } from "../repositories/internacional/response_simple.repository";
+import { response_simpleRepository, PermisoRepository, EstadoPermisoRepository } from "../repositories";
 //
 
 export class ConfirmacionControllerController {
   constructor(
     @repository(response_simpleRepository) public response_simpleRepository: response_simpleRepository,
+    @repository(PermisoRepository) public permisoRepository: PermisoRepository,
+    @repository(EstadoPermisoRepository) public estadoPermisoRepository: EstadoPermisoRepository
   ) { }
 
   //@patch('/tramites/internacional/chile-chile/envio/confirmacion')
@@ -55,91 +58,119 @@ export class ConfirmacionControllerController {
         // update a registros en simple
         let strdocumentoId = params.documentoId.toString();
         // buscar en tabla permiso segun ID documento la URL CALL BACK para realizar el put de cada documento
-        let urlCallback: any = (await this.response_simpleRepository.obtenerURLCallBackId(strdocumentoId))[0];
+        let permiso: any = (await this.permisoRepository.obtenerPermisoByCertificado(strdocumentoId))[0];
 
-        if (urlCallback.url_callback !== undefined && urlCallback.url_callback !== "") {
-          let strbody = JSON.stringify({
-            identificadorIntermediario: params.identificadorIntermediario,
-            documentoId: params.documentoId,
-            fechaHoraEnvio: params.fechaHoraEnvio,
-            estadoDocumento: params.estadoDocumento
-          });
+        if (permiso != undefined) {
+          // tipo_estado_permiso_id = 1 En espera de firma
+          let tipo_estado_permiso_id;
 
-          try {
-            let options = {
-              method: 'PUT',
-              url: urlCallback.url_callback,
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: strbody
-            };
-            //llama a simple /wso2 prueba
-            let retorno = await new Promise((resolve, reject) => {
-              request(options, function (error, response, body) {
-                if (error) {
-                  return reject({ resultado: false, motivo: "UrlCallBack: " + error.code });
-                }
-                console.log(body);
-                return resolve(body);
+          if (params.estadoDocumento.codigoEstado == 'FIR') { tipo_estado_permiso_id = 3 } else if (params.estadoDocumento.codigoEstado == 'REC') { tipo_estado_permiso_id = 2 }
 
-              });
+          let respPermisoId: any = await this.permisoRepository.actualizarEstadoPermisoEnPermisoById(permiso.id, tipo_estado_permiso_id)
+          if (respPermisoId != undefined) {
+            let permisoId = respPermisoId.rows[0].id;
+            let respObtenerEstadoPermiso: any = (await this.estadoPermisoRepository.ObtenerEstadoPermisoByPermisoId(permisoId, tipo_estado_permiso_id))[0]
+            if (respObtenerEstadoPermiso != undefined) {
+              let estadoPermiso = {
+                id: respObtenerEstadoPermiso.id,
+                fecha_hora_cambio: moment(params.fechaHoraEnvio, "DD/MM/YYYY kk:mm:ss").toDate(),
+                tipo_estado_permiso_id: tipo_estado_permiso_id
+              }
+              //Actualiza el detalle de cada estado del permiso
+              let resEstadoPermiso: any = await this.estadoPermisoRepository.ActualizarEstadoPermiso(estadoPermiso)
+              if (resEstadoPermiso != undefined) { console.log("Estado Permiso actualizado OK") }
+            } else {
+              let estadoPermiso = {
+                fecha_hora_cambio: moment(params.fechaHoraEnvio, "DD/MM/YYYY kk:mm:ss").toDate(),
+                permiso_id: permisoId,
+                tipo_estado_permiso_id: tipo_estado_permiso_id
+              }
+              //Guardar el detalle de cada estado del permiso
+              let resEstadoPermiso = (await this.estadoPermisoRepository.crearEstadoPermiso(estadoPermiso))[0]
+              if (resEstadoPermiso != undefined) { console.log("Estado Permiso creado OK:" + resEstadoPermiso.id) }
+            }
+          }
+          if (permiso.url_callback !== undefined && permiso.url_callback !== "") {
+            let strbody = JSON.stringify({
+              identificadorIntermediario: params.identificadorIntermediario,
+              documentoId: params.documentoId,
+              fechaHoraEnvio: params.fechaHoraEnvio,
+              estadoDocumento: params.estadoDocumento
             });
-            // si es Ok, graba en tabla response_simple
-            if (retorno !== undefined) {
-              let d = new Date();
-              let response_sim = {
-                id: 0,
-                request_json: JSON.stringify({
-                  identificadorIntermediario: params.identificadorIntermediario,
-                  documentoId: params.documentoId,
-                  fechaHoraEnvio: params.fechaHoraEnvio,
-                  estadoDocumento: params.estadoDocumento
-                }),
-                response_json: retorno,
-                modified: d,
-                user_modified: 'user_ws_mtt'
+
+            try {
+              let options = {
+                method: 'PUT',
+                url: permiso.url_callback,
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: strbody
+              };
+              //llama a simple /wso2 prueba
+              let retorno = await new Promise((resolve, reject) => {
+                request(options, function (error, response, body) {
+                  if (error) {
+                    return reject({ resultado: false, motivo: "UrlCallBack: " + error.code });
+                  }
+                  console.log(body);
+                  return resolve(body);
+
+                });
+              });
+              // si es Ok, graba en tabla response_simple
+              if (retorno !== undefined) {
+                let d = new Date();
+                let response_sim = {
+                  id: 0,
+                  request_json: JSON.stringify({
+                    identificadorIntermediario: params.identificadorIntermediario,
+                    documentoId: params.documentoId,
+                    fechaHoraEnvio: params.fechaHoraEnvio,
+                    estadoDocumento: params.estadoDocumento
+                  }),
+                  response_json: retorno,
+                  modified: d,
+                  user_modified: 'user_ws_mtt'
+                }
+                let resultadoCreacionresponse_simple: any = await this.response_simpleRepository.crearResponse(response_sim);
+                if (resultadoCreacionresponse_simple[0].id.toString() !== "") {
+                  return { resultado: true, motivo: "OK" }
+                  // return { response.status}
+                }
               }
-              let resultadoCreacionresponse_simple: any = await this.response_simpleRepository.crearResponse(response_sim);
-              if (resultadoCreacionresponse_simple[0].id.toString() !== "") {
-                return { resultado: true, motivo: "OK" }
-                // return { response.status}
+              else { return { resultado: false, motivo: "respuesta de ws simple vacia" } }
+            }
+            catch (ex) {
+              console.log(ex)
+              // ctx.status = 502
+              // ctx.body = ex.toString()
+              let error: HttpError;
+              if (ex.status == 502) {
+                error = new HttpErrors.BadGateway(ex.toString());
+                error.status = 502;
+                throw error;
               }
+              if (ex.status == 404) {
+                error = new HttpErrors.NotFound(ex.toString());
+                error.status = 404
+                throw error;
+              }
+              if (ex.resultado == false) {
+                error = new HttpErrors.BadRequest(ex.motivo);
+                error.status = 400
+                throw error;
+                // throw { resultado: false, motivo: ex.motivo.toString() };
+              }
+              error = new HttpErrors.InternalServerError(ex.toString());
+              error.status = 500;
+              throw error;
             }
-            else { return { resultado: false, motivo: "respuesta de ws simple vacia" } }
-
           }
-          catch (ex) {
-            console.log(ex)
-            // ctx.status = 502
-            // ctx.body = ex.toString()
-            let error: HttpError;
-            if (ex.status == 502) {
-              error = new HttpErrors.BadGateway(ex.toString());
-              error.status = 502;
-              throw error;
-            }
-            if (ex.status == 404) {
-              error = new HttpErrors.NotFound(ex.toString());
-              error.status = 404
-              throw error;
-            }
-            if (ex.resultado == false) {
-              error = new HttpErrors.BadRequest(ex.motivo);
-              error.status = 400
-              throw error;
-              // throw { resultado: false, motivo: ex.motivo.toString() };
-            }
-            error = new HttpErrors.InternalServerError(ex.toString());
-            error.status = 500;
-            throw error;
+          else {
+            return { resultado: false, motivo: "urlCallback No existe" }
           }
-
-
-        }
-        else {
-          return { resultado: false, motivo: "urlCallback No existe" }
         }
       }
     } catch (ex) {
