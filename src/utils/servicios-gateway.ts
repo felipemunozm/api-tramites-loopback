@@ -109,19 +109,22 @@ export class ServiciosGateway {
     //.ele('listado_flota', {'etiqueta': 'Listado flota'}).up()
     //xml.ele('certificado').cdata(xml)
     let listado_flota = xml.ele('listado_flota')
-    //console.log(certificado.flota)
-    certificado.flota.forEach((tipoVehiculo: any) => {
-      let item = listado_flota.ele('item_Tabla_tipo_vehiculo')
-      item.ele('tipoVehiculo', {}, tipoVehiculo.tipo)
-      let listadoVehiculos = item.ele('listado_vehiculos')
-      let vehiculo = listadoVehiculos.ele('vehiculo')
-      vehiculo.ele('marca', {}, tipoVehiculo.marca)
-      vehiculo.ele('anno', {}, tipoVehiculo.anno)
-      vehiculo.ele('chasis', {}, tipoVehiculo.chasis)
-      vehiculo.ele('ejes', {}, tipoVehiculo.ejes)
-      vehiculo.ele('capacidad_carga', {}, tipoVehiculo.capacidadCarga)
-      vehiculo.ele('patente', {}, tipoVehiculo.patente)
-
+    //console..log(certificado.flota)
+    certificado.resumen.forEach((item: any) => {
+      let itemResumen = listado_flota.ele('item_Tabla_tipo_vehiculo')
+      itemResumen.ele('tipoVehiculo', {}, item.tipoVehiculo)
+      let listadoVehiculos = itemResumen.ele('listado_vehiculos')
+      certificado.flota.forEach((flota: any) => {
+        if (item.tipoVehiculo == flota.tipo) {
+          let vehiculo = listadoVehiculos.ele('vehiculo')
+          vehiculo.ele('marca', {}, flota.marca)
+          vehiculo.ele('anno', {}, flota.anno)
+          vehiculo.ele('chasis', {}, flota.chasis)
+          vehiculo.ele('ejes', {}, flota.ejes)
+          vehiculo.ele('capacidad_carga', {}, flota.capacidadCarga)
+          vehiculo.ele('patente', {}, flota.patente)
+        }
+      })
     })
 
     let resumenFlota = xml.ele('resumen_flota')

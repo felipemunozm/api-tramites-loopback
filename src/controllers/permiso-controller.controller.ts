@@ -224,6 +224,7 @@ export class PermisoControllerController {
           patente: flota.ppu,
           tipo: flota.tipo
         }
+
         let flotaTipo = flotasPorTipo.find((flotaPorTipo: any) => flotaPorTipo.tipo === flota.tipo)
         if (flotaTipo != undefined) {
           flotasPorTipo.push(vehiculoFlota)
