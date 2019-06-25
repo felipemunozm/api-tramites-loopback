@@ -27,7 +27,7 @@ export class PermisoRepository extends DefaultCrudRepository<
       + "from permiso a left join sujeto b on b.id = a.sujeto_id \r\n"
       + "left join persona_natural c on c.id = b.persona_natural_id \r\n"
       + "left join persona_juridica d on d.id = b.persona_juridica_id \r\n"
-      + "where c.identificador = $1 or d.identificador = $1 and a.fecha_fin_vigencia > NOW()";
+      + "where (c.identificador = $1 or d.identificador = $1) and a.fecha_fin_vigencia > NOW()";
     return this.dataSource.execute(query, [rut]);
   }
   public obtenerPermisoByCertificado(certificado: any): Promise<any> {
