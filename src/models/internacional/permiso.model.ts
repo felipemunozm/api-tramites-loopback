@@ -88,6 +88,13 @@ export class Permiso extends Entity {
     postgresql: { "columnName": "tipo_estado_permiso_id", "dataType": "bigint", "dataLength": null, "dataPrecision": null, "dataScale": 0, "nullable": "YES" },
   })
   tipo_estado_permiso_id?: Number;
+  @property({
+    type: Number,
+    required: false,
+    scale: 0,
+    postgresql: { "columnName": "id_anterior", "dataType": "bigint", "dataLength": null, "dataPrecision": null, "dataScale": 0, "nullable": "YES" },
+  })
+  id_anterior?: Number;
 
   // Define well-known properties here
 

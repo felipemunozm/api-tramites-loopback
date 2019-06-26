@@ -42,6 +42,21 @@ export class EstadoPermiso extends Entity {
   })
   tipo_estado_permiso_id: Number;
 
+  @property({
+    type: Number,
+    required: true,
+    scale: 0,
+    postgresql: { "columnName": "folio_documento", "dataType": "bigint", "dataLength": null, "dataPrecision": null, "dataScale": 0, "nullable": "NO" },
+  })
+  folio_documento: Number;
+
+  @property({
+    type: String,
+    required: true,
+    postgresql: { "columnName": "fecha_estado_doc", "dataType": "timestamp without time zone", "dataLength": null, "dataPrecision": null, "dataScale": null, "nullable": "NO" },
+  })
+  fecha_estado_doc: String;
+
   // Define well-known properties here
 
   // Indexer property to allow additional data

@@ -35,14 +35,33 @@ export class PersonasControllerController {
         codigoResultado: 1,
         descripcionResultado: 'No tiene permiso vigente'
       }
-      if (permiso == undefined) {
+      if (permiso == undefined || permiso.tipo_estado_permiso_id == null) {
         return resp;
-      } else {
+      } else if (permiso.tipo_estado_permiso_id == 1) {
+        resp.rutSolicitante = rut
+        resp.codigoResultado = 4
+        resp.descripcionResultado = 'Tiene un permiso vigente pendiente de firma'
+        return resp;
+      } else if (permiso.tipo_estado_permiso_id == 3) {
         controllerLogger.info("permiso: " + permiso.id);
         resp.codigoResultado = 2
         resp.descripcionResultado = 'Tiene permiso vigente'
+      } else if (permiso.tipo_estado_permiso_id == 2) {
+        //Obtiene el id permiso firmado
+        let permisoFirmado: any = (await this.permisoRepository.obtenerPermisoVigenteFirmadoByRut(rut))[0];
+        if (permisoFirmado == undefined) {
+          resp.rutSolicitante = rut
+          resp.codigoResultado = 3
+          resp.descripcionResultado = 'No tiene permiso vigente'
+          return resp;
+        } else {
+          controllerLogger.info("permiso: " + permisoFirmado.id);
+          resp.codigoResultado = 2
+          resp.descripcionResultado = 'Tiene permiso vigente'
+          //en el caso que exista un permiso firmado anterior este se retorna
+          permiso = permisoFirmado;
+        }
       }
-
       let tipoPermiso = await this.tipoPermisoRepository.findById(permiso.tipo_id);
       let sujeto = (await this.sujetoRepository.obtenerSujetoById(permiso.sujeto_id))[0];
       let direccionSujeto = (await this.direccionPersonaNaturalRepository.obtenerDireccionByPersonaId(sujeto.id))[0];
@@ -135,6 +154,38 @@ export class PersonasControllerController {
           return resp;
         }
       }
+      resp.codigoResultado = 2
+      resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado Sin Permiso Vigente'
+      let permiso: any = (await this.permisoRepository.obtenerPermisoVigenteByRut(rutEmpresa))[0];
+      if (permiso == undefined || permiso.tipo_estado_permiso_id == null) {
+        return resp;
+      } else if (permiso.tipo_estado_permiso_id == 1) {
+        resp.rutSolicitante = rutSolicitante
+        resp.rutEmpresa = rutEmpresa
+        resp.codigoResultado = 6
+        resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene un permiso vigente pendiente de firma'
+        return resp;
+      } else if (permiso.tipo_estado_permiso_id == 3) {
+        controllerLogger.info("permiso: " + permiso.id);
+        resp.codigoResultado = 4
+        resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene Permiso Vigente firmado'
+      } else if (permiso.tipo_estado_permiso_id == 2) {
+        //Obtiene el id permiso firmado
+        let permisoFirmado: any = (await this.permisoRepository.obtenerPermisoVigenteFirmadoByRut(rutEmpresa))[0];
+        if (permisoFirmado == undefined) {
+          resp.rutSolicitante = rutSolicitante
+          resp.rutEmpresa = rutEmpresa
+          resp.codigoResultado = 5
+          resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado Sin permiso vigente, documento rechazado'
+          return resp;
+        } else {
+          controllerLogger.info("permiso: " + permisoFirmado.id);
+          resp.codigoResultado = 4
+          resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene Permiso Vigente firmado'
+          //en el caso que exista un permiso firmado anterior este se retorna
+          permiso = permisoFirmado;
+        }
+      }
       resp.empresa = {}
       resp.empresa.rut = empresa.identificador
       resp.empresa.razonSocial = empresa.razon_social
@@ -151,14 +202,6 @@ export class PersonasControllerController {
         telefono_movil: empresa.telefono_movil,
         email: empresa.email
       }
-      resp.codigoResultado = 2
-      resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado Sin Permiso Vigente'
-      let permiso: any = (await this.permisoRepository.obtenerPermisoVigenteByRut(rutEmpresa))[0];
-      if (permiso == undefined) {
-        return resp;
-      }
-      resp.codigoResultado = 4
-      resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene Permiso Vigente'
       let tipoPermiso = await this.tipoPermisoRepository.findById(new Number(permiso.tipo_id));
       let sujeto = (await this.sujetoRepository.obtenerSujetoById(permiso.sujeto_id))[0];
       let vehiculos = await this.vehiculoRepository.obtenerVehiculosByPermisoId(permiso.id.toString());

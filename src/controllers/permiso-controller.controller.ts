@@ -49,7 +49,7 @@ export class PermisoControllerController {
   @post('/tramites/internacional/chile-chile/permiso/persona')
   async crearPermisoChileChilePersona(@requestBody() params: any): Promise<any> {
     try {
-      if (params == undefined || params.identificadorIntermediario == undefined || params.fechaHoraCreacion == undefined || params.solicitante == undefined
+      if (params == undefined || params.identificadorIntermediario == undefined || params.idPermisoAnterior == undefined || params.fechaHoraCreacion == undefined || params.solicitante == undefined
         || params.documentosAdjuntos == undefined
         || params.solicitante.rut == undefined
         || params.codigoAnalista == undefined || params.nombreAnalista == undefined || params.codigoRegion == undefined
@@ -58,6 +58,16 @@ export class PermisoControllerController {
         throw new HttpErrors.NotFound('Parámteros incorrectos');
       }
       console.log("inicia tramite");
+
+      if (params.idPermisoAnterior != "") {
+        if (!/^[0-9]*$/.test(params.idPermisoAnterior)) {
+          return {
+            codigoResultado: 5,
+            descripcionResultado: "El parámetro puede ser vacío o númerico " + params.idPermisoAnterior + "."
+          }
+        }
+      } else { params.idPermisoAnterior = undefined }
+
       let tipoTramite: any = (await this.tipoTramiteRepository.obtenerTipoTramitesByCodigo('chile-chile'))[0]
       if (tipoTramite == undefined) console.error('Debe crear un Tipo de Trámite con código chile-chile.')
       let intermediarios: any = await this.intermediarioTramiteRepository.obtenerIntermediarios();
@@ -123,7 +133,6 @@ export class PermisoControllerController {
       } catch (err) {
         controllerLogger.info(err)
         throw new HttpErrors.BadGateway('No fue posible crear el permiso.');
-
       }
       console.log("Tramite OK");
       //Se crea el caso que se deba eliminar el tramite recien generado.
@@ -166,14 +175,21 @@ export class PermisoControllerController {
         } while (i != 0)
       }
       console.log("Sujeto vehículo OK");
+      let idPermisoAnterior = params.idPermisoAnterior
+      let fechaVigencia = moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").add(tipoPermisoChileChile.meses_vigencia, "M").toDate()
+      let obtenerPermisoAnt: any = (await this.permisoRepository.obtenerPermisoById(idPermisoAnterior))[0]
+
+      obtenerPermisoAnt != undefined ? fechaVigencia = moment(obtenerPermisoAnt.fecha_fin_vigencia, "DD/MM/YYYY kk:mm:ss").toDate() : console.log("Sin permiso anterior");
+
       let permiso = {
+        id_anterior: idPermisoAnterior,
         sujetoId: respCreacionSujeto.id,
         paisId: paisChile.id,
         tipoCargaId: tiposCargas[0].id,
         tipoId: tipoPermisoChileChile.id,
         urlCallback: params.urlCallback,
         fechaHoraCreacion: moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").toDate(),
-        fechaFinVigencia: moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").add(tipoPermisoChileChile.meses_vigencia, "M").toDate()
+        fechaFinVigencia: fechaVigencia
       }
       //Nuevo FV
       let respCreacionPermiso: any = (await this.permisoRepository.crearPermiso(permiso))[0];
@@ -255,12 +271,17 @@ export class PermisoControllerController {
         } catch (err) {
           controllerLogger.info("Error insertando documento: " + err)
         }
-
       }
+      // tipo_estado_permiso_id = 3 Firmado
+      let tipo_estado_permiso_id = 3;
+      let folioDocumentoAnt = '';
+      let estadoPermisoAnt: any = (await this.estadoPermisoRepository.ObtenerEstadoPermisoByPermisoId(idPermisoAnterior, tipo_estado_permiso_id))[0]
+      estadoPermisoAnt != undefined ? folioDocumentoAnt = estadoPermisoAnt.folio_documento : console.log("Sin folio anterior")
       let certificado = {
         titulo: 'Permiso Ocasional País-País',
         encabezado: 'CONFORME A LO ACORDADO EN EL CONVENIO CHILENO-ARGENTINO DE TRANSPORTE TERRESTRE EN TRÁNSITO PARA VINCULAR DOS PUNTOS DE UN MISMO PAÍS, COMUNICO A USTED, HABER AUTORIZADO PERMISO OCASIONAL CON DESTINO A TERRITORIO NACIONAL EN TRÁNSITO POR TERRITORIO ARGENTINO POR PASOS FRONTERIZOS AUTORIZADOS ENTRE LAS REGIONES DE LOS LAGOS, DE AYSÉN Y DE MAGALLANES ANTÁRTICA CHILENA.',
-        numeroPermiso: respCreacionPermiso.id,
+        numeroPermiso: 'acairaelfolio',
+        numeroPermisoAnt: folioDocumentoAnt,
         fechaInicio: dateFormat(permiso.fechaHoraCreacion, "yyyy-mm-dd"),
         fechaFin: dateFormat(permiso.fechaFinVigencia, "yyyy-mm-dd"),
         nombreTransportista: params.solicitante.nombre,
@@ -285,7 +306,7 @@ export class PermisoControllerController {
         }
       } else {
         // tipo_estado_permiso_id = 1 En espera de firma
-        const tipo_estado_permiso_id = 1;
+        tipo_estado_permiso_id = 1;
         let respPermisoId: any = await this.permisoRepository.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return, tipo_estado_permiso_id)
         if (respPermisoId != undefined) {
           let estadoPermiso = {
@@ -323,7 +344,7 @@ export class PermisoControllerController {
     try {
       console.log("inicio el tramite")
       let body: any;
-      if (!params || !params.identificadorIntermediario || !params.fechaHoraCreacion || !params.solicitante
+      if (!params || !params.identificadorIntermediario || params.idPermisoAnterior == undefined || !params.fechaHoraCreacion || !params.solicitante
         || !params.documentosAdjuntos
         || !params.solicitante.nombre || !params.solicitante.rut || !params.solicitante.email
         || !params.codigoAnalista || !params.nombreAnalista || !params.codigoRegion
@@ -331,6 +352,15 @@ export class PermisoControllerController {
         || !params.empresa || !params.empresa.rut || !params.urlCallback) {
         throw new HttpErrors.NotFound('Parámteros incorrectos');
       }
+      if (params.idPermisoAnterior != "") {
+        if (!/^[0-9]*$/.test(params.idPermisoAnterior)) {
+          return {
+            codigoResultado: 5,
+            descripcionResultado: "El parámetro debe ser vacío o númerico " + params.idPermisoAnterior + "."
+          }
+        }
+      } else { params.idPermisoAnterior = undefined }
+
       console.log("inicia tramite");
       // let tiposTramite = await gestionTramitesGateway.obtenerTiposTramites()
       let tiposTramite: any = await this.tipoTramiteRepository.obtenerTipoTramites();
@@ -372,23 +402,7 @@ export class PermisoControllerController {
           descripcionResultado: "No hay una empresa registrada con el rut " + params.empresa.rut + "."
         }
       }
-      // let solicitud = await gestionTramitesGateway.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario)
-      // let solicitud: any = (await this.solicitudTramiteRepository.obtenerSolicitudByIdentificadorIntermediario(params.identificadorIntermediario))[0];
-      // if (solicitud == undefined) {
-      //   return {
-      //     codigoResultado: 2,
-      //     descripcionResultado: "No existe una solicitud con el identificador de intermediario " + params.identificadorIntermediario + "."
-      //   }
-      // }
-      // let tram = await gestionTramitesGateway.obtenerTramiteBySolicitudId(solicitud.id)
-      // let tram: any = (await this.tramiteRepository.obtenerTramiteBySolicitudId(solicitud.id))[0];
-      // if (tram != undefined) {
-      //   return {
-      //     codigoResultado: 5,
-      //     descripcionResultado: "Ya existe un trámite creado para la solicitud solicitada."
-      //   }
-      // }
-      // let paisChile = await internacionalGateway.obtenerPaisByCodigo('CL')
+
       let paisChile = (await this.paisRepository.obtenerPaisByCodigo('CL'))[0];
       if (!paisChile) console.error('Debe registrar a Chile como país con código CL.')
       // let tiposCargas = await internacionalGateway.obtenerTiposCargas()
@@ -452,14 +466,21 @@ export class PermisoControllerController {
         }
       }
       console.log("Sujeto vehículo OK");
+      let idPermisoAnterior = params.idPermisoAnterior
+      let fechaVigencia = moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").add(tipoPermisoChileChile.meses_vigencia, "M").toDate()
+      let obtenerPermisoAnt: any = (await this.permisoRepository.obtenerPermisoById(idPermisoAnterior))[0]
+
+      obtenerPermisoAnt != undefined ? fechaVigencia = moment(obtenerPermisoAnt.fecha_fin_vigencia, "DD/MM/YYYY kk:mm:ss").toDate() : console.log("Sin permiso anterior");
+
       let permiso = {
+        id_anterior: idPermisoAnterior,
         sujetoId: respCreacionSujeto.id,
         paisId: paisChile.id,
         tipoCargaId: tiposCargas[0].id,
         tipoId: tipoPermisoChileChile.id,
         urlCallback: params.urlCallback,
         fechaHoraCreacion: moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").toDate(),
-        fechaFinVigencia: moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").add(tipoPermisoChileChile.meses_vigencia, "M").toDate()
+        fechaFinVigencia: fechaVigencia
       }
       //Nuevo FV
       let respCreacionPermiso: any = (await this.permisoRepository.crearPermiso(permiso))[0];
@@ -472,7 +493,7 @@ export class PermisoControllerController {
           ejes: flota.ejes,
           fechaVigenciaLS: flota.fechaVencimientoLS,
           observacion: flota.limitacion,
-          patente: flota.ppu,
+          ppu: flota.ppu,
           tipo: flota.tipo,
           marca: flota.marca,
           modelo: flota.modelo,
@@ -483,7 +504,7 @@ export class PermisoControllerController {
           fechaVencimientoRT: flota.fechaVencimientoRT,
           estadoRT: flota.estadoRT,
           propietario: flota.propietario,
-          capacidadCarga: flota.capacidadCargaToneladas
+          toneladas: flota.capacidadCargaToneladas
         }
         if (vehiculoFlota.ejes == "Sin dato" || vehiculoFlota.ejes == "Sin Dato" || vehiculoFlota.ejes == "") {
           vehiculoFlota.ejes = 0
@@ -539,10 +560,16 @@ export class PermisoControllerController {
       }
       console.log("Genero XML")
       //let now: Date = new Date()
+      // tipo_estado_permiso_id = 3 Firmado
+      let tipo_estado_permiso_id = 3;
+      let folioDocumentoAnt = '';
+      let estadoPermisoAnt: any = (await this.estadoPermisoRepository.ObtenerEstadoPermisoByPermisoId(idPermisoAnterior, tipo_estado_permiso_id))[0]
+      estadoPermisoAnt != undefined ? folioDocumentoAnt = estadoPermisoAnt.folio_documento : console.log("Sin folio anterior")
       let certificado = {
         titulo: 'Permiso Ocasional País-País',
         encabezado: 'CONFORME A LO ACORDADO EN EL CONVENIO CHILENO-ARGENTINO DE TRANSPORTE TERRESTRE EN TRÁNSITO PARA VINCULAR DOS PUNTOS DE UN MISMO PAÍS, COMUNICO A USTED, HABER AUTORIZADO PERMISO OCASIONAL CON DESTINO A TERRITORIO NACIONAL EN TRÁNSITO POR TERRITORIO ARGENTINO POR PASOS FRONTERIZOS AUTORIZADOS ENTRE LAS REGIONES DE LOS LAGOS, DE AYSÉN Y DE MAGALLANES ANTÁRTICA CHILENA.',
-        numeroPermiso: respCreacionPermiso.id,
+        numeroPermiso: 'acairaelfolio',
+        numeroPermisoAnt: folioDocumentoAnt,
         fechaInicio: dateFormat(permiso.fechaHoraCreacion, "yyyy-mm-dd"),
         fechaFin: dateFormat(permiso.fechaFinVigencia, "yyyy-mm-dd"),
         nombreTransportista: params.solicitante.nombre,
@@ -568,7 +595,7 @@ export class PermisoControllerController {
         }
       } else {
         // tipo_estado_permiso_id = 1 En espera de firma
-        const tipo_estado_permiso_id = 1;
+        tipo_estado_permiso_id = 1;
         let respPermisoId: any = await this.permisoRepository.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return, tipo_estado_permiso_id)
         if (respPermisoId != undefined) {
           let estadoPermiso = {

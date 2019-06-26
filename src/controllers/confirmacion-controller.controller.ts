@@ -70,11 +70,15 @@ export class ConfirmacionControllerController {
           if (respPermisoId != undefined) {
             let permisoId = respPermisoId.rows[0].id;
             let respObtenerEstadoPermiso: any = (await this.estadoPermisoRepository.ObtenerEstadoPermisoByPermisoId(permisoId, tipo_estado_permiso_id))[0]
+            let folioDocumento = undefined;
+            params.estadoDocumento.datosFirma.folioDocumento != 0 && params.estadoDocumento.datosFirma.folioDocumento != "" ? folioDocumento = params.estadoDocumento.datosFirma.folioDocumento : null
             if (respObtenerEstadoPermiso != undefined) {
               let estadoPermiso = {
                 id: respObtenerEstadoPermiso.id,
                 fecha_hora_cambio: moment(params.fechaHoraEnvio, "DD/MM/YYYY kk:mm:ss").toDate(),
-                tipo_estado_permiso_id: tipo_estado_permiso_id
+                tipo_estado_permiso_id: tipo_estado_permiso_id,
+                folio_documento: folioDocumento,
+                fecha_estado_doc: moment(params.estadoDocumento.fechaHora, "DD/MM/YYYY kk:mm:ss").toDate()
               }
               //Actualiza el detalle de cada estado del permiso
               let resEstadoPermiso: any = await this.estadoPermisoRepository.ActualizarEstadoPermiso(estadoPermiso)
@@ -83,7 +87,9 @@ export class ConfirmacionControllerController {
               let estadoPermiso = {
                 fecha_hora_cambio: moment(params.fechaHoraEnvio, "DD/MM/YYYY kk:mm:ss").toDate(),
                 permiso_id: permisoId,
-                tipo_estado_permiso_id: tipo_estado_permiso_id
+                tipo_estado_permiso_id: tipo_estado_permiso_id,
+                folio_documento: params.estadoDocumento.datosFirma.folioDocumento,
+                fecha_estado_doc: moment(params.estadoDocumento.fechaHora, "DD/MM/YYYY kk:mm:ss").toDate(),
               }
               //Guardar el detalle de cada estado del permiso
               let resEstadoPermiso = (await this.estadoPermisoRepository.crearEstadoPermiso(estadoPermiso))[0]

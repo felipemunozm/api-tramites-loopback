@@ -102,6 +102,7 @@ export class ServiciosGateway {
       .ele('titulo', certificado.titulo).up()
       .ele('encabezado', certificado.encabezado).up()
       .ele('nro_permiso', certificado.numeroPermiso).up()
+      .ele('nro_permiso_ant', certificado.numeroPermisoAnt).up()
       .ele('fecha_inicio', certificado.fechaInicio).up()
       .ele('fecha_fin', certificado.fechaFin).up()
       .ele('nombre_transportista', certificado.nombreTransportista).up()
