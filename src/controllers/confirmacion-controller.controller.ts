@@ -71,7 +71,9 @@ export class ConfirmacionControllerController {
             let permisoId = respPermisoId.rows[0].id;
             let respObtenerEstadoPermiso: any = (await this.estadoPermisoRepository.ObtenerEstadoPermisoByPermisoId(permisoId, tipo_estado_permiso_id))[0]
             let folioDocumento = undefined;
-            params.estadoDocumento.datosFirma.folioDocumento != 0 && params.estadoDocumento.datosFirma.folioDocumento != "" ? folioDocumento = params.estadoDocumento.datosFirma.folioDocumento : null
+            if (params.estadoDocumento.datosFirma.folioDocumento != 0 && params.estadoDocumento.datosFirma.folioDocumento != "") {
+              folioDocumento = params.estadoDocumento.datosFirma.folioDocumento
+            }
             if (respObtenerEstadoPermiso != undefined) {
               let estadoPermiso = {
                 id: respObtenerEstadoPermiso.id,
