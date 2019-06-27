@@ -51,7 +51,7 @@ export class PersonasControllerController {
         let permisoFirmado: any = (await this.permisoRepository.obtenerPermisoVigenteFirmadoByRut(rut))[0];
         if (permisoFirmado == undefined) {
           resp.rutSolicitante = rut
-          resp.codigoResultado = 3
+          resp.codigoResultado = 1
           resp.descripcionResultado = 'No tiene permiso vigente'
           return resp;
         } else {
@@ -168,20 +168,20 @@ export class PersonasControllerController {
       } else if (permiso.tipo_estado_permiso_id == 3) {
         controllerLogger.info("permiso: " + permiso.id);
         resp.codigoResultado = 4
-        resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene Permiso Vigente firmado'
+        resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene Permiso Vigente'
       } else if (permiso.tipo_estado_permiso_id == 2) {
         //Obtiene el id permiso firmado
         let permisoFirmado: any = (await this.permisoRepository.obtenerPermisoVigenteFirmadoByRut(rutEmpresa))[0];
         if (permisoFirmado == undefined) {
           resp.rutSolicitante = rutSolicitante
           resp.rutEmpresa = rutEmpresa
-          resp.codigoResultado = 5
-          resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado Sin permiso vigente, documento rechazado'
+          resp.codigoResultado = 2
+          resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado Sin permiso vigente'
           return resp;
         } else {
           controllerLogger.info("permiso: " + permisoFirmado.id);
           resp.codigoResultado = 4
-          resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene Permiso Vigente firmado'
+          resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene Permiso Vigente'
           //en el caso que exista un permiso firmado anterior este se retorna
           permiso = permisoFirmado;
         }
