@@ -22,7 +22,8 @@ export class EmpresaRepository extends DefaultCrudRepository<
       "left join tipo_empresa te on a.tipo_empresa_id = te.id\n" +
       "left join comuna co on de.codigo_comuna = co.codigo\n" +
       "left join region re on de.codigo_region = re.codigo\n" +
-      "left join persona_natural pn on pj.representante_legal_id = pn.id where pj.identificador = $1";
+      "left join persona_natural pn on pj.representante_legal_id = pn.id where pj.identificador = $1\n" +
+      "order by de.id desc";
     return this.dataSource.execute(query, [rut]);
   }
   public crearEmpresa(personaJuridicaId: any, tipoEmpresa: any): Promise<any> {

@@ -398,11 +398,13 @@ export class EmpresaControllerController {
     }
   }
   @get('/tramites/internacional/chile-chile/empresa')
-  async getEmpresa(@param.query.string('rutEmpresa') rutEmpresa: any, @param.query.string('rutSolicitante') rutSolicitante: any): Promise<any> {
+  async getEmpresa(@param.query.string('q') q: string): Promise<any> {
     try {
-      // let rutEmpresa = ctx.query.rutEmpresa
-      // let rutSolicitante = ctx.query.rutSolicitante
-      // let empresa = await internacionalGateway.obtenerEmpresaByRut(rutEmpresa)
+      let params = q.replace(/\{/g, '').replace(/\}/g, '').replace(/\s/g, '').split(',')
+      let pRutSolicitante = params[0].split('='), pRutEmpresa = params[1].split('=')
+      if (pRutSolicitante[0] !== "'rutSolicitante'" || pRutEmpresa[0] !== "'rutEmpresa'") throw 'Parámetros incorrectos'
+      let rutSolicitante = pRutSolicitante[1].replace(/\'/g, '')
+      let rutEmpresa = pRutEmpresa[1].replace(/\'/g, '')
       let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(rutEmpresa))[0];
       let solicitantes: any = [],
         sol: any = [],
@@ -413,9 +415,7 @@ export class EmpresaControllerController {
           codigoResultado: 2,
           descripcionResultado: "No hay una empresa registrada con el rut " + rutEmpresa + "."
         }
-        // return
       }
-      // solicitantes = await internacionalGateway.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id)
       solicitantes = await this.solicitanteAutorizadoRepository.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id);
       if (rutSolicitante !== empresa.identificador_representante_legal) {
 
@@ -424,7 +424,6 @@ export class EmpresaControllerController {
             codigoResultado: 4,
             descripcionResultado: "No hay solicitantes autorizados para esta empresa."
           }
-          // return
         }
         let solicitante = solicitantes.find((s: any) => s.identificador === rutSolicitante)
         if (solicitante.id == undefined) {
@@ -432,13 +431,9 @@ export class EmpresaControllerController {
             codigoResultado: 3,
             descripcionResultado: "No hay un solicitante autorizado con el rut " + rutSolicitante + "."
           }
-          // return
         }
-
       }
-      // direccionRepresentanteLegal = await internacionalGateway.obtenerDireccionByPersonaId(empresa.id_representante_legal)
       direccionRepresentanteLegal = (await this.direccionPersonaNaturalRepository.obtenerDireccionByPersonaId(empresa.id_representante_legal))[0];
-      // documentos = await internacionalGateway.obtenerDocumentosEmpresaById(empresa.id)
       documentos = await this.documentoEmpresaRepository.obtenerDocumentosEmpresaById(empresa.id);
       solicitantes.forEach((s: any) => {
         console.log('sol')
