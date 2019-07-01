@@ -1,5 +1,5 @@
 import { post, requestBody, HttpErrors } from "@loopback/rest";
-import { TipoTramiteRepository, IntermediarioTramiteRepository, RegionRepository, AnalistaRepository, EmpresaRepository, TipoIdPersonaRepository, PermisoRepository, PersonaJuridicaRepository, PersonaNaturalRepository, DomicilioEmpresaRepository, TipoEmpresaRepository, SolicitanteAutorizadoRepository, TipoDocumentoRepository, DocumentoEmpresaRepository, EstadoTramiteRepository, SolicitudTramiteRepository, TramiteRepository, PaisRepository, TipoCargaRepository, TipoPermisoRepository, TipoIdVehiculoRepository, SujetoRepository, VehiculoRepository, SujetoVehiculoRepository, DocumentoRepository, PermisoSujetoVehiculoRepository, EstadoPermisoRepository } from "../repositories";
+import { TipoTramiteRepository, IntermediarioTramiteRepository, RegionRepository, AnalistaRepository, EmpresaRepository, TipoIdPersonaRepository, PermisoRepository, PersonaJuridicaRepository, PersonaNaturalRepository, DomicilioEmpresaRepository, TipoEmpresaRepository, SolicitanteAutorizadoRepository, TipoDocumentoRepository, DocumentoEmpresaRepository, EstadoTramiteRepository, TramiteRepository, PaisRepository, TipoCargaRepository, TipoPermisoRepository, TipoIdVehiculoRepository, SujetoRepository, VehiculoRepository, SujetoVehiculoRepository, DocumentoRepository, PermisoSujetoVehiculoRepository, EstadoPermisoRepository } from "../repositories";
 import { repository } from "@loopback/repository";
 import * as moment from 'moment';
 import * as dateFormat from 'dateformat';
@@ -33,7 +33,6 @@ export class PermisoControllerController {
     @repository(TipoDocumentoRepository) public tipoDocumentoRepository: TipoDocumentoRepository,
     @repository(DocumentoEmpresaRepository) public documentoEmpresaRepository: DocumentoEmpresaRepository,
     @repository(EstadoTramiteRepository) public estadoTramiteRepository: EstadoTramiteRepository,
-    @repository(SolicitudTramiteRepository) public solicitudTramiteRepository: SolicitudTramiteRepository,
     @repository(TramiteRepository) public tramiteRepository: TramiteRepository,
     @repository(PaisRepository) public paisRepository: PaisRepository,
     @repository(TipoCargaRepository) public tipoCargaRepository: TipoCargaRepository,
@@ -63,7 +62,7 @@ export class PermisoControllerController {
         if (!/^[0-9]*$/.test(params.idPermisoAnterior)) {
           return {
             codigoResultado: 5,
-            descripcionResultado: "El parámetro puede ser vacío o númerico " + params.idPermisoAnterior + "."
+            descripcionResultado: "El parámetro puede ser vacío o numérico " + params.idPermisoAnterior + "."
           }
         }
       } else { params.idPermisoAnterior = undefined }
@@ -356,7 +355,7 @@ export class PermisoControllerController {
         if (!/^[0-9]*$/.test(params.idPermisoAnterior)) {
           return {
             codigoResultado: 5,
-            descripcionResultado: "El parámetro debe ser vacío o númerico " + params.idPermisoAnterior + "."
+            descripcionResultado: "El parámetro debe ser vacío o numérico " + params.idPermisoAnterior + "."
           }
         }
       } else { params.idPermisoAnterior = undefined }

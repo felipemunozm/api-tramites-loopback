@@ -282,7 +282,8 @@ export class EmpresaControllerController {
       try {
         if (empresa == undefined) {
           return {
-            descripcionResultado: 'Empresa con rut ' + params.rutEmpresa + ' no existe.'
+            codigoResultado: 2,
+            descripcionResultado: 'No hay una empresa registrada con el rut ' + params.rutEmpresa + '.'
           }
         }
       } catch (ex) {

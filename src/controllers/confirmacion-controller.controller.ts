@@ -148,7 +148,7 @@ export class ConfirmacionControllerController {
                   // return { response.status}
                 }
               }
-              else { return { resultado: false, motivo: "respuesta de ws simple vacia" } }
+              else { return { resultado: false, motivo: "respuesta de ws simple vacía" } }
             }
             catch (ex) {
               console.log(ex)
