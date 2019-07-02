@@ -3,12 +3,10 @@ import { PermisoRepository, TipoPermisoRepository, SujetoRepository, DireccionPe
 import { get, param, HttpErrors } from "@loopback/rest";
 import { controllerLogger } from "../logger/logger-config";
 import * as moment from 'moment';
-import { TipoPermiso } from "../models";
+import { HttpError } from "http-errors";
 
 // Uncomment these imports to begin using these cool features!
-
 // import {inject} from '@loopback/context';
-
 export class PersonasControllerController {
   constructor(@repository(PermisoRepository) public permisoRepository: PermisoRepository,
     @repository(TipoPermisoRepository) public tipoPermisoRepository: TipoPermisoRepository,
@@ -25,9 +23,9 @@ export class PersonasControllerController {
     try {
       // controllerLogger.info(q);
       let params: any[] = q.replace(/\{/g, '').replace(/\}/g, '').split('=')
-      if (params[0] !== "'rut'") throw 'Parámetros incorrectos'
+      if (params[0] !== "'rut'") throw new HttpErrors.NotFound('Parámteros incorrectos');
       let rut = params[1].replace(/\'/g, '')
-      console.log("rut:" + rut);
+      controllerLogger.info("rut:" + rut);
       let permiso: any = (await this.permisoRepository.obtenerPermisoVigenteByRut(rut))[0];
       let resp: { [k: string]: any } = {};
       resp = {
@@ -40,7 +38,7 @@ export class PersonasControllerController {
       } else if (permiso.tipo_estado_permiso_id == 1) {
         resp.rutSolicitante = rut
         resp.codigoResultado = 4
-        resp.descripcionResultado = 'Tiene un permiso vigente pendiente de firma'
+        resp.descripcionResultado = 'Tiene un permiso pendiente de firma'
         return resp;
       } else if (permiso.tipo_estado_permiso_id == 3) {
         controllerLogger.info("permiso: " + permiso.id);
@@ -91,7 +89,7 @@ export class PersonasControllerController {
         contabilizacion[v.tipo] = (contabilizacion[v.tipo] ? contabilizacion[v.tipo] : 0.0) + 1
       })
       //Logica de calculo toneladas
-      console.log("Contabilizacion toneladas")
+      controllerLogger.info("Contabilizacion toneladas")
       vehiculos.forEach((t: any) => {
         let toneladas = {
           ton: JSON.parse(t.cantidad_toneladas_carga)
@@ -99,10 +97,9 @@ export class PersonasControllerController {
         tonelada.push(toneladas.ton)
       })
       let toneladasFinal = tonelada.reduce((a, B) => a + B, 0)
-      console.log(tonelada)
       let toneladasFinal1 = JSON.parse(toneladasFinal)
       resumen.capacidadCargaToneladas = toneladasFinal1
-      console.log(toneladasFinal1)
+      controllerLogger.info(toneladasFinal1)
       //Fin Logica
       let contabilizacionFlota: any[] = [];
       Object.keys(contabilizacion).forEach((tipoVehiculo: any) => contabilizacionFlota.push({ tipo: tipoVehiculo, cantidad: contabilizacion[tipoVehiculo] }))
@@ -122,8 +119,21 @@ export class PersonasControllerController {
       }
       return resp;
     } catch (ex) {
-      controllerLogger.error(ex, ex);
-      throw new HttpErrors.InternalServerError(ex.toString());
+      controllerLogger.info(ex)
+      let error: HttpError;
+      if (ex.status == 502) {
+        error = new HttpErrors.BadGateway(ex.toString());
+        error.status = 502
+        throw error;
+      }
+      if (ex.status == 404) {
+        error = new HttpErrors.NotFound(ex.toString());
+        error.status = 404
+        throw error;
+      }
+      error = new HttpErrors.InternalServerError(ex.toString());
+      error.status = 500;
+      throw error;
     }
   }
 
@@ -132,7 +142,7 @@ export class PersonasControllerController {
     try {
       let params = q.replace(/\{/g, '').replace(/\}/g, '').replace(/\s/g, '').split(',')
       let pRutSolicitante = params[0].split('='), pRutEmpresa = params[1].split('=')
-      if (pRutSolicitante[0] !== "'rutSolicitante'" || pRutEmpresa[0] !== "'rutEmpresa'") throw 'Parámetros incorrectos'
+      if (pRutSolicitante[0] !== "'rutSolicitante'" || pRutEmpresa[0] !== "'rutEmpresa'") throw new HttpErrors.NotFound('Parámteros incorrectos')
       let rutSolicitante = pRutSolicitante[1].replace(/\'/g, '')
       let rutEmpresa = pRutEmpresa[1].replace(/\'/g, '')
       let tonelada: any[] = []
@@ -155,7 +165,7 @@ export class PersonasControllerController {
         }
       }
       resp.codigoResultado = 2
-      resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado Sin Permiso Vigente'
+      resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado, Sin Permiso Vigente'
       let permiso: any = (await this.permisoRepository.obtenerPermisoVigenteByRut(rutEmpresa))[0];
       if (permiso == undefined || permiso.tipo_estado_permiso_id == null) {
         return resp;
@@ -163,7 +173,7 @@ export class PersonasControllerController {
         resp.rutSolicitante = rutSolicitante
         resp.rutEmpresa = rutEmpresa
         resp.codigoResultado = 6
-        resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene un permiso vigente pendiente de firma'
+        resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado y Tiene un permiso pendiente de firma'
         return resp;
       } else if (permiso.tipo_estado_permiso_id == 3) {
         controllerLogger.info("permiso: " + permiso.id);
@@ -176,7 +186,7 @@ export class PersonasControllerController {
           resp.rutSolicitante = rutSolicitante
           resp.rutEmpresa = rutEmpresa
           resp.codigoResultado = 2
-          resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado Sin permiso vigente'
+          resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado, Sin permiso vigente'
           return resp;
         } else {
           controllerLogger.info("permiso: " + permisoFirmado.id);
@@ -230,7 +240,7 @@ export class PersonasControllerController {
         contabilizacion[v.tipo] = (contabilizacion[v.tipo] ? contabilizacion[v.tipo] : 0.0) + 1
       })
       //Logica de calculo toneladas
-      console.log("Contabilizacion toneladas")
+      controllerLogger.info("Contabilizacion toneladas")
       vehiculos.forEach((t: any) => {
         let toneladas = {
           ton: JSON.parse(t.cantidad_toneladas_carga)
@@ -238,10 +248,9 @@ export class PersonasControllerController {
         tonelada.push(toneladas.ton)
       })
       let toneladasFinal = tonelada.reduce((a, B) => a + B, 0)
-      console.log(tonelada)
       let toneladasFinal1 = JSON.parse(toneladasFinal)
       resumen.capacidadCargaToneladas = toneladasFinal1
-      console.log(toneladasFinal1)
+      controllerLogger.info(toneladasFinal1)
       //Fin Logica
       let contabilizacionFlota: any[] = []
       Object.keys(contabilizacion).forEach((tipoVehiculo, index) => contabilizacionFlota.push({ tipo: tipoVehiculo, cantidad: contabilizacion[tipoVehiculo] }))
@@ -261,8 +270,21 @@ export class PersonasControllerController {
       }
       return resp
     } catch (ex) {
-      controllerLogger.error(ex, ex);
-      throw new HttpErrors.InternalServerError(ex.toString());
+      controllerLogger.info(ex)
+      let error: HttpError;
+      if (ex.status == 502) {
+        error = new HttpErrors.BadGateway(ex.toString());
+        error.status = 502
+        throw error;
+      }
+      if (ex.status == 404) {
+        error = new HttpErrors.NotFound(ex.toString());
+        error.status = 404
+        throw error;
+      }
+      error = new HttpErrors.InternalServerError(ex.toString());
+      error.status = 500;
+      throw error;
     }
   }
 }

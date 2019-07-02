@@ -6,7 +6,6 @@ import * as request from 'request';
 import * as moment from 'moment';
 import { HttpError } from "http-errors";
 import { response_simpleRepository, PermisoRepository, EstadoPermisoRepository } from "../repositories";
-//
 
 export class ConfirmacionControllerController {
   constructor(
@@ -14,58 +13,33 @@ export class ConfirmacionControllerController {
     @repository(PermisoRepository) public permisoRepository: PermisoRepository,
     @repository(EstadoPermisoRepository) public estadoPermisoRepository: EstadoPermisoRepository
   ) { }
-
-  //@patch('/tramites/internacional/chile-chile/envio/confirmacion')
   @put('/tramites/internacional/chile-chile/envio/confirmacion')
   async enviarConfirmacionFirma(@requestBody() params: any): Promise<any> {
-
     try {
-
       if (!params.documentoId || !params.fechaHoraEnvio || !params.estadoDocumento.codigoEstado
         || !params.estadoDocumento.descripcionEstado || !params.estadoDocumento.fechaHora
       ) {
-        //console.log("inicia tramite");
         throw new HttpErrors.NotFound('Parámteros incorrectos');
       }
-
-      // if (!params || !params.identificadorIntermediario || !params.documentoId || !params.fechaHoraEnvio
-      //   || !params.estadoDocumento
-      //   || !params.estadoDocumento.codigoEstado || !params.estadoDocumento.descripcionEstado || !params.estadoDocumento.fechaHora
-      //   || !params.estadoDocumento.datosFirma
-      //   || !params.estadoDocumento.datosFirma.folioDocumento || !params.estadoDocumento.datosFirma.urlDocumento
-      // )
-
-
-
       if (params.estadoDocumento.codigoEstado == 'FIR' && (!params.estadoDocumento.datosFirma.urlDocumento
         || !params.estadoDocumento.datosFirma.urlDocumento.trim()
         || !params.estadoDocumento.datosFirma.folioDocumento)
-
       ) {
-        // throw new HttpErrors.NotFound('Motivo de Rechazo No existe');
-        return { resultado: false, motivo: "Folio o Url Documento No Existe" }
+        return { codigoResultado: 2, descripcionResultado: "Los Parámetros Folio documento o url Documento No Existen" }
       }
-
       if (params.estadoDocumento.codigoEstado == 'REC' && (!params.estadoDocumento.rechazo.motivo
         || !params.estadoDocumento.rechazo.motivo.trim())) {
-        // throw new HttpErrors.NotFound('Motivo de Rechazo No existe');
-        return { resultado: false, motivo: "Motivo de Rechazo no Existe" }
+        return { codigoResultado: 3, descripcionResultado: "El documento rechazado debe tener un motivo" }
       }
-
-
       else {
-
         // update a registros en simple
         let strdocumentoId = params.documentoId.toString();
         // buscar en tabla permiso segun ID documento la URL CALL BACK para realizar el put de cada documento
         let permiso: any = (await this.permisoRepository.obtenerPermisoByCertificado(strdocumentoId))[0];
-
         if (permiso != undefined) {
           // tipo_estado_permiso_id = 1 En espera de firma
           let tipo_estado_permiso_id;
-
           if (params.estadoDocumento.codigoEstado == 'FIR') { tipo_estado_permiso_id = 3 } else if (params.estadoDocumento.codigoEstado == 'REC') { tipo_estado_permiso_id = 2 }
-
           let respPermisoId: any = await this.permisoRepository.actualizarEstadoPermisoEnPermisoById(permiso.id, tipo_estado_permiso_id)
           if (respPermisoId != undefined) {
             let permisoId = respPermisoId.rows[0].id;
@@ -84,7 +58,7 @@ export class ConfirmacionControllerController {
               }
               //Actualiza el detalle de cada estado del permiso
               let resEstadoPermiso: any = await this.estadoPermisoRepository.ActualizarEstadoPermiso(estadoPermiso)
-              if (resEstadoPermiso != undefined) { console.log("Estado Permiso actualizado OK") }
+              if (resEstadoPermiso != undefined) { controllerLogger.info("Estado Permiso actualizado OK") }
             } else {
               let estadoPermiso = {
                 fecha_hora_cambio: moment(params.fechaHoraEnvio, "DD/MM/YYYY kk:mm:ss").toDate(),
@@ -95,7 +69,7 @@ export class ConfirmacionControllerController {
               }
               //Guardar el detalle de cada estado del permiso
               let resEstadoPermiso = (await this.estadoPermisoRepository.crearEstadoPermiso(estadoPermiso))[0]
-              if (resEstadoPermiso != undefined) { console.log("Estado Permiso creado OK:" + resEstadoPermiso.id) }
+              if (resEstadoPermiso != undefined) { controllerLogger.info("Estado Permiso creado OK:" + resEstadoPermiso.id) }
             }
           }
           if (permiso.url_callback !== undefined && permiso.url_callback !== "") {
@@ -120,11 +94,11 @@ export class ConfirmacionControllerController {
               let retorno = await new Promise((resolve, reject) => {
                 request(options, function (error, response, body) {
                   if (error) {
-                    return reject({ resultado: false, motivo: "UrlCallBack: " + error.code });
+                    controllerLogger.info("Error en la respuesta de UrlCallBack SMPLE: " + error.code);
+                    return reject({ codigoResultado: 5, descripcionResultado: "Error en la respuesta de UrlCallBack SMPLE" });
                   }
                   console.log(body);
                   return resolve(body);
-
                 });
               });
               // si es Ok, graba en tabla response_simple
@@ -142,18 +116,15 @@ export class ConfirmacionControllerController {
                   modified: d,
                   user_modified: 'user_ws_mtt'
                 }
-                let resultadoCreacionresponse_simple: any = await this.response_simpleRepository.crearResponse(response_sim);
-                if (resultadoCreacionresponse_simple[0].id.toString() !== "") {
-                  return { resultado: true, motivo: "OK" }
-                  // return { response.status}
+                let codigoResultadoCreacionresponse_simple: any = await this.response_simpleRepository.crearResponse(response_sim);
+                if (codigoResultadoCreacionresponse_simple[0].id.toString() !== "") {
+                  return { codigoResultado: 1, descripcionResultado: "Documento enviado correctamente" }
                 }
               }
-              else { return { resultado: false, motivo: "respuesta de ws simple vacía" } }
+              else { return { codigoResultado: 5, descripcionResultado: "Error en la respuesta de UrlCallBack SMPLE" } }
             }
             catch (ex) {
-              console.log(ex)
-              // ctx.status = 502
-              // ctx.body = ex.toString()
+              controllerLogger.info(ex)
               let error: HttpError;
               if (ex.status == 502) {
                 error = new HttpErrors.BadGateway(ex.toString());
@@ -165,11 +136,10 @@ export class ConfirmacionControllerController {
                 error.status = 404
                 throw error;
               }
-              if (ex.resultado == false) {
-                error = new HttpErrors.BadRequest(ex.motivo);
+              if (ex.codigoResultado == false) {
+                error = new HttpErrors.BadRequest(ex.descripcionResultado);
                 error.status = 400
                 throw error;
-                // throw { resultado: false, motivo: ex.motivo.toString() };
               }
               error = new HttpErrors.InternalServerError(ex.toString());
               error.status = 500;
@@ -177,15 +147,26 @@ export class ConfirmacionControllerController {
             }
           }
           else {
-            return { resultado: false, motivo: "urlCallback No existe" }
+            return { codigoResultado: 4, descripcionResultado: "urlCallback de SIMPLE no existe" }
           }
         }
       }
     } catch (ex) {
-      console.log(ex);
-      controllerLogger.error(ex, ex);
-      throw new HttpErrors.InternalServerError(ex.toString());
-      // return { resultado: false, motivo: ex.toString() }
+      controllerLogger.info(ex)
+      let error: HttpError;
+      if (ex.status == 502) {
+        error = new HttpErrors.BadGateway(ex.toString());
+        error.status = 502;
+        throw error;
+      }
+      if (ex.status == 404) {
+        error = new HttpErrors.NotFound(ex.toString());
+        error.status = 404
+        throw error;
+      }
+      error = new HttpErrors.InternalServerError(ex.toString());
+      error.status = 500;
+      throw error;
     }
   }
 }
