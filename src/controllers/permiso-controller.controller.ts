@@ -1,5 +1,5 @@
 import { post, requestBody, HttpErrors } from "@loopback/rest";
-import { TipoTramiteRepository, IntermediarioTramiteRepository, RegionRepository, AnalistaRepository, EmpresaRepository, TipoIdPersonaRepository, PermisoRepository, PersonaJuridicaRepository, PersonaNaturalRepository, DomicilioEmpresaRepository, TipoEmpresaRepository, SolicitanteAutorizadoRepository, TipoDocumentoRepository, DocumentoEmpresaRepository, EstadoTramiteRepository, TramiteRepository, PaisRepository, TipoCargaRepository, TipoPermisoRepository, TipoIdVehiculoRepository, SujetoRepository, VehiculoRepository, SujetoVehiculoRepository, DocumentoRepository, PermisoSujetoVehiculoRepository, EstadoPermisoRepository } from "../repositories";
+import { TipoTramiteRepository, IntermediarioTramiteRepository, RegionRepository, AnalistaRepository, EmpresaRepository, TipoIdPersonaRepository, PermisoRepository, PersonaJuridicaRepository, PersonaNaturalRepository, DomicilioEmpresaRepository, TipoEmpresaRepository, SolicitanteAutorizadoRepository, TipoDocumentoRepository, DocumentoEmpresaRepository, EstadoTramiteRepository, TramiteRepository, PaisRepository, TipoCargaRepository, TipoPermisoRepository, TipoIdVehiculoRepository, SujetoRepository, VehiculoRepository, SujetoVehiculoRepository, DocumentoRepository, PermisoSujetoVehiculoRepository, EstadoPermisoRepository, Log_wsdl_docfirmaRepository } from "../repositories";
 import { repository } from "@loopback/repository";
 import * as moment from 'moment';
 import * as dateFormat from 'dateformat';
@@ -38,7 +38,8 @@ export class PermisoControllerController {
     @repository(SujetoVehiculoRepository) public sujetoVehiculoRepository: SujetoVehiculoRepository,
     @repository(DocumentoRepository) public documentoRepository: DocumentoRepository,
     @repository(PermisoSujetoVehiculoRepository) public permisoSujetoVehiculoRepository: PermisoSujetoVehiculoRepository,
-    @repository(EstadoPermisoRepository) public estadoPermisoRepository: EstadoPermisoRepository
+    @repository(EstadoPermisoRepository) public estadoPermisoRepository: EstadoPermisoRepository,
+    @repository(Log_wsdl_docfirmaRepository) public log_wsdl_docfirmaRepository: Log_wsdl_docfirmaRepository
   ) { }
   @post('/tramites/internacional/chile-chile/permiso/persona')
   async crearPermisoChileChilePersona(@requestBody() params: any): Promise<any> {
@@ -272,12 +273,32 @@ export class PermisoControllerController {
         resumen: flotasResumen
       }
       let serviciosGateway: ServiciosGateway = new ServiciosGateway();
-      let responseFirmador: any = await serviciosGateway.firmar(params.codigoRegion, certificado);
-      controllerLogger.info("Certificado OK");
-      if (responseFirmador.return < 0) {
+      let responseFirmador: any;
+      let idEstadoLog = 1;
+      let idPermisoLog = undefined;
+      try {
+        responseFirmador = await serviciosGateway.firmar(params.codigoRegion, certificado);
+      } catch (error) {
+        idEstadoLog = error;
         await this.tramiteRepository.DeleteTramiteByIdentificadorIntermediario(params.identificadorIntermediario);
-        //controllerLogger.info(respCreacionPermiso)
         await this.permisoSujetoVehiculoRepository.borrarPermisoSujetoVehiculo(respCreacionPermiso.id);
+        await this.documentoRepository.borrarDocumento(respCreacionPermiso.id);
+        await this.permisoRepository.borrarPermiso(respCreacionPermiso.id);
+        await this.sujetoVehiculoRepository.borrarSujetoVehiculo(respCreacionPermiso.id);
+        controllerLogger.info('Permiso debera ser borrado.')
+        controllerLogger.info('Tramite no sera generado.')
+        let respLog: any = (await this.log_wsdl_docfirmaRepository.crearLog_wsdl_docfirma(idPermisoLog, idEstadoLog))[0]
+        respLog != undefined ? controllerLogger.info('log Firmar generado id: ' + respLog.id) : controllerLogger.info('log Firmar no generado')
+        return {
+          codigoResultado: 7,
+          descripcionResultado: "Por Problemas en respuesta del servicio firmador, el tramite no será generado, intente nuevamente"
+        }
+      }
+      if (responseFirmador.return < 0) {
+        idEstadoLog = responseFirmador.return;
+        await this.tramiteRepository.DeleteTramiteByIdentificadorIntermediario(params.identificadorIntermediario);
+        await this.permisoSujetoVehiculoRepository.borrarPermisoSujetoVehiculo(respCreacionPermiso.id);
+        await this.documentoRepository.borrarDocumento(respCreacionPermiso.id);
         await this.permisoRepository.borrarPermiso(respCreacionPermiso.id);
         await this.sujetoVehiculoRepository.borrarSujetoVehiculo(respCreacionPermiso.id);
         controllerLogger.info('Permiso debera ser borrado.')
@@ -287,8 +308,10 @@ export class PermisoControllerController {
           descripcionResultado: "Por Problemas en respuesta del servicio firmador, el tramite no será generado, intente nuevamente"
         }
       } else {
+        controllerLogger.info("Certificado OK")
         // tipo_estado_permiso_id = 1 En espera de firma
         tipo_estado_permiso_id = 1;
+        idPermisoLog = respCreacionPermiso.id;
         let respPermisoId: any = await this.permisoRepository.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return, tipo_estado_permiso_id)
         if (respPermisoId != undefined) {
           let estadoPermiso = {
@@ -301,6 +324,8 @@ export class PermisoControllerController {
           if (resEstadoPermiso != undefined) { controllerLogger.info("Estado Permiso creado OK:" + resEstadoPermiso.id) }
         }
       }
+      let respLog: any = (await this.log_wsdl_docfirmaRepository.crearLog_wsdl_docfirma(idPermisoLog, idEstadoLog))[0]
+      respLog != undefined ? controllerLogger.info('log Firmar generado id: ' + respLog.id) : controllerLogger.info('log Firmar no generado')
       return body;
     } catch (ex) {
       controllerLogger.info(ex)
@@ -541,13 +566,33 @@ export class PermisoControllerController {
         resumen: flotasResumen
       }
       controllerLogger.info('llamando al firmador')
+      let idEstadoLog = 1;
+      let idPermisoLog = undefined;
+      let responseFirmador: any
       let serviciosGateway: ServiciosGateway = new ServiciosGateway();
-      let responseFirmador: any = await serviciosGateway.firmar(params.codigoRegion, certificado);
-      controllerLogger.info("Certificado OK");
-      if (responseFirmador.return < 0) {
+      try {
+        responseFirmador = await serviciosGateway.firmar(params.codigoRegion, certificado);
+      } catch (error) {
+        idEstadoLog = error;
         await this.tramiteRepository.DeleteTramiteByIdentificadorIntermediario(params.identificadorIntermediario);
-        //controllerLogger.info(respCreacionPermiso)
         await this.permisoSujetoVehiculoRepository.borrarPermisoSujetoVehiculo(respCreacionPermiso.id);
+        await this.documentoRepository.borrarDocumento(respCreacionPermiso.id);
+        await this.permisoRepository.borrarPermiso(respCreacionPermiso.id);
+        await this.sujetoVehiculoRepository.borrarSujetoVehiculo(respCreacionPermiso.id);
+        controllerLogger.info('Permiso debera ser borrado.')
+        controllerLogger.info('Tramite no sera generado.')
+        let respLog: any = (await this.log_wsdl_docfirmaRepository.crearLog_wsdl_docfirma(idPermisoLog, idEstadoLog))[0]
+        respLog != undefined ? controllerLogger.info('log Firmar generado id: ' + respLog.id) : controllerLogger.info('log Firmar no generado')
+        return {
+          codigoResultado: 7,
+          descripcionResultado: "Por Problemas en respuesta del servicio firmador, el tramite no será generado, intente nuevamente"
+        }
+      }
+      if (responseFirmador.return < 0) {
+        idEstadoLog = responseFirmador.return;
+        await this.tramiteRepository.DeleteTramiteByIdentificadorIntermediario(params.identificadorIntermediario);
+        await this.permisoSujetoVehiculoRepository.borrarPermisoSujetoVehiculo(respCreacionPermiso.id);
+        await this.documentoRepository.borrarDocumento(respCreacionPermiso.id);
         await this.permisoRepository.borrarPermiso(respCreacionPermiso.id);
         await this.sujetoVehiculoRepository.borrarSujetoVehiculo(respCreacionPermiso.id);
         controllerLogger.info('Permiso debera ser borrado.')
@@ -557,8 +602,10 @@ export class PermisoControllerController {
           descripcionResultado: "Por Problemas en respuesta del servicio firmador, el tramite no será generado, intente nuevamente"
         }
       } else {
+        controllerLogger.info("Certificado OK")
         // tipo_estado_permiso_id = 1 En espera de firma
         tipo_estado_permiso_id = 1;
+        idPermisoLog = respCreacionPermiso.id;
         let respPermisoId: any = await this.permisoRepository.actualizarCertificadoEnPermisoById(respCreacionPermiso.id, responseFirmador.return, tipo_estado_permiso_id)
         if (respPermisoId != undefined) {
           let estadoPermiso = {
@@ -571,6 +618,8 @@ export class PermisoControllerController {
           if (resEstadoPermiso != undefined) { controllerLogger.info("Estado Permiso creado OK:" + resEstadoPermiso.id) }
         }
       }
+      let respLog: any = (await this.log_wsdl_docfirmaRepository.crearLog_wsdl_docfirma(idPermisoLog, idEstadoLog))[0]
+      respLog != undefined ? controllerLogger.info('log Firmar generado id: ' + respLog.id) : controllerLogger.info('log Firmar no generado')
       return body;
     } catch (ex) {
       controllerLogger.info(ex)

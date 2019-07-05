@@ -22,4 +22,9 @@ export class DocumentoRepository extends DefaultCrudRepository<
     let query: string = 'insert into documento (version, tipo_id, hashing, url, algoritmo, permiso_id) select 0, id, null, ' + '\'' + doc.urlDescargaDocumento + '\'' + ', null, ' + respCreacionPermiso.id + ' from tipo_documento where codigo = ' + '\'' + doc.codigoTipoDocumento + '\'' + ';';
     return this.dataSource.execute(query);
   }
+
+  public borrarDocumento(permisoId: any): Promise<any> {
+    let query: string = 'DELETE FROM public.documento WHERE permiso_id = $1';
+    return this.dataSource.execute(query, [permisoId]);
+  }
 }

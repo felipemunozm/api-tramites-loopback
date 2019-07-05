@@ -121,7 +121,7 @@ export class ConfirmacionControllerController {
                   return { codigoResultado: 1, descripcionResultado: "Documento enviado correctamente" }
                 }
               }
-              else { return { codigoResultado: 5, descripcionResultado: "Error en la respuesta de UrlCallBack SMPLE" } }
+              else { return { codigoResultado: 5, descripcionResultado: "Error en la respuesta de UrlCallBack SIMPLE" } }
             }
             catch (ex) {
               controllerLogger.info(ex)

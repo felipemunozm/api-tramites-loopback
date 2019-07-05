@@ -1,8 +1,11 @@
 import * as builder from 'xmlbuilder';
 import * as soap from 'soap';
+import { controllerLogger } from '../logger/logger-config';
+import { DataSource } from 'loopback-datasource-juggler';
 
 export class ServiciosGateway {
-  constructor() { }
+  constructor(
+  ) { }
 
   // private urlPpu = '../wsdl/ppu.wsdl'
   // private urlRT = '../wsdl/revisionTecnica.wsdl'
@@ -10,6 +13,7 @@ export class ServiciosGateway {
   private urlPpu = 'http://ws.mtt.cl/services/PPUService_API_Tramites?wsdl'
   private urlRT = 'http://ws.mtt.cl/services/ConsultaRevisionTecnica_API_Tramites?wsdl'
   private urlFirmador = 'http://wsqa.mtt.cl:8280/services/RecibeDocumentoFirma_Api_Tramites?wsdl'
+
 
   public async obtenerVehiculo(ppu: string): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -73,23 +77,25 @@ export class ServiciosGateway {
       let xml = this.armarXmlCertificado2(certificado)
       soap.createClient(this.urlFirmador, function (error1, client) {
         if (error1) {
-          reject(new Error(error1))
-          return
+          controllerLogger.info(error1 + ' - id error:-9')
+          return reject(-9)
         }
         if (!client) {
-          reject('No fue posible la conexión con el servicio externo.')
-          return
+          controllerLogger.info('No fue posible la conexión con el servicio externo - id error:-9')
+          return reject(-9)
         }
         client.procesarXml({ region: region, sistema: 'tramites', tipoDcto: 'Certificado', materia: 'carga_chile_chile', xml: '<![CDATA[' + xml + ']]>' }, function (error2: any, result: any) {
-          console.log('<![CDATA[' + xml + ']]>')
-          console.log('*****************************')
+          controllerLogger.info('<![CDATA[' + xml + ']]>')
+          controllerLogger.info('*****************************')
           if (error2) {
-            console.log(error2)
-            reject(new Error(error2))
-            return
+            controllerLogger.info(error2 + ' - id error:-10')
+            return reject(-10)
           }
-
-          console.log(result)
+          if (!result) {
+            controllerLogger.info('No fue posible la conexión con el servicio externo - id error:-10')
+            return reject(-10)
+          }
+          controllerLogger.info(result + ' - id resp: 1')
           resolve(result)
         })
       })
