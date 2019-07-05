@@ -298,6 +298,7 @@ export class EmpresaControllerController {
         switch (modificacion.tipo) {
           case 1:
             if (modificacion.solicitantes.length === 0) throw new Error('Falta datos del o los solicitantes.')
+            await this.solicitanteAutorizadoRepository.borrarSolicitanteAutorizadoExistente(empresa.id);
             modificacion.solicitantes.forEach(async (solicitante: any) => {
               if (solicitante.relacionEmpresa === 'Representante Legal' || solicitante.relacionEmpresa === 'Mandatario') {
                 let persona: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(solicitante.rut))[0];
@@ -337,9 +338,9 @@ export class EmpresaControllerController {
               email: modificacion.domicilio.email,
               empresaId: empresa.id
             }
-            let resultadoCreacionDomicilio: any = await this.domicilioEmpresaRepository.crearDomicilioEmpresa(domicilio);
+            let resultadoCreacionDomicilio: any = await this.domicilioEmpresaRepository.actualizarDomicilioEmpresalById(domicilio);
             domicilio.id = resultadoCreacionDomicilio.id;
-            mensajes.push('Nuevo domicilio de empresa creado: ' + domicilio.texto)
+            mensajes.push('Domicilio de empresa actualizado: ' + domicilio.texto)
             break
           case 3:
             console.log('Modificacion 6')
@@ -360,9 +361,13 @@ export class EmpresaControllerController {
               let respuestaCreacionPersonaNatural: any = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
               persona.id = respuestaCreacionPersonaNatural.id;
             }
-            await this.personaJuridicaRepository.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id);
-            mensajes.push('Representante Legal cambiado a: ' + persona.nombreCompleto)
-            break
+            else {
+              await this.personaJuridicaRepository.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id);
+              mensajes.push('Representante Legal cambiado a: ' + persona.nombreCompleto)
+              break
+            }
+          //await this.personaJuridicaRepository.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id);
+
           default:
             throw new Error('Tipo ' + modificacion.tipo + ' desconocido.')
         }

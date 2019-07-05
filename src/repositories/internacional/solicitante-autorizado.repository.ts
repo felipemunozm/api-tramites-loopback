@@ -23,4 +23,8 @@ export class SolicitanteAutorizadoRepository extends DefaultCrudRepository<
     let query: string = "insert into solicitante_autorizado (version, habilitado, empresa_id, persona_natural_id, fecha_creacion, relacion) values (0, true, $1, $2, NOW(), $3) returning id";
     return this.dataSource.execute(query, [empresaId, personaId, relacion]);
   }
+  public borrarSolicitanteAutorizadoExistente(empresaId: any): Promise<any> {
+    let query: string = "delete from solicitante_autorizado where empresa_id = $1";
+    return this.dataSource.execute(query, [empresaId]);
+  }
 }
