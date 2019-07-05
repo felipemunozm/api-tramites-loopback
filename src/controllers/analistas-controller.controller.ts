@@ -1,12 +1,11 @@
-import { get, requestBody, post } from "@loopback/rest";
+import { get, requestBody, post, HttpErrors } from "@loopback/rest";
 import { repository } from "@loopback/repository";
 import { AnalistaRepository } from "../repositories";
+import { controllerLogger } from "../logger/logger-config";
+import { HttpError } from "http-errors";
 
 // Uncomment these imports to begin using these cool features!
-
 // import {inject} from '@loopback/context';
-
-
 export class AnalistasControllerController {
   constructor(
     @repository(AnalistaRepository) public analistaRepository: AnalistaRepository,
@@ -20,16 +19,14 @@ export class AnalistasControllerController {
         descripcionResultado: 'No hay analistas disponibles.',
         analistas: []
       }
-      // let analistas = await gestionTramitesGateway.obtenerAnalistas()
       let analistas: any = await this.analistaRepository.obtenerAnalistas();
       if (!analistas || analistas.length === 0) {
-        return resp
-        return
+        throw new HttpErrors.NotFound('Parámetros Incorrectos')
       }
       resp.codigoResultado = 1
       resp.descripcionResultado = 'Analistas disponibles.'
       analistas.forEach((a: any, index: any) => {
-        console.log(a)
+        controllerLogger.info(a)
         let analista = {
           id: a.id,
           rut: a.rut,
@@ -41,15 +38,27 @@ export class AnalistasControllerController {
       })
       return resp;
     } catch (ex) {
-      console.log(ex)
-      throw ex.toString()
+      controllerLogger.info(ex)
+      let error: HttpError;
+      if (ex.status == 502) {
+        error = new HttpErrors.BadGateway(ex.toString());
+        error.status = 502;
+        throw error;
+      }
+      if (ex.status == 404) {
+        error = new HttpErrors.NotFound(ex.toString());
+        error.status = 404
+        throw error;
+      }
+      error = new HttpErrors.InternalServerError(ex.toString());
+      error.status = 500;
+      throw error;
     }
   }
   @post('/tramites/internacional/analista')
   async crearAnalista(@requestBody() params: any): Promise<any> {
     if (!params || !params.nombreCompleto || !params.codigo || !params.regionId) {
-      throw 'Parámetros incorrectos'
-      return
+      throw new HttpErrors.NotFound('Parámetros Incorrectos')
     }
     let analista: any = {
       codigo: params.codigo,
@@ -61,13 +70,25 @@ export class AnalistasControllerController {
         codigoResultado: 1,
         descripcionResultado: 'Analista creado.'
       }
-      // let respCreacionAnalista = await gestionTramitesGateway.crearAnalista(analista)
       let respCreacionAnalista = (await this.analistaRepository.crearAnalista(analista))[0];
       resp.analistaId = respCreacionAnalista.id
       return resp
     } catch (ex) {
-      console.log(ex)
-      throw ex.toString()
+      controllerLogger.info(ex)
+      let error: HttpError;
+      if (ex.status == 502) {
+        error = new HttpErrors.BadGateway(ex.toString());
+        error.status = 502;
+        throw error;
+      }
+      if (ex.status == 404) {
+        error = new HttpErrors.NotFound(ex.toString());
+        error.status = 404
+        throw error;
+      }
+      error = new HttpErrors.InternalServerError(ex.toString());
+      error.status = 500;
+      throw error;
     }
   }
 }

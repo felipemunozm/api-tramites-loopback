@@ -43,6 +43,7 @@ import {
 import {
   Any
 } from "json2typescript";
+import { HttpError } from "http-errors";
 // Uncomment these imports to begin using these cool features!
 export class EmpresaControllerController {
   constructor(
@@ -77,25 +78,24 @@ export class EmpresaControllerController {
             statusCode: 502,
             message: 'Parámetros incorrectos'
           }
-        };
+        }
       }
-      //console.log('Paso 1')
+      controllerLogger.info('Paso 1')
       let tiposTramite: any = await this.tipoTramiteRepository.obtenerTipoTramites();
       let tipoTramite = tiposTramite.find((tipo: any) => tipo.codigo === 'creacion-empresa')
       if (tipoTramite.id == undefined) console.error('Debe crear un Tipo de Trámite con código creacion-empresa.')
       let intermediarios: any = await this.intermediarioTramiteRepository.obtenerIntermediarios();
       let region = (await this.regionRepository.obtenerRegionesByCodigo(params.codigoRegion))[0]
-      // console.log('Paso 2')
-      // console.log(region)
+      controllerLogger.info('Paso 2')
       if (region.id == undefined) {
         return {
           codigoResultado: 3,
-          descripcionResultado: "No existe una región con el código " + params.codigoRegion + "."
+          descripcionResultado: "No existe una región con el código (" + params.codigoRegion + ")"
         }
       }
       let analistas: any = await this.analistaRepository.obtenerAnalistas();
       let analista = analistas.find((analista: any) => analista.codigo === params.codigoAnalista)
-      //console.log('Paso 3')
+      controllerLogger.info('Paso 3')
       if (analista.id == undefined) {
         analista = {
           codigo: params.codigoAnalista,
@@ -108,21 +108,21 @@ export class EmpresaControllerController {
 
         await this.analistaRepository.actualizarAnalista(params.nombreAnalista, params.codigoRegion, params.codigoAnalista);
       }
-      //console.log('Paso 4')
+      controllerLogger.info('Paso 4')
       try {
         let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(params.empresa.rut))[0];
         if (empresa != undefined) {
           return {
             codigoResultado: 4,
-            descripcionResultado: "Ya existe una empresa registrada con el rut " + params.empresa.rut + "."
+            descripcionResultado: "Ya existe una empresa registrada con el rut (" + params.empresa.rut + ")"
           }
         }
       } catch (ex) {
-        //console.log(ex);
+        controllerLogger.info(ex);
         controllerLogger.error(ex, ex);
         throw new HttpErrors.InternalServerError(ex.toString());
       }
-      //console.log('Paso 5')
+      controllerLogger.info('Paso 5')
       let tramite = {
         identificadorIntermediario: params.identificadorIntermediario,
         analistaId: analista.id,
@@ -136,8 +136,7 @@ export class EmpresaControllerController {
         tipoTramiteId: tipoTramite.id,
         intermediarioId: intermediarios[0].id
       }
-      //console.log('Paso 6')
-      //console.log(tramite)
+      controllerLogger.info('Paso 6')
       try {
         let resultadoCrearTramite: any = (await this.tramiteRepository.crearTramite(tramite))[0]
 
@@ -151,7 +150,7 @@ export class EmpresaControllerController {
             email: params.empresa.representanteLegal.direccion.email,
             tipoIdentificadorId: tipoIdRut.id
           }
-          //console.log('Paso 7')
+          controllerLogger.info('Paso 7')
           let persona = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(representanteLegal.identificador))[0];
           if (persona == undefined) {
             persona = {
@@ -171,7 +170,7 @@ export class EmpresaControllerController {
             }
             await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante);
           }
-          //  console.log('Paso 8')
+          controllerLogger.info('Paso 8')
           let personaJuridica = {
             razonSocial: params.empresa.razonSocial,
             identificador: params.empresa.rut,
@@ -179,11 +178,15 @@ export class EmpresaControllerController {
             nombreFantasia: params.empresa.nombreFantasia,
             representanteLegalId: persona.id
           }
-          let respuestaCreacionPersonaJuridica = (await this.personaJuridicaRepository.crearPersonaJuridica(personaJuridica))[0];
-          //  console.log('Paso 9')
+          controllerLogger.info('Paso 9')
           let tipoEmpresa = (await this.tipoEmpresaRepository.obtenerTipoEmpresaByCodigo(params.empresa.tipoEmpresa))[0];
-          let empresaCreada: any = (await this.empresaRepository.crearEmpresa(respuestaCreacionPersonaJuridica.id, tipoEmpresa.id))[0];
-          //   console.log('Paso 10')
+          if (tipoEmpresa === undefined) return {
+            codigoResultado: 5,
+            descripcionResultado: "El tipo de empresa no existe (" + params.empresa.tipoEmpresa + ")"
+          }
+          let respuestaCreacionPersonaJuridica = (await this.personaJuridicaRepository.crearPersonaJuridica(personaJuridica))[0];
+          let empresaCreada = (await this.empresaRepository.crearEmpresa(respuestaCreacionPersonaJuridica.id, tipoEmpresa.id))[0];
+          controllerLogger.info('Paso 10')
           let domicilio = {
             codigoRegion: params.empresa.direccion.codigoRegionIntermediario,
             codigoComuna: params.empresa.direccion.codigoComunaIntermediario,
@@ -194,9 +197,9 @@ export class EmpresaControllerController {
             empresaId: empresaCreada.id
           }
           await this.domicilioEmpresaRepository.crearDomicilioEmpresa(domicilio);
-          //  console.log('Paso 11')
+          controllerLogger.info('Paso 11')
           let solicitante: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(params.solicitante.rut))[0];
-          //  console.log('Paso 12')
+          controllerLogger.info('Paso 12')
           if (solicitante == undefined) {
             let personaSolicitante: any = {}
             personaSolicitante.nombreCompleto = params.solicitante.nombre
@@ -208,14 +211,13 @@ export class EmpresaControllerController {
           } else {
             await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresaCreada.id, solicitante.id, params.relacionSolicitanteEmpresa);
           }
-          //console.log('Paso 13')
+          controllerLogger.info('Paso 13')
           await params.documentosAdjuntos.forEach(async (documento: any) => {
             let tipoDocumento = (await this.tipoDocumentoRepository.obtenerTipoDocumentoByCodigo(documento.codigoTipoDocumento));
             await this.documentoEmpresaRepository.crearDocumentoEmpresa(tipoDocumento[0].id, empresaCreada.id, documento.urlDescargaDocumento);
           })
-          //console.log('Paso 14 Final')
+          controllerLogger.info('Paso 14 Final')
           let estadoTramite: any = (await this.estadoTramiteRepository.crearEstadoTramite(resultadoCrearTramite.id, 7))[0]
-          //  console.log(resp[0])
           if (estadoTramite != undefined) {
             return {
               codigoResultado: 1,
@@ -224,14 +226,25 @@ export class EmpresaControllerController {
           }
         }
       } catch (error) {
-        //console.log(error);
         controllerLogger.error(error, error);
         throw new HttpErrors.InternalServerError(error.toString());
       }
     } catch (ex) {
-      //console.log(ex);
-      controllerLogger.error(ex, ex);
-      throw new HttpErrors.InternalServerError(ex.toString());
+      controllerLogger.info(ex)
+      let error: HttpError;
+      if (ex.status == 502) {
+        error = new HttpErrors.BadGateway(ex.toString());
+        error.status = 502;
+        throw error;
+      }
+      if (ex.status == 404) {
+        error = new HttpErrors.NotFound(ex.toString());
+        error.status = 404
+        throw error;
+      }
+      error = new HttpErrors.InternalServerError(ex.toString());
+      error.status = 500;
+      throw error;
     }
   }
   @put('/tramites/internacional/chile-chile/empresa')
@@ -256,10 +269,10 @@ export class EmpresaControllerController {
       if (region == undefined) {
         return {
           codigoResultado: 3,
-          descripcionResultado: "No existe una región con el código " + params.analista.codigoRegion + "."
+          descripcionResultado: "No existe una región con el código (" + params.analista.codigoRegion + ")"
         }
       }
-      console.log('Modificacion 1')
+      controllerLogger.info('Modificacion 1')
       let analistas: any = await this.analistaRepository.obtenerAnalistas();
       let analista = analistas.find((analista: any) => analista.codigo === params.analista.codigo)
       if (analista == undefined) {
@@ -273,19 +286,20 @@ export class EmpresaControllerController {
       } else {
         await this.analistaRepository.actualizarAnalista(params.analista.nombre, params.analista.codigoRegion, params.analista.codigo);
       }
-      console.log('Modificacion 2')
+      controllerLogger.info('Modificacion 2')
       let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(params.rutEmpresa))[0];
       try {
         if (empresa == undefined) {
           return {
-            descripcionResultado: 'Empresa con rut ' + params.rutEmpresa + ' no existe.'
+            codigoResultado: 2,
+            descripcionResultado: 'No hay una empresa registrada con el rut (' + params.rutEmpresa + ')'
           }
         }
       } catch (ex) {
         controllerLogger.error(ex, ex);
         throw new HttpErrors.InternalServerError(ex.toString());
       }
-      console.log('Modificacion 3')
+      controllerLogger.info('Modificacion 3')
       let tiposIdentificadores: any = await this.tipoIdPersonaRepository.obtenerTiposIdentificadoresPersonas();
       let tipoIdRut = tiposIdentificadores.find((tipo: any) => tipo.codigo === 'RUT')
       if (tipoIdRut == undefined) throw new Error('Debe crear el tipo de identificador con código RUT')
@@ -314,7 +328,7 @@ export class EmpresaControllerController {
                 else {
                   await this.personaNaturalrepsitory.actualizarPersonaNaturalByRut(solicitante.nombre, solicitante.rut);
                 }
-                console.log('Modificacion 4')
+                controllerLogger.info('Modificacion 4')
                 await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresa.id, persona.id, solicitante.relacionEmpresa);
                 mensajes.push('Nuevo solicitante autorizado creado: ' + solicitante.nombre)
               }
@@ -324,7 +338,7 @@ export class EmpresaControllerController {
             })
             break
           case 2:
-            console.log('Modificacion 5')
+            controllerLogger.info('Modificacion 5')
             if (!modificacion.domicilio || !modificacion.domicilio.codigoRegionIntermediario || !modificacion.domicilio.codigoComunaIntermediario ||
               !modificacion.domicilio.textoDireccion || !modificacion.domicilio.telefonoFijo || !modificacion.domicilio.telefonoMovil || !modificacion.domicilio.email) {
               throw new Error('Parámetros de modificación de domicilio incorrectos.')
@@ -343,13 +357,13 @@ export class EmpresaControllerController {
             mensajes.push('Domicilio de empresa actualizado: ' + domicilio.texto)
             break
           case 3:
-            console.log('Modificacion 6')
+            controllerLogger.info('Modificacion 6')
             if (modificacion.razonSocial == undefined) throw new Error('No viene la Razón Social a cambiar.')
             await this.personaJuridicaRepository.actualizarRazonSocialPersonaJuridica(empresa.persona_juridica_id, modificacion.razonSocial);
             mensajes.push('Razón Social modificada a "' + modificacion.razonSocial + '"')
             break
           case 4:
-            console.log('Modificacion 7')
+            controllerLogger.info('Modificacion 7')
             if (modificacion.representanteLegal == undefined || modificacion.representanteLegal.rut == undefined || modificacion.representanteLegal.nombre == undefined) throw new Error('Parámetros de Representante Legal incorrectos.')
             let persona: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(modificacion.representanteLegal.rut))[0];
             if (persona == undefined) {
@@ -372,7 +386,7 @@ export class EmpresaControllerController {
             throw new Error('Tipo ' + modificacion.tipo + ' desconocido.')
         }
       })
-      console.log('Modificacion 8')
+      controllerLogger.info('Modificacion 8')
       let tramite = {
         identificadorIntermediario: params.identificadorIntermediario,
         analistaId: analista.id,
@@ -383,7 +397,7 @@ export class EmpresaControllerController {
         tipoTramiteId: tipoTramite.id,
         intermediarioId: intermediarios[0].id
       }
-      console.log('Modificacion 9')
+      controllerLogger.info('Modificacion 9')
       let resultadoCrearTramite: any = (await this.tramiteRepository.crearTramite(tramite))[0]
       if (resultadoCrearTramite != undefined) {
         return {
@@ -393,16 +407,31 @@ export class EmpresaControllerController {
       }
 
     } catch (ex) {
-      console.log(ex)
-      throw new HttpErrors.InternalServerError(ex.toString());
+      controllerLogger.info(ex)
+      let error: HttpError;
+      if (ex.status == 502) {
+        error = new HttpErrors.BadGateway(ex.toString());
+        error.status = 502;
+        throw error;
+      }
+      if (ex.status == 404) {
+        error = new HttpErrors.NotFound(ex.toString());
+        error.status = 404
+        throw error;
+      }
+      error = new HttpErrors.InternalServerError(ex.toString());
+      error.status = 500;
+      throw error;
     }
   }
   @get('/tramites/internacional/chile-chile/empresa')
-  async getEmpresa(@param.query.string('rutEmpresa') rutEmpresa: any, @param.query.string('rutSolicitante') rutSolicitante: any): Promise<any> {
+  async getEmpresa(@param.query.string('q') q: string): Promise<any> {
     try {
-      // let rutEmpresa = ctx.query.rutEmpresa
-      // let rutSolicitante = ctx.query.rutSolicitante
-      // let empresa = await internacionalGateway.obtenerEmpresaByRut(rutEmpresa)
+      let params = q.replace(/\{/g, '').replace(/\}/g, '').replace(/\s/g, '').split(',')
+      let pRutSolicitante = params[0].split('='), pRutEmpresa = params[1].split('=')
+      if (pRutSolicitante[0] !== "'rutSolicitante'" || pRutEmpresa[0] !== "'rutEmpresa'") throw 'Parámetros incorrectos'
+      let rutSolicitante = pRutSolicitante[1].replace(/\'/g, '')
+      let rutEmpresa = pRutEmpresa[1].replace(/\'/g, '')
       let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(rutEmpresa))[0];
       let solicitantes: any = [],
         sol: any = [],
@@ -411,38 +440,31 @@ export class EmpresaControllerController {
       if (empresa == undefined) {
         return {
           codigoResultado: 2,
-          descripcionResultado: "No hay una empresa registrada con el rut " + rutEmpresa + "."
+          descripcionResultado: "No hay una empresa registrada con el rut (" + rutEmpresa + ")"
         }
-        // return
       }
-      // solicitantes = await internacionalGateway.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id)
       solicitantes = await this.solicitanteAutorizadoRepository.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id);
       if (rutSolicitante !== empresa.identificador_representante_legal) {
 
         if (!solicitantes || solicitantes.length === 0) {
           return {
             codigoResultado: 4,
-            descripcionResultado: "No hay solicitantes autorizados para esta empresa."
+            descripcionResultado: "No hay solicitantes autorizados para esta empresa"
           }
-          // return
         }
         let solicitante = solicitantes.find((s: any) => s.identificador === rutSolicitante)
-        if (solicitante.id == undefined) {
+        if (solicitante == undefined) {
           return {
             codigoResultado: 3,
-            descripcionResultado: "No hay un solicitante autorizado con el rut " + rutSolicitante + "."
+            descripcionResultado: "No hay un solicitante autorizado con el rut (" + rutSolicitante + ")"
           }
-          // return
         }
-
       }
-      // direccionRepresentanteLegal = await internacionalGateway.obtenerDireccionByPersonaId(empresa.id_representante_legal)
       direccionRepresentanteLegal = (await this.direccionPersonaNaturalRepository.obtenerDireccionByPersonaId(empresa.id_representante_legal))[0];
-      // documentos = await internacionalGateway.obtenerDocumentosEmpresaById(empresa.id)
       documentos = await this.documentoEmpresaRepository.obtenerDocumentosEmpresaById(empresa.id);
       solicitantes.forEach((s: any) => {
-        console.log('sol')
-        console.log(s)
+        controllerLogger.info('sol')
+        controllerLogger.info(s)
         sol.push({
           rut: s.identificador,
           nombre: s.nombre_completo
@@ -450,7 +472,7 @@ export class EmpresaControllerController {
       })
       return {
         codigoResultado: 1,
-        descripcionResultado: "Exitoso.",
+        descripcionResultado: "Exitoso",
         empresa: {
           id: empresa.id,
           rut: empresa.identificador,
@@ -476,8 +498,21 @@ export class EmpresaControllerController {
         }
       }
     } catch (ex) {
-      console.log(ex)
-      throw ex.toString()
+      controllerLogger.info(ex)
+      let error: HttpError;
+      if (ex.status == 502) {
+        error = new HttpErrors.BadGateway(ex.toString());
+        error.status = 502;
+        throw error;
+      }
+      if (ex.status == 404) {
+        error = new HttpErrors.NotFound(ex.toString());
+        error.status = 404
+        throw error;
+      }
+      error = new HttpErrors.InternalServerError(ex.toString());
+      error.status = 500;
+      throw error;
     }
   }
 }

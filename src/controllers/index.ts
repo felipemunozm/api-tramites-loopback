@@ -1,6 +1,5 @@
 export * from './personas-controller.controller';
 export * from './flota-controller.controller';
-export * from './solicitud-controller.controller';
 export * from './empresa-controller.controller';
 export * from './permiso-controller.controller';
 export * from './confirmacion-controller.controller';

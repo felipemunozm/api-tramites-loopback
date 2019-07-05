@@ -8,10 +8,7 @@ import { HttpError } from "http-errors";
 import { Rechazo } from "../models/estructuras-validacion/rechazo";
 
 // Uncomment these imports to begin using these cool features!
-
 // import {inject} from '@loopback/context';
-
-
 export class FlotaControllerController {
   constructor(
     @repository(TraduccionTipoVehiculoEjesCargaRepository) public traduccionTipoVehiculosEjesCargaRepository: TraduccionTipoVehiculoEjesCargaRepository,
@@ -47,11 +44,10 @@ export class FlotaControllerController {
     try {
 
       if (!params || !params.rutSujeto || !params.ppus || params.ppus.length === 0) {
-        throw new HttpErrors.NotFound('Parámetros Incorrectos');
+        throw new HttpErrors.NotFound('Parámetros Incorrectos')
       }
       let ppusProcesadas: any[] = []
       let resultado: any = {};
-      let lstVehiculosRechazadosParaPersistir: any[] = []
       resultado.codigoResultado = 1;
       resultado.descripcionResultado = 'Todas las PPUs validadas correctamente';
       resultado.flotaValidada = new Array();
@@ -62,7 +58,6 @@ export class FlotaControllerController {
       resultado.tiposDocumentosPosiblesAdjuntar = {};
       resultado.tiposDocumentosPosiblesAdjuntar.caso = 0
       resultado.tiposDocumentosPosiblesAdjuntar.data = new Array();
-
 
       for (let _ppu of params.ppus) {
         let rechazoTipoVehiculo: Rechazo = new Rechazo(), rechazoAntiguedad: Rechazo = new Rechazo(), rechazoCivil: Rechazo = new Rechazo(), rechazoDuplicado: Rechazo = new Rechazo();
@@ -134,7 +129,6 @@ export class FlotaControllerController {
           }
           rechazoCivil.estado = true
           rechazoCivil.motivo = 'Vehículo no encontrado en Registro civil'
-          // continue;
         }
         let ppuDuplicada = ppusProcesadas.find(p => p.ppu == ppu)
         ppusProcesadas.push({ ppu: ppu })
@@ -193,7 +187,6 @@ export class FlotaControllerController {
               //FV se agrega motor
               numeroMotor: v.return.numeroMotor,
               ejes: '0',
-              //capacidadCargaToneladas: 0,
               fechaVencimientoRT: '',
               estadoRT: '',
               nombrePropietario: v.return.propieActual.propact.itemPropact.find((prop: any) => prop.rut == params.rutSujeto) ? v.return.propieActual.propact.itemPropact.find((prop: any) => prop.rut == params.rutSujeto).nombres : v.return.propieActual.propact.itemPropact[0].nombres,
@@ -253,8 +246,6 @@ export class FlotaControllerController {
               vehiculo.estadoRT = revisionTecnica.estado ? revisionTecnica.estado : ''
               vehiculo.identificador = 'Sin Dato'
               vehiculo.tipoid = '1'
-              // vehiculo.propietario = v.return.propieActual.propact.itemPropact[0].nombres
-              let info = {}
               vehiculo.modelo = v.return.modelo ? v.return.modelo : 'Sin Dato'
               vehiculo.marca = v.return.marca ? v.return.marca : 'Sin Dato'
               vehiculo.tipo = v.return.tipoVehi ? v.return.tipoVehi : 'Sin Dato'
@@ -294,7 +285,6 @@ export class FlotaControllerController {
                 }
               } catch (ex) {
                 controllerLogger.info("Existia la patente, actualizando:  " + vehiculo.ppu + "\n" + ex);
-                // this.vehiculoRepository.updateVehiculoFV(vehiculo)
                 await this.vehiculoRepository.updateVehiculo(vehiculo)
                   .then((val: any) => {
                     controllerLogger.info("vehiculo " + JSON.stringify(val))
@@ -315,7 +305,6 @@ export class FlotaControllerController {
                 }
                 //revision de Leasing
                 let tenedores: any = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
-                // if (tenedores != undefined)
                 //   controllerLogger.info("Tenedores y nombre: " + JSON.stringify(tenedores) + ", " + tenedores.nombre)
                 if (tenedores != undefined && tenedores.itemTenedores[0].nombres != undefined) {
                   let vehClsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_CLS')
@@ -401,20 +390,23 @@ export class FlotaControllerController {
         resultado.codigoResultado = 2
         resultado.descripcionResultado = 'Todas las PPUs rechazadas';
       }
-      // controllerLogger.info("resultado es: " + JSON.stringify(resultado));
       resultado.cantidadVehiculosRechazados = resultado.flotaRechazada.length
       return resultado;
     } catch (ex) {
-      console.log(ex)
-      controllerLogger.info(ex.toString());
+      controllerLogger.info(ex)
       let error: HttpError;
-      if (ex.status == 404)
+      if (ex.status == 502) {
+        error = new HttpErrors.BadGateway(ex.toString());
+        error.status = 502;
+        throw error;
+      }
+      if (ex.status == 404) {
         error = new HttpErrors.NotFound(ex.toString());
-      else
-        error = new HttpErrors.InternalServerError(ex.toString());
-      // error.status = ex.status;
-      error.statusCode = ex.status;
-      // error.headers
+        error.status = 404
+        throw error;
+      }
+      error = new HttpErrors.InternalServerError(ex.toString());
+      error.status = 500;
       throw error;
     }
   }

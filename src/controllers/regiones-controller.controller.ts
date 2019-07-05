@@ -1,12 +1,10 @@
 import { get, param } from "@loopback/rest";
 import { repository } from "@loopback/repository";
 import { RegionRepository } from "../repositories";
+import { controllerLogger } from "../logger/logger-config";
 
 // Uncomment these imports to begin using these cool features!
-
 // import {inject} from '@loopback/context';
-
-
 export class RegionesControllerController {
   constructor(
     @repository(RegionRepository) public regionRepository: RegionRepository,
@@ -16,11 +14,10 @@ export class RegionesControllerController {
     try {
       let resp: any = {
         codigoResultado: 2,
-        descripcionResultado: 'No hay regiones disponibles.',
+        descripcionResultado: 'No hay regiones disponibles',
         regiones: []
       }
       let resp2: any[] = new Array();
-      // let regiones = await internacionalGateway.obtenerRegiones()
       let regiones: any = await this.regionRepository.obtenerRegiones();
       if (!regiones || regiones.length === 0) {
         return resp
@@ -44,7 +41,7 @@ export class RegionesControllerController {
         return resp2;
       return resp
     } catch (ex) {
-      console.log(ex)
+      controllerLogger.info(ex)
       throw ex.toString()
     }
   }
