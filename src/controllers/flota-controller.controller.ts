@@ -119,7 +119,7 @@ export class FlotaControllerController {
         let infoPrt: any = await serviciosGateway.obtenerRevisionTecnica(_ppu);
         let ppu: any;
         try {
-          ppu = v.return.patente.split('-')[0]
+          ppu = v.return.patente[0]
         } catch (Ex) {
           controllerLogger.info("Saltando PPU: " + _ppu[0] + " no se encontro en SRCeI");
           if (resultado.flotaRechazada.find((value: any) => {
