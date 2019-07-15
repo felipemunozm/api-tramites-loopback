@@ -205,7 +205,7 @@ export class PermisoControllerController {
           numeroMotor: flotas.numeroMotor,
           fechaVencimientoRT: flotas.fechaVencimientoRT,
           estadoRT: flotas.estadoRT,
-          propietario: flotas.propietario,
+          propietario: flotas.rutPropietario,
           toneladas: flotas.capacidadCargaToneladas
         }
         if (vehiculoFlota.ejes == "Sin dato" || vehiculoFlota.ejes == "Sin Dato" || vehiculoFlota.ejes == "") {
@@ -214,6 +214,9 @@ export class PermisoControllerController {
         }
         if (vehiculoFlota.fechaVigenciaLS == "" || vehiculoFlota.fechaVigenciaLS == '') {
           vehiculoFlota.fechaVigenciaLS = "01/01/1900"
+        }
+        if (vehiculoFlota.fechaVencimientoRT == "" || vehiculoFlota.fechaVencimientoRT == '') {
+          vehiculoFlota.fechaVencimientoRT = "01/01/1900"
         }
         await this.permisoSujetoVehiculoRepository.insertPermisoSujetoVehiculoFV(vehiculoFlota, respCreacionPermiso);
         controllerLogger.info("Permiso Sujeto Vehiculo OK")
@@ -503,18 +506,17 @@ export class PermisoControllerController {
           numeroMotor: flota.numeroMotor,
           fechaVencimientoRT: flota.fechaVencimientoRT,
           estadoRT: flota.estadoRT,
-          propietario: flota.propietario,
+          propietario: flota.rutPropietario,
           toneladas: flota.capacidadCargaToneladas
         }
         if (vehiculoFlota.ejes == "Sin dato" || vehiculoFlota.ejes == "Sin Dato" || vehiculoFlota.ejes == "") {
           vehiculoFlota.ejes = 0
-        } else {
-          vehiculoFlota.ejes = vehiculoFlota.ejes
         }
-        if (vehiculoFlota.fechaVigenciaLS == "") {
+        if (vehiculoFlota.fechaVigenciaLS == "" || vehiculoFlota.fechaVigenciaLS == '') {
           vehiculoFlota.fechaVigenciaLS = "01/01/1900"
-        } else {
-          vehiculoFlota.fechaVigenciaLS = vehiculoFlota.fechaVigenciaLS
+        }
+        if (vehiculoFlota.fechaVencimientoRT == "" || vehiculoFlota.fechaVencimientoRT == '') {
+          vehiculoFlota.fechaVencimientoRT = "01/01/1900"
         }
         controllerLogger.info(vehiculoFlota.ejes)
         controllerLogger.info(vehiculoFlota.fechaVigenciaLS)
