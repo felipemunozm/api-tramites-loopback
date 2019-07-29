@@ -194,7 +194,7 @@ export class PermisoControllerController {
         let vehiculoFlota = {
           ejes: flotas.ejes,
           fechaVigenciaLS: flotas.fechaVencimientoLS,
-          observacion: flotas.limitacion,
+          observacion: flotas.observacion,
           ppu: flotas.ppu,
           tipo: flotas.tipo,
           marca: flotas.marca,
@@ -495,7 +495,7 @@ export class PermisoControllerController {
         let vehiculoFlota = {
           ejes: flota.ejes,
           fechaVigenciaLS: flota.fechaVencimientoLS,
-          observacion: flota.limitacion,
+          observacion: flota.observacion,
           ppu: flota.ppu,
           tipo: flota.tipo,
           marca: flota.marca,
