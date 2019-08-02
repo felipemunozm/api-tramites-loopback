@@ -231,7 +231,7 @@ export class PermisoControllerController {
         let vehiculoFlota = {
           marca: flota.marca,
           anno: flota.anno,
-          chasis: flota.carroceria,
+          chasis: flota.chasis,
           ejes: flota.ejes,
           capacidadCarga: flota.capacidadCargaToneladas,
           patente: flota.ppu,
