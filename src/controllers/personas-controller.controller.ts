@@ -168,6 +168,15 @@ export class PersonasControllerController {
       resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado, Sin Permiso Vigente'
       let permiso: any = (await this.permisoRepository.obtenerPermisoVigenteByRut(rutEmpresa))[0];
       if (permiso == undefined || permiso.tipo_estado_permiso_id == null) {
+        resp.empresa = {}
+        resp.empresa.razonSocial = empresa.razon_social
+        resp.empresa.direccion = {
+          codigo_comuna: empresa.codigo_comuna,
+          codigo_region: empresa.codigo_region,
+          nombre_comuna: empresa.nombre_comuna,
+          nombre_region: empresa.nombre_region,
+          texto: empresa.texto
+        }
         return resp;
       } else if (permiso.tipo_estado_permiso_id == 1) {
         resp.rutSolicitante = rutSolicitante
@@ -184,9 +193,18 @@ export class PersonasControllerController {
         let permisoFirmado: any = (await this.permisoRepository.obtenerPermisoVigenteFirmadoByRut(rutEmpresa))[0];
         if (permisoFirmado == undefined) {
           resp.rutSolicitante = rutSolicitante
-          resp.rutEmpresa = rutEmpresa
+          //resp.rutEmpresa = rutEmpresa
           resp.codigoResultado = 2
           resp.descripcionResultado = 'Empresa Registrada, Usuario Autorizado, Sin permiso vigente'
+          resp.empresa = {}
+          resp.empresa.razonSocial = empresa.razon_social
+          resp.empresa.direccion = {
+            codigo_comuna: empresa.codigo_comuna,
+            codigo_region: empresa.codigo_region,
+            nombre_comuna: empresa.nombre_comuna,
+            nombre_region: empresa.nombre_region,
+            texto: empresa.texto,
+          }
           return resp;
         } else {
           controllerLogger.info("permiso: " + permisoFirmado.id);

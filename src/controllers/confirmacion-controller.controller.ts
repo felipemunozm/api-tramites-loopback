@@ -82,7 +82,7 @@ export class ConfirmacionControllerController {
 
             try {
               let options = {
-                method: 'PUT',
+                method: 'POST',
                 url: permiso.url_callback,
                 headers: {
                   'Accept': 'application/json',
@@ -97,12 +97,13 @@ export class ConfirmacionControllerController {
                     controllerLogger.info("Error en la respuesta de UrlCallBack SMPLE: " + error.code);
                     return reject({ codigoResultado: 5, descripcionResultado: "Error en la respuesta de UrlCallBack SMPLE" });
                   }
-                  console.log(body);
-                  return resolve(body);
+                  console.log("body:" + body);
+                  console.log("response:" + response.statusCode);
+                  return resolve(response.statusCode);
                 });
               });
               // si es Ok, graba en tabla response_simple
-              if (retorno !== undefined) {
+              if (retorno !== undefined && retorno == 200) {
                 let d = new Date();
                 let response_sim = {
                   id: 0,
