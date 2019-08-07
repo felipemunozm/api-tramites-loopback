@@ -13,10 +13,11 @@ export class DireccionPersonaNaturalRepository extends DefaultCrudRepository<
     super(DireccionPersonaNatural, dataSource);
   }
   public obtenerDireccionByPersonaId(id: any): Promise<any> {
-    let query = "select dpa.codigo_region, dpa.codigo_comuna, dpa.texto, co.nombre as nombre_comuna, re.nombre as nombre_region from direccion_persona_natural dpa\n" +
+    let query = "select dpa.codigo_region, dpa.codigo_comuna, dpa.texto, co.nombre as nombre_comuna, re.nombre as nombre_region, dpa.telefono_fijo, dpa.telefono_movil from direccion_persona_natural dpa\n" +
       "left join comuna co on co.codigo = dpa.codigo_comuna\n" +
       "left join region re on re.codigo = dpa.codigo_region\n" +
-      "where persona_id = $1";
+      "left join persona_natural pn on pn.id = dpa.persona_id\n" +
+      "where dpa.persona_id = $1";
     return this.dataSource.execute(query, [id]);
   }
   public crearDireccionPersonaNatural(direccion: any): Promise<any> {
