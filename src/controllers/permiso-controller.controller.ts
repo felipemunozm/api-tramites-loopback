@@ -1,5 +1,5 @@
 import { post, requestBody, HttpErrors } from "@loopback/rest";
-import { TipoTramiteRepository, IntermediarioTramiteRepository, RegionRepository, AnalistaRepository, EmpresaRepository, TipoIdPersonaRepository, PermisoRepository, PersonaJuridicaRepository, PersonaNaturalRepository, DomicilioEmpresaRepository, TipoEmpresaRepository, SolicitanteAutorizadoRepository, TipoDocumentoRepository, DocumentoEmpresaRepository, EstadoTramiteRepository, TramiteRepository, PaisRepository, TipoCargaRepository, TipoPermisoRepository, TipoIdVehiculoRepository, SujetoRepository, VehiculoRepository, SujetoVehiculoRepository, DocumentoRepository, PermisoSujetoVehiculoRepository, EstadoPermisoRepository, Log_wsdl_docfirmaRepository } from "../repositories";
+import { TipoTramiteRepository, IntermediarioTramiteRepository, RegionRepository, AnalistaRepository, EmpresaRepository, TipoIdPersonaRepository, PermisoRepository, PersonaJuridicaRepository, PersonaNaturalRepository, DomicilioEmpresaRepository, TipoEmpresaRepository, SolicitanteAutorizadoRepository, TipoDocumentoRepository, DocumentoEmpresaRepository, EstadoTramiteRepository, TramiteRepository, PaisRepository, TipoCargaRepository, TipoPermisoRepository, TipoIdVehiculoRepository, SujetoRepository, VehiculoRepository, SujetoVehiculoRepository, DocumentoRepository, PermisoSujetoVehiculoRepository, EstadoPermisoRepository, Log_wsdl_docfirmaRepository, DireccionPersonaNaturalRepository } from "../repositories";
 import { repository } from "@loopback/repository";
 import * as moment from 'moment';
 import * as dateFormat from 'dateformat';
@@ -39,7 +39,8 @@ export class PermisoControllerController {
     @repository(DocumentoRepository) public documentoRepository: DocumentoRepository,
     @repository(PermisoSujetoVehiculoRepository) public permisoSujetoVehiculoRepository: PermisoSujetoVehiculoRepository,
     @repository(EstadoPermisoRepository) public estadoPermisoRepository: EstadoPermisoRepository,
-    @repository(Log_wsdl_docfirmaRepository) public log_wsdl_docfirmaRepository: Log_wsdl_docfirmaRepository
+    @repository(Log_wsdl_docfirmaRepository) public log_wsdl_docfirmaRepository: Log_wsdl_docfirmaRepository,
+    @repository(DireccionPersonaNaturalRepository) public direccionPersonaNaturalRepository: DireccionPersonaNaturalRepository
   ) { }
   @post('/tramites/internacional/chile-chile/permiso/persona')
   async crearPermisoChileChilePersona(@requestBody() params: any): Promise<any> {
@@ -97,7 +98,17 @@ export class PermisoControllerController {
           email: params.solicitante.email
         }
         let respPersonaNatural = (await this.personaNaturalrepsitory.crearPersonaNatural(solicitante))[0];
-        solicitante.id = respPersonaNatural.id;
+        if (respPersonaNatural != undefined) {
+          solicitante.id = respPersonaNatural.id;
+          let direccionPersonaNatural = {
+            personaId: respPersonaNatural.id,
+            codigoRegion: params.solicitante.codigoRegion,
+            codigoComuna: params.solicitante.codigoComuna,
+            direccion: params.solicitante.direccion
+          }
+          let respDireccion: any = (await this.direccionPersonaNaturalRepository.crearDireccionPersonaNatural(direccionPersonaNatural))[0]
+          respDireccion != undefined ? controllerLogger.info(respDireccion.id) : controllerLogger.info('la dirección no pudo ser creada')
+        }
       }
       controllerLogger.info("Solicitante OK");
       let paisChile: any = (await this.paisRepository.obtenerPaisByCodigo('CL'))[0];
@@ -153,7 +164,7 @@ export class PermisoControllerController {
         do {
           let respCreacionSujetoVehiculo: any = (await this.sujetoVehiculoRepository.crearSujetoVehiculo(respCreacionSujeto.id, respObtenerPPUVehiculo.id))[0];
           sujetosVehiculosIds.push(respCreacionSujetoVehiculo.id)
-          if (respCreacionSujetoVehiculo != '') {
+          if (respCreacionSujetoVehiculo != undefined) {
             i = 0
           } else {
             i = 1
@@ -164,7 +175,6 @@ export class PermisoControllerController {
       let idPermisoAnterior = params.idPermisoAnterior
       let fechaVigencia = moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").add(tipoPermisoChileChile.meses_vigencia, "M").toDate()
       let obtenerPermisoAnt: any = (await this.permisoRepository.obtenerPermisoById(idPermisoAnterior))[0]
-
       obtenerPermisoAnt != undefined ? fechaVigencia = moment(obtenerPermisoAnt.fecha_fin_vigencia, "DD/MM/YYYY kk:mm:ss").toDate() : controllerLogger.info("Sin permiso anterior");
       let permiso = {
         id_anterior: idPermisoAnterior,
@@ -184,7 +194,7 @@ export class PermisoControllerController {
         let vehiculoFlota = {
           ejes: flotas.ejes,
           fechaVigenciaLS: flotas.fechaVencimientoLS,
-          observacion: flotas.limitacion,
+          observacion: flotas.observacion,
           ppu: flotas.ppu,
           tipo: flotas.tipo,
           marca: flotas.marca,
@@ -195,7 +205,7 @@ export class PermisoControllerController {
           numeroMotor: flotas.numeroMotor,
           fechaVencimientoRT: flotas.fechaVencimientoRT,
           estadoRT: flotas.estadoRT,
-          propietario: flotas.propietario,
+          propietario: flotas.rutPropietario,
           toneladas: flotas.capacidadCargaToneladas
         }
         if (vehiculoFlota.ejes == "Sin dato" || vehiculoFlota.ejes == "Sin Dato" || vehiculoFlota.ejes == "") {
@@ -204,6 +214,9 @@ export class PermisoControllerController {
         }
         if (vehiculoFlota.fechaVigenciaLS == "" || vehiculoFlota.fechaVigenciaLS == '') {
           vehiculoFlota.fechaVigenciaLS = "01/01/1900"
+        }
+        if (vehiculoFlota.fechaVencimientoRT == "" || vehiculoFlota.fechaVencimientoRT == '') {
+          vehiculoFlota.fechaVencimientoRT = "01/01/1900"
         }
         await this.permisoSujetoVehiculoRepository.insertPermisoSujetoVehiculoFV(vehiculoFlota, respCreacionPermiso);
         controllerLogger.info("Permiso Sujeto Vehiculo OK")
@@ -218,7 +231,7 @@ export class PermisoControllerController {
         let vehiculoFlota = {
           marca: flota.marca,
           anno: flota.anno,
-          chasis: flota.carroceria,
+          chasis: flota.chasis,
           ejes: flota.ejes,
           capacidadCarga: flota.capacidadCargaToneladas,
           patente: flota.ppu,
@@ -482,7 +495,7 @@ export class PermisoControllerController {
         let vehiculoFlota = {
           ejes: flota.ejes,
           fechaVigenciaLS: flota.fechaVencimientoLS,
-          observacion: flota.limitacion,
+          observacion: flota.observacion,
           ppu: flota.ppu,
           tipo: flota.tipo,
           marca: flota.marca,
@@ -493,18 +506,17 @@ export class PermisoControllerController {
           numeroMotor: flota.numeroMotor,
           fechaVencimientoRT: flota.fechaVencimientoRT,
           estadoRT: flota.estadoRT,
-          propietario: flota.propietario,
+          propietario: flota.rutPropietario,
           toneladas: flota.capacidadCargaToneladas
         }
         if (vehiculoFlota.ejes == "Sin dato" || vehiculoFlota.ejes == "Sin Dato" || vehiculoFlota.ejes == "") {
           vehiculoFlota.ejes = 0
-        } else {
-          vehiculoFlota.ejes = vehiculoFlota.ejes
         }
-        if (vehiculoFlota.fechaVigenciaLS == "") {
+        if (vehiculoFlota.fechaVigenciaLS == "" || vehiculoFlota.fechaVigenciaLS == '') {
           vehiculoFlota.fechaVigenciaLS = "01/01/1900"
-        } else {
-          vehiculoFlota.fechaVigenciaLS = vehiculoFlota.fechaVigenciaLS
+        }
+        if (vehiculoFlota.fechaVencimientoRT == "" || vehiculoFlota.fechaVencimientoRT == '') {
+          vehiculoFlota.fechaVencimientoRT = "01/01/1900"
         }
         controllerLogger.info(vehiculoFlota.ejes)
         controllerLogger.info(vehiculoFlota.fechaVigenciaLS)

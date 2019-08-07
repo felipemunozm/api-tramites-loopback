@@ -36,7 +36,7 @@ export class ServiciosGateway {
           } else {
             let response: any = {}
             response.return = {
-              patente: ppu
+              patente: ppu + '-'
             }
             resolve(response)
           }
