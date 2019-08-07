@@ -21,7 +21,7 @@ export class DireccionPersonaNaturalRepository extends DefaultCrudRepository<
     return this.dataSource.execute(query, [id]);
   }
   public crearDireccionPersonaNatural(direccion: any): Promise<any> {
-    let query: string = "insert into direccion_persona_natural (version, codigo_region, codigo_comuna, tipo, texto, persona_id) values (0, $1, $2, $3, $4, $5) returning id";
+    let query: string = "insert into direccion_persona_natural (version, codigo_region, codigo_comuna, tipo, texto, persona_id, telefono_fijo, telefono_movil) values (0, $1, $2, $3, $4, $5, $6, $7) returning id";
     return this.dataSource.execute(query, [direccion])
   }
 }
