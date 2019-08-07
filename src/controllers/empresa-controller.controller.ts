@@ -168,7 +168,7 @@ export class EmpresaControllerController {
               tipo: 'particular',
               persona_id: respuestaCreacionPersonaNatural.id,
               telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
-              telefono_movil: params.empresa.representanteLegal.direccion.telefonomovil
+              telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
             }
             await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante);
           }
