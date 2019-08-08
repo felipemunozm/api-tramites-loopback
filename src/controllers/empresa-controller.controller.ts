@@ -500,7 +500,8 @@ export class EmpresaControllerController {
         sol.push({
           rut: s.identificador,
           nombre: s.nombre_completo,
-          email: s.email
+          email: s.email,
+          relacion: s.relacion
         })
       })
       return {
