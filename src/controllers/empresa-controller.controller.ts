@@ -499,7 +499,8 @@ export class EmpresaControllerController {
         controllerLogger.info(s)
         sol.push({
           rut: s.identificador,
-          nombre: s.nombre_completo
+          nombre: s.nombre_completo,
+          email: s.email
         })
       })
       return {

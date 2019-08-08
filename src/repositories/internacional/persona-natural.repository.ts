@@ -13,7 +13,7 @@ export class PersonaNaturalRepository extends DefaultCrudRepository<
     super(PersonaNatural, dataSource);
   }
   public obtenerPersonaNaturalByRut(rut: any): Promise<any> {
-    let query: string = "select id id, nombre_completo nombreCompleto, identificador, tipo_id_id tipoIdentificadorId from persona_natural where identificador = $1 and tipo_id_id = 1";
+    let query: string = "select id id, nombre_completo nombreCompleto, identificador, tipo_id_id tipoIdentificadorId, email from persona_natural where identificador = $1 and tipo_id_id = 1";
     return this.dataSource.execute(query, [rut]);
   }
   public actualizarPersonaNaturalByRut(nombre: any, rut: any): Promise<any> {
@@ -30,7 +30,7 @@ export class PersonaNaturalRepository extends DefaultCrudRepository<
     return this.dataSource.execute(query, [direccion.codigo_region, direccion.codigo_comuna, direccion.tipo, direccion.texto, direccion.persona_id, direccion.telefono_fijo, direccion.telefono_movil]);
   }
   public obtenerDireccionByPersonaId(id: any): Promise<any> {
-    let query = "select dpa.codigo_region, dpa.codigo_comuna, dpa.texto, co.nombre as nombre_comuna, re.nombre as nombre_region from direccion_persona_natural dpa\n" +
+    let query = "select dpa.codigo_region, dpa.codigo_comuna, dpa.texto, co.nombre as nombre_comuna, re.nombre as nombre_region, telefono_fijo, telefono_movil from direccion_persona_natural dpa\n" +
       "left join comuna co on co.codigo = dpa.codigo_comuna\n" +
       "left join region re on re.codigo = dpa.codigo_region\n" +
       "where persona_id = $1";
