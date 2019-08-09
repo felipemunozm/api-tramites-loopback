@@ -332,7 +332,8 @@ export class EmpresaControllerController {
                   persona = {
                     nombreCompleto: solicitante.nombre,
                     identificador: solicitante.rut,
-                    tipoIdentificadorId: tipoIdRut.id
+                    tipoIdentificadorId: tipoIdRut.id,
+                    email: modificacion.solicitante.email
                   }
                   let respuestaCreacionPersonaNatural: any = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
                   persona.id = respuestaCreacionPersonaNatural.id;
@@ -392,7 +393,8 @@ export class EmpresaControllerController {
               persona = {
                 nombreCompleto: modificacion.representanteLegal.nombre,
                 identificador: modificacion.representanteLegal.rut,
-                tipoIdentificadorId: tipoIdRut.id
+                tipoIdentificadorId: tipoIdRut.id,
+                email: modificacion.representanteLegal.email
               }
               let respuestaCreacionPersonaNatural: any = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
               persona.id = respuestaCreacionPersonaNatural.id;
@@ -511,6 +513,7 @@ export class EmpresaControllerController {
           id: empresa.id,
           rut: empresa.identificador,
           razonSocial: empresa.razon_social,
+          nombreFantasia: empresa.nombre_fantasia,
           tipoEmpresa: empresa.tipo_empresa,
           representanteLegal: {
             rut: empresa.identificador_representante_legal,
