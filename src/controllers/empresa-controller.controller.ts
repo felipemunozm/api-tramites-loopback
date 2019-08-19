@@ -333,7 +333,7 @@ export class EmpresaControllerController {
                     nombreCompleto: solicitante.nombre,
                     identificador: solicitante.rut,
                     tipoIdentificadorId: tipoIdRut.id,
-                    email: modificacion.solicitante.email
+                    email: solicitante.email
                   }
                   let respuestaCreacionPersonaNatural: any = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
                   persona.id = respuestaCreacionPersonaNatural.id;
@@ -349,7 +349,7 @@ export class EmpresaControllerController {
                   await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante);
                 }
                 else {
-                  await this.personaNaturalrepsitory.actualizarPersonaNaturalByRut(solicitante.nombre, solicitante.rut);
+                  await this.personaNaturalrepsitory.actualizarPersonaNaturalByRut(solicitante.nombre, solicitante.rut, solicitante.email);
                 }
                 controllerLogger.info('Modificacion 4')
                 await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresa.id, persona.id, solicitante.relacionEmpresa);
@@ -410,12 +410,21 @@ export class EmpresaControllerController {
               await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante);
             }
             else {
-              await this.personaJuridicaRepository.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id);
-              mensajes.push('Representante Legal cambiado a: ' + persona.nombreCompleto)
-              break
+              try {
+                for (let datosRepresentante of params.modificaciones) {
+                  if (datosRepresentante.tipo == "4") {
+                    await this.personaJuridicaRepository.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id);
+                    await this.personaNaturalrepsitory.actualizarPersonaNaturalByRut(datosRepresentante.representanteLegal.nombre, datosRepresentante.representanteLegal.rut, datosRepresentante.representanteLegal.direccion.email);
+                    await this.personaNaturalrepsitory.actualizarDireccionNaturalByRut(datosRepresentante.representanteLegal.direccion.codigoRegionIntermediario, datosRepresentante.representanteLegal.direccion.codigoComunaIntermediario, datosRepresentante.tipo, datosRepresentante.representanteLegal.direccion.textoDireccion, persona.id, datosRepresentante.representanteLegal.direccion.telefonoFijo, datosRepresentante.representanteLegal.direccion.telefonoMovil);
+                    mensajes.push('Representante Legal cambiado a: ' + datosRepresentante.representanteLegal.nombre)
+                  }
+                }
+              } catch (ex) {
+                controllerLogger.error(ex, ex);
+                throw new HttpErrors.InternalServerError(ex.toString());
+              }
             }
-          //await this.personaJuridicaRepository.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id);
-
+            break
           default:
             throw new Error('Tipo ' + modificacion.tipo + ' desconocido.')
         }
@@ -470,7 +479,7 @@ export class EmpresaControllerController {
       let solicitantes: any = [],
         sol: any = [],
         documentos = [],
-        direccionRepresentanteLegal = {}
+        datosRepresentanteLegal: any = []
       if (empresa == undefined) {
         return {
           codigoResultado: 2,
@@ -494,7 +503,9 @@ export class EmpresaControllerController {
           }
         }
       }
-      direccionRepresentanteLegal = (await this.direccionPersonaNaturalRepository.obtenerDireccionByPersonaId(empresa.id_representante_legal))[0];
+
+      let direccionRepresentanteLegal: any = (await this.direccionPersonaNaturalRepository.obtenerDireccionByPersonaId(empresa.id_representante_legal));
+
       documentos = await this.documentoEmpresaRepository.obtenerDocumentosEmpresaById(empresa.id);
       solicitantes.forEach((s: any) => {
         controllerLogger.info('sol')
@@ -518,17 +529,25 @@ export class EmpresaControllerController {
           representanteLegal: {
             rut: empresa.identificador_representante_legal,
             nombre: empresa.nombre_representante_legal,
-            direccion: direccionRepresentanteLegal
+            texto: empresa.texto_rl,
+            codigo_region: empresa.codigo_region_rl,
+            codigo_comuna: empresa.codigo_comuna_rl,
+            telefonoFijo: empresa.telefono_fijo_rl,
+            telefonoMovil: empresa.telefono_movil_rl,
+            email: empresa.email_representante_legal
+
           },
           direccion: {
-            codigo_comuna: empresa.codigo_comuna,
-            nombre_comuna: empresa.nombre_comuna,
-            codigo_region: empresa.codigo_region,
-            nombre_region: empresa.nombre_region,
             texto: empresa.texto,
             telefono_fijo: empresa.telefono_fijo,
             telefono_movil: empresa.telefono_movil,
             email: empresa.email
+          },
+          region: {
+            codigo_comuna: empresa.codigo_comuna,
+            nombre_comuna: empresa.nombre_comuna,
+            codigo_region: empresa.codigo_region,
+            nombre_region: empresa.nombre_region
           },
           documentos: documentos,
           solicitantesAutorizados: sol

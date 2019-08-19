@@ -16,9 +16,13 @@ export class PersonaNaturalRepository extends DefaultCrudRepository<
     let query: string = "select id id, nombre_completo nombreCompleto, identificador, tipo_id_id tipoIdentificadorId, email from persona_natural where identificador = $1 and tipo_id_id = 1";
     return this.dataSource.execute(query, [rut]);
   }
-  public actualizarPersonaNaturalByRut(nombre: any, rut: any): Promise<any> {
-    let query = "update persona_natural set nombre_completo = $1 where identificador = $2";
-    return this.dataSource.execute(query, [nombre, rut]);
+  public actualizarPersonaNaturalByRut(nombre: any, rut: any, email: any): Promise<any> {
+    let query = "update persona_natural set nombre_completo = $1 , email = $3 where identificador = $2";
+    return this.dataSource.execute(query, [nombre, rut, email]);
+  }
+  public actualizarDireccionNaturalByRut(codigo_region: any, codigo_comuna: any, tipo: any, texto: any, persona_id: any, telefono_fijo: any, telefono_movil: any): Promise<any> {
+    let query = "update direccion_persona_natural set codigo_region = $1, codigo_comuna = $2 , tipo = $3, texto = $4, telefono_fijo = $6, telefono_movil =$7 where persona_id = $5";
+    return this.dataSource.execute(query, [codigo_region, codigo_comuna, tipo, texto, persona_id, telefono_fijo, telefono_movil]);
   }
   public crearPersonaNatural(persona: any): Promise<any> {
     let query = "insert into persona_natural (version, nombre_completo, identificador, tipo_id_id, email) values (0, $1, $2, $3, $4) returning id";

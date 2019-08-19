@@ -117,6 +117,7 @@ export class ConfirmacionControllerController {
                   modified: d,
                   user_modified: 'user_ws_mtt'
                 }
+
                 let codigoResultadoCreacionresponse_simple: any = await this.response_simpleRepository.crearResponse(response_sim);
                 if (codigoResultadoCreacionresponse_simple[0].id.toString() !== "") {
                   return { codigoResultado: 1, descripcionResultado: "Documento enviado correctamente" }
