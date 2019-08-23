@@ -124,11 +124,11 @@ export class FlotaControllerController {
         try {
           ppu = v.return.patente.split('-')[0]
         } catch (Ex) {
-          controllerLogger.info("Saltando PPU: " + ppuRequest[0] + " no se encontro en SRCeI");
+          controllerLogger.info("Saltando PPU: " + ppuRequest + " no se encontro en SRCeI");
           if (resultado.flotaRechazada.find((value: any) => {
-            if (value.ppu == ppuRequest[0]) return value
+            if (value.ppu == ppuRequest) return value
           }) == undefined) {
-            resultado.flotaRechazada.push({ ppu: ppuRequest[0], motivoRechazo: 'Vehículo no encontrado en Registro civil' });
+            resultado.flotaRechazada.push({ ppu: ppuRequest, motivoRechazo: 'Vehículo no encontrado en Registro civil' });
           }
           rechazoCivil.estado = true
           rechazoCivil.motivo = 'Vehículo no encontrado en Registro civil'
@@ -137,7 +137,7 @@ export class FlotaControllerController {
         ppusProcesadas.push({ ppu: ppu })
         //Condicion de rechazo, propiedad sea diferente o meratenencia, tipo de vehiculo se valida contra una lista, antiguedad del vehiculo
         if (ppuDuplicada != undefined) {
-          resultado.flotaRechazada.push({ ppu: ppuRequest[0], motivoRechazo: 'Vehículo duplicado' });
+          resultado.flotaRechazada.push({ ppu: ppuRequest, motivoRechazo: 'Vehículo duplicado' });
           rechazoDuplicado.estado = true
           rechazoDuplicado.motivo = 'Vehículo duplicado'
         } else {
@@ -205,7 +205,7 @@ export class FlotaControllerController {
               if (resultado.flotaRechazada.find((value: any) => {
                 if (value.ppu == ppuRequest) return value
               }) == undefined) {
-                resultado.flotaRechazada.push({ ppu: ppuRequest[0], motivoRechazo: 'Tipo de vehículo no corresponde a solicitud' });
+                resultado.flotaRechazada.push({ ppu: ppuRequest, motivoRechazo: 'Tipo de vehículo no corresponde a solicitud' });
                 rechazoTipoVehiculo.estado = true
                 rechazoTipoVehiculo.motivo = 'Tipo de vehículo no corresponde a solicitud'
                 // continue
@@ -217,7 +217,7 @@ export class FlotaControllerController {
                 if (resultado.flotaRechazada.find((value: any) => {
                   if (value.ppu == ppuRequest) return value
                 }) == undefined) {
-                  resultado.flotaRechazada.push({ ppu: ppuRequest[0], motivoRechazo: 'Antigüedad del vehiculo supera la permitida (28 años)' });
+                  resultado.flotaRechazada.push({ ppu: ppuRequest, motivoRechazo: 'Antigüedad del vehiculo supera la permitida (28 años)' });
                   rechazoAntiguedad.estado = true
                   rechazoAntiguedad.motivo = 'Antigüedad del vehiculo supera la permitida (28 años)'
                   // continue
@@ -231,7 +231,7 @@ export class FlotaControllerController {
               }) == undefined) {
                 rechazoCivil.estado = true
                 rechazoCivil.motivo = 'Propietario del vehículo no corresponde al solicitante'
-                resultado.flotaRechazada.push({ ppu: ppuRequest[0], motivoRechazo: 'Propietario del vehículo no corresponde al solicitante' })
+                resultado.flotaRechazada.push({ ppu: ppuRequest, motivoRechazo: 'Propietario del vehículo no corresponde al solicitante' })
               }
             }
             if (infoPrt && infoPrt.return.revisionTecnica) {
@@ -348,7 +348,7 @@ export class FlotaControllerController {
             if (resultado.flotaRechazada.find((value: any) => {
               if (value.ppu == ppuRequest) return value
             }) == undefined) {
-              resultado.flotaRechazada.push({ ppu: ppuRequest[0], motivoRechazo: 'Vehículo no encontrado en Registro civil' });
+              resultado.flotaRechazada.push({ ppu: ppuRequest, motivoRechazo: 'Vehículo no encontrado en Registro civil' });
             }
           }
         }
