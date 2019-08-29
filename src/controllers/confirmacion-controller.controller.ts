@@ -102,28 +102,25 @@ export class ConfirmacionControllerController {
                   return resolve(response.statusCode);
                 });
               });
-              // si es Ok, graba en tabla response_simple
-              if (retorno !== undefined && retorno == 200) {
-                let d = new Date();
-                let response_sim = {
-                  id: 0,
-                  request_json: JSON.stringify({
-                    identificadorIntermediario: params.identificadorIntermediario,
-                    documentoId: params.documentoId,
-                    fechaHoraEnvio: params.fechaHoraEnvio,
-                    estadoDocumento: params.estadoDocumento
-                  }),
-                  response_json: retorno,
-                  modified: d,
-                  user_modified: 'user_ws_mtt'
-                }
-
-                let codigoResultadoCreacionresponse_simple: any = await this.response_simpleRepository.crearResponse(response_sim);
-                if (codigoResultadoCreacionresponse_simple[0].id.toString() !== "") {
-                  return { codigoResultado: 1, descripcionResultado: "Documento enviado correctamente" }
-                }
+              // si es OK o Error, graba en tabla response_simple
+              let d = new Date();
+              let response_sim = {
+                id: 0,
+                request_json: JSON.stringify({
+                  identificadorIntermediario: params.identificadorIntermediario,
+                  documentoId: params.documentoId,
+                  fechaHoraEnvio: params.fechaHoraEnvio,
+                  estadoDocumento: params.estadoDocumento
+                }),
+                response_json: retorno,
+                modified: d,
+                user_modified: 'user_ws_mtt'
               }
-              else { return { codigoResultado: 5, descripcionResultado: "Error en la respuesta de UrlCallBack SIMPLE" } }
+              await this.response_simpleRepository.crearResponse(response_sim);
+              if (retorno !== undefined && retorno == 200)
+                return { codigoResultado: 1, descripcionResultado: "Documento enviado correctamente" }
+              else
+                return { codigoResultado: 5, descripcionResultado: "Error en la respuesta de UrlCallBack SIMPLE" }
             }
             catch (ex) {
               controllerLogger.info(ex)
@@ -152,6 +149,8 @@ export class ConfirmacionControllerController {
             return { codigoResultado: 4, descripcionResultado: "urlCallback de SIMPLE no existe" }
           }
         }
+        else
+          return { codigoResultado: 6, descripcionResultado: "El Documento ingresado no tiene un permiso" }
       }
     } catch (ex) {
       controllerLogger.info(ex)
