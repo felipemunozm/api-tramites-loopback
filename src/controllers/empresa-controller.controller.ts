@@ -531,7 +531,9 @@ export class EmpresaControllerController {
             nombre: empresa.nombre_representante_legal,
             texto: empresa.texto_rl,
             codigo_region: empresa.codigo_region_rl,
+            nombre_region: empresa.nombre_region_rl,
             codigo_comuna: empresa.codigo_comuna_rl,
+            nombre_comuna: empresa.nombre_comuna_rl,
             telefonoFijo: empresa.telefono_fijo_rl,
             telefonoMovil: empresa.telefono_movil_rl,
             email: empresa.email_representante_legal
