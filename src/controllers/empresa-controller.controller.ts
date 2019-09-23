@@ -334,6 +334,7 @@ export class EmpresaControllerController {
         }
         switch (modificacion.tipo) {
           case 1:
+            controllerLogger.info('Modificaciones caso 1')
             if (modificacion.solicitantes.length === 0) throw new Error('Falta datos del o los solicitantes.')
             await this.solicitanteAutorizadoRepository.borrarSolicitanteAutorizadoExistente(empresa.id);
             modificacion.solicitantes.forEach(async (solicitante: any) => {
@@ -372,7 +373,7 @@ export class EmpresaControllerController {
             })
             break
           case 2:
-            controllerLogger.info('Modificacion 5')
+            controllerLogger.info('Modificaciones caso 2')
             if (!modificacion.domicilio || !modificacion.domicilio.codigoRegionIntermediario || !modificacion.domicilio.codigoComunaIntermediario ||
               !modificacion.domicilio.textoDireccion || !modificacion.domicilio.telefonoFijo || !modificacion.domicilio.telefonoMovil || !modificacion.domicilio.email) {
               throw new Error('Parámetros de modificación de domicilio incorrectos.')
@@ -391,13 +392,13 @@ export class EmpresaControllerController {
             mensajes.push('Domicilio de empresa actualizado: ' + domicilio.texto)
             break
           case 3:
-            controllerLogger.info('Modificacion 6')
+            controllerLogger.info('Modificaciones caso 3')
             if (modificacion.razonSocial == undefined) throw new Error('No viene la Razón Social a cambiar.')
             await this.personaJuridicaRepository.actualizarRazonSocialPersonaJuridica(empresa.persona_juridica_id, modificacion.razonSocial);
             mensajes.push('Razón Social modificada a "' + modificacion.razonSocial + '"')
             break
           case 4:
-            controllerLogger.info('Modificacion 7')
+            controllerLogger.info('Modificaciones caso 4')
             if (modificacion.representanteLegal == undefined || modificacion.representanteLegal.rut == undefined || modificacion.representanteLegal.nombre == undefined) throw new Error('Parámetros de Representante Legal incorrectos.')
             let persona: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(modificacion.representanteLegal.rut))[0];
             if (persona == undefined) {
