@@ -62,7 +62,7 @@ export class PersonasControllerController {
       }
       let tipoPermiso = await this.tipoPermisoRepository.findById(permiso.tipo_id);
       let sujeto = (await this.sujetoRepository.obtenerSujetoById(permiso.sujeto_id))[0];
-      let direccionSujeto = (await this.direccionPersonaNaturalRepository.obtenerDireccionByPersonaId(sujeto.persona_natural_id))[0];
+      let direccionSujeto = (await this.direccionPersonaNaturalRepository.obtenerDireccionByPersonaId(sujeto.persona_natural_id, sujeto.persona_juridica_id))[0];
       let vehiculos = await this.vehiculoRepository.obtenerVehiculosByPermisoId(permiso.id);
       let flota: any[] = [], contabilizacion: { [k: string]: any } = {}
       let tonelada: any[] = []
