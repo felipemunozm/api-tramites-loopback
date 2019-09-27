@@ -272,6 +272,7 @@ export class EmpresaControllerController {
   }
   @put('/tramites/internacional/chile-chile/empresa')
   public async modificarTramiteEmpresa(@requestBody() params: any): Promise<any> {
+    var mensajes: any = [];
     try {
       if (!params || !params.identificadorIntermediario || !params.fechaHoraCreacion || !params.rutSolicitante ||
         !params.rutEmpresa || !params.modificaciones || !params.documentosAdjuntos || params.modificaciones.length === 0 ||
@@ -283,6 +284,7 @@ export class EmpresaControllerController {
           }
         };
       }
+
       let tiposTramite: any = await this.tipoTramiteRepository.obtenerTipoTramites();
       let tipoTramite = tiposTramite.find((tipo: any) => tipo.codigo === 'modifica-empresa')
       if (!tipoTramite) console.error('Debe crear un Tipo de Trámite con código modificacion-empresa.')
@@ -295,7 +297,7 @@ export class EmpresaControllerController {
           descripcionResultado: "No existe una región con el código (" + params.analista.codigoRegion + ")"
         }
       }
-      controllerLogger.info('Modificacion 1')
+      //controllerLogger.info('Modificacion 1')
       let analistas: any = await this.analistaRepository.obtenerAnalistas();
       let analista = analistas.find((analista: any) => analista.codigo === params.analista.codigo)
       if (analista == undefined) {
@@ -309,7 +311,7 @@ export class EmpresaControllerController {
       } else {
         await this.analistaRepository.actualizarAnalista(params.analista.nombre, params.analista.codigoRegion, params.analista.codigo);
       }
-      controllerLogger.info('Modificacion 2')
+      //controllerLogger.info('Modificacion 2')
       let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(params.rutEmpresa))[0];
       try {
         if (empresa == undefined) {
@@ -322,13 +324,14 @@ export class EmpresaControllerController {
         controllerLogger.error(ex, ex);
         throw new HttpErrors.InternalServerError(ex.toString());
       }
-      controllerLogger.info('Modificacion 3')
+      //controllerLogger.info('Modificacion 3')
       let tiposIdentificadores: any = await this.tipoIdPersonaRepository.obtenerTiposIdentificadoresPersonas();
       let tipoIdRut = tiposIdentificadores.find((tipo: any) => tipo.codigo === 'RUT')
       if (tipoIdRut == undefined) throw new Error('Debe crear el tipo de identificador con código RUT')
       let modificaciones = params.modificaciones;
-      let mensajes: any = [];
-      await modificaciones.forEach(async (modificacion: any) => {
+      let modificacion: any;
+      for (let x = 0; x < modificaciones.length; x++) {
+        modificacion = modificaciones[x]
         if (modificacion.tipo == undefined || modificacion.descripcion == undefined) {
           throw new Error('Modificación no contiene los parámetros esperados. ' + JSON.stringify(modificacion))
         }
@@ -338,7 +341,7 @@ export class EmpresaControllerController {
             if (modificacion.solicitantes.length === 0) throw new Error('Falta datos del o los solicitantes.')
             await this.solicitanteAutorizadoRepository.borrarSolicitanteAutorizadoExistente(empresa.id);
             modificacion.solicitantes.forEach(async (solicitante: any) => {
-              if (solicitante.relacionEmpresa === 'Representante Legal' || solicitante.relacionEmpresa === 'Mandatario') {
+              if (solicitante.relacionEmpresa === 'Representante Legal' || solicitante.relacionEmpresa === 'Representante legal' || solicitante.relacionEmpresa === 'representante legal' || solicitante.relacionEmpresa === 'Mandatario' || solicitante.relacionEmpresa === 'mandatario') {
                 let persona: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(solicitante.rut))[0];
                 if (persona == undefined) {
                   persona = {
@@ -363,12 +366,11 @@ export class EmpresaControllerController {
                 else {
                   await this.personaNaturalrepsitory.actualizarPersonaNaturalByRut(solicitante.nombre, solicitante.rut, solicitante.email);
                 }
-                controllerLogger.info('Modificacion 4')
                 await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresa.id, persona.id, solicitante.relacionEmpresa);
-                mensajes.push('Nuevo solicitante autorizado creado: ' + solicitante.nombre)
+                mensajes.push('Nuevo solicitante autorizado creado: ' + solicitante.nombre);
               }
               else {
-                throw new Error('Relación ' + solicitante.relacionEmpresa + ' desconocida.')
+                throw new Error('Relación ' + solicitante.relacionEmpresa + ' desconocida                   .')
               }
             })
             break
@@ -428,7 +430,7 @@ export class EmpresaControllerController {
                     await this.personaJuridicaRepository.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id);
                     await this.personaNaturalrepsitory.actualizarPersonaNaturalByRut(datosRepresentante.representanteLegal.nombre, datosRepresentante.representanteLegal.rut, datosRepresentante.representanteLegal.direccion.email);
                     await this.personaNaturalrepsitory.actualizarDireccionNaturalByRut(datosRepresentante.representanteLegal.direccion.codigoRegionIntermediario, datosRepresentante.representanteLegal.direccion.codigoComunaIntermediario, datosRepresentante.tipo, datosRepresentante.representanteLegal.direccion.textoDireccion, persona.id, datosRepresentante.representanteLegal.direccion.telefonoFijo, datosRepresentante.representanteLegal.direccion.telefonoMovil, empresa.persona_juridica_id);
-                    mensajes.push('Representante Legal cambiado a: ' + datosRepresentante.representanteLegal.nombre)
+                    mensajes.push('Representante Legal cambiado a: ' + datosRepresentante.representanteLegal.nombre);
                   }
                 }
               } catch (ex) {
@@ -440,8 +442,8 @@ export class EmpresaControllerController {
           default:
             throw new Error('Tipo ' + modificacion.tipo + ' desconocido.')
         }
-      })
-      controllerLogger.info('Modificacion 8')
+      }
+      controllerLogger.info('Modificacion fuera del ciclo for2:' + mensajes.join('; '))
       let tramite = {
         identificadorIntermediario: params.identificadorIntermediario,
         analistaId: analista.id,
@@ -452,12 +454,11 @@ export class EmpresaControllerController {
         tipoTramiteId: tipoTramite.id,
         intermediarioId: intermediarios[0].id
       }
-      controllerLogger.info('Modificacion 9')
       let resultadoCrearTramite: any = (await this.tramiteRepository.crearTramite(tramite))[0]
       if (resultadoCrearTramite != undefined) {
         return {
           codigoResultado: 1,
-          descripcionResultado: "Trámite de Modificación de Empresa registrado exitosamente. Modificaciones realizadas: " + mensajes.join('; ')
+          descripcionResultado: "Trámite de Modificación de Empresa registrado exitosamente. Modificaciones realizadas: " + mensajes + ";"
         }
       }
 
