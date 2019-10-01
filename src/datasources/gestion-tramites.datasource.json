@@ -1,8 +1,8 @@
 {
   "name": "gestionTramites",
   "connector": "postgresql",
-  "url": "postgres://tramites:tramites@172.25.1.135:5432/gestion_tramites",
-  "host": "172.25.1.135",
+  "url": "postgres://tramites:tramites@172.25.12.135:5432/gestion_tramites",
+  "host": "172.25.12.135",
   "port": 5432,
   "user": "tramites",
   "password": "tramites",
