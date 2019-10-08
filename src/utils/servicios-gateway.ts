@@ -11,7 +11,7 @@ export class ServiciosGateway {
   // private urlRT = '../wsdl/revisionTecnica.wsdl'
   // private urlFirmador = '../wsdl/RecibeDocumentoFirma_Api_Tramites.wsdl'
   private urlPpu = 'http://ws.mtt.cl/services/PPUService_API_Tramites?wsdl'
-  private urlRT = 'http://ws.mtt.cl/services/ConsultaRevisionTecnica_API_Tramites?wsdl'
+  private urlRT = 'http://ws. cx.cl/services/ConsultaRevisionTecnica_API_Tramites?wsdl'
   private urlFirmador = 'http://wsqa.mtt.cl:8280/services/RecibeDocumentoFirma_Api_Tramites?wsdl'
 
 

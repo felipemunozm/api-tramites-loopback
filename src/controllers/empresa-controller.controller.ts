@@ -527,12 +527,19 @@ export class EmpresaControllerController {
           rut: s.identificador,
           nombre: s.nombre_completo,
           email: s.email,
-          relacion: s.relacion
+          relacion: s.relacion,
+          codigo_comuna: s.codigo_comuna,
+          codigo_region: s.codigo_region,
+          nombre_region: s.nombre_region,
+          nombre_comuna: s.nombre_comuna,
+          texto: s.texto,
+          telefono_fijo: s.telefono_fijo,
+          telefono_movil: s.telefono_movil
         })
       })
       return {
         codigoResultado: 1,
-        descripcionResultado: "Exitoso",
+        descripcionResultado: "Exitosoxx",
         empresa: {
           id: empresa.id,
           rut: empresa.identificador,
