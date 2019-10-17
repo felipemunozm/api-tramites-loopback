@@ -62,7 +62,8 @@ export class FlotaControllerController {
       let ppuRequest: any;
       for (let _ppu of params.ppus) {
         if (_ppu != undefined)
-          ppuRequest = _ppu.ppu
+          ppuRequest = _ppu
+        //ppuRequest = _ppu.ppu
         let rechazoTipoVehiculo: Rechazo = new Rechazo(), rechazoAntiguedad: Rechazo = new Rechazo(), rechazoCivil: Rechazo = new Rechazo(), rechazoDuplicado: Rechazo = new Rechazo();
         let vehiculoBD: any = await this.vehiculoRepository.ObtenerVehiculoPorPPU(ppuRequest)
         if (vehiculoBD.length == 0)
