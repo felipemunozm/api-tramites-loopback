@@ -175,7 +175,8 @@ export class PersonasControllerController {
           codigo_region: empresa.codigo_region,
           nombre_comuna: empresa.nombre_comuna,
           nombre_region: empresa.nombre_region,
-          texto: empresa.texto
+          texto: empresa.texto,
+          email: empresa.email
         }
         return resp;
       } else if (permiso.tipo_estado_permiso_id == 1) {
@@ -204,6 +205,7 @@ export class PersonasControllerController {
             nombre_comuna: empresa.nombre_comuna,
             nombre_region: empresa.nombre_region,
             texto: empresa.texto,
+            email: empresa.email
           }
           return resp;
         } else {
