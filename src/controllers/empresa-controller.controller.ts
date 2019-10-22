@@ -170,7 +170,8 @@ export class EmpresaControllerController {
               telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
               telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
             }
-            /* await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante);*/
+            //revisar el ingreso de la dirección de mandatario
+            //await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, persona.id);
           }
           controllerLogger.info('Paso 8')
           let personaJuridica = {
@@ -233,6 +234,17 @@ export class EmpresaControllerController {
               telefono_movil: params.empresa.representanteLegal.direccion.telefonomovil
             }
             await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, respuestaCreacionPersonaJuridica.id);
+            // se ingresa dirección del Mandatario asociado a la empresa por persona_juridica_id
+            let direccionParticularMandatario = {
+              codigo_region: params.solicitante.direccion.codigoRegionIntermediario,
+              codigo_comuna: params.solicitante.direccion.codigoComunaIntermediario,
+              texto: params.solicitante.direccion.textoDireccion,
+              persona_id: solicitante.id,
+              telefono_fijo: params.solicitante.direccion.telefonoFijo,
+              telefono_movil: params.solicitante.direccion.telefonomovil,
+              email: params.solicitante.direccion.email
+            }
+            await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularMandatario, respuestaCreacionPersonaJuridica.id);
           }
           controllerLogger.info('Paso 13')
           await params.documentosAdjuntos.forEach(async (documento: any) => {
