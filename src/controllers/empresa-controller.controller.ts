@@ -218,7 +218,7 @@ export class EmpresaControllerController {
               tipo: 'particular',
               persona_id: solicitanteCreado.id,
               telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
-              telefono_movil: params.empresa.representanteLegal.direccion.telefonomovil
+              telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
             }
             await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresaCreada.id, solicitanteCreado.id, params.relacionSolicitanteEmpresa);
             await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, respuestaCreacionPersonaJuridica.id);
@@ -231,7 +231,7 @@ export class EmpresaControllerController {
               tipo: 'particular',
               persona_id: solicitante.id,
               telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
-              telefono_movil: params.empresa.representanteLegal.direccion.telefonomovil
+              telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
             }
             await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, respuestaCreacionPersonaJuridica.id);
             // se ingresa dirección del Mandatario asociado a la empresa por persona_juridica_id
@@ -241,7 +241,7 @@ export class EmpresaControllerController {
               texto: params.solicitante.direccion.textoDireccion,
               persona_id: solicitante.id,
               telefono_fijo: params.solicitante.direccion.telefonoFijo,
-              telefono_movil: params.solicitante.direccion.telefonomovil,
+              telefono_movil: params.solicitante.direccion.telefonoMovil,
               email: params.solicitante.direccion.email
             }
             await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularMandatario, respuestaCreacionPersonaJuridica.id);
@@ -371,7 +371,7 @@ export class EmpresaControllerController {
                     tipo: 'particular',
                     persona_id: respuestaCreacionPersonaNatural.id,
                     telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
-                    telefono_movil: params.empresa.representanteLegal.direccion.telefonomovil
+                    telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
                   }
                   await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, empresa.persona_juridica_id);
                 }
@@ -431,7 +431,7 @@ export class EmpresaControllerController {
                 tipo: 'particular',
                 persona_id: respuestaCreacionPersonaNatural.id,
                 telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
-                telefono_movil: params.empresa.representanteLegal.direccion.telefonomovil
+                telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
               }
               await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, empresa.persona_juridica_id);
             }
