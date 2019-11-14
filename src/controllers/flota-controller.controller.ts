@@ -1,4 +1,4 @@
-import { HttpErrors, post, requestBody } from "@loopback/rest";
+import { HttpErrors, post, requestBody, param } from "@loopback/rest";
 import * as moment from 'moment';
 import { controllerLogger } from "../logger/logger-config";
 import { repository, DATE } from "@loopback/repository";
@@ -41,6 +41,8 @@ export class FlotaControllerController {
   async validarFlota(@requestBody() params: any): Promise<any> {
     let matrizConversionCapacidadesCargas = await this.traduccionTipoVehiculosEjesCargaRepository.obtenerCapacidadesCargas();
     let tiposVehiculosAceptados = ['camioneta', 'furgon', 'tractocamion', 'camion', 'semiremolque', 'remolque', 'chasis cabinado', 'CAMION']
+    controllerLogger.info("Validar flota INPUT" + JSON.stringify(params));
+
     try {
 
       if (!params || !params.rutSujeto || !params.ppus || params.ppus.length === 0) {
@@ -60,9 +62,11 @@ export class FlotaControllerController {
       resultado.tiposDocumentosPosiblesAdjuntar.data = new Array();
 
       let ppuRequest: any;
+      // controllerLogger.info('Respuesta de Civil para vehiculo nuevo: ' + JSON.stringify(v))
+      controllerLogger.info("parse : " + params.ppus);
       for (let _ppu of params.ppus) {
         if (_ppu != undefined)
-          ppuRequest = _ppu
+          ppuRequest = _ppu;
         //ppuRequest = _ppu.ppu
         let rechazoTipoVehiculo: Rechazo = new Rechazo(), rechazoAntiguedad: Rechazo = new Rechazo(), rechazoCivil: Rechazo = new Rechazo(), rechazoDuplicado: Rechazo = new Rechazo();
         let vehiculoBD: any = await this.vehiculoRepository.ObtenerVehiculoPorPPU(ppuRequest)
