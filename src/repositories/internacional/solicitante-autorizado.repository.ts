@@ -32,4 +32,8 @@ export class SolicitanteAutorizadoRepository extends DefaultCrudRepository<
     let query: string = "delete from solicitante_autorizado where empresa_id = $1";
     return this.dataSource.execute(query, [empresaId]);
   }
+  public borrarDireccionAutorizadoExistente(empresaPersonaJuridicaId: any): Promise<any> {
+    let query: string = "delete from direccion_persona_natural where persona_juridica_id = $1";
+    return this.dataSource.execute(query, [empresaPersonaJuridicaId]);
+  }
 }

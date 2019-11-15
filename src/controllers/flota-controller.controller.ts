@@ -1,3 +1,4 @@
+
 import { HttpErrors, post, requestBody, param } from "@loopback/rest";
 import * as moment from 'moment';
 import { controllerLogger } from "../logger/logger-config";
@@ -61,10 +62,18 @@ export class FlotaControllerController {
       resultado.tiposDocumentosPosiblesAdjuntar.caso = 0
       resultado.tiposDocumentosPosiblesAdjuntar.data = new Array();
 
+
       let ppuRequest: any;
       // controllerLogger.info('Respuesta de Civil para vehiculo nuevo: ' + JSON.stringify(v))
-      controllerLogger.info("parse : " + params.ppus);
-      for (let _ppu of params.ppus) {
+      let ppuAux = new Array();
+      ppuAux = params.ppus;
+      let miarrayaux: any[] = [params];
+
+      miarrayaux = params;
+      //let ppuAux = params.ppus.split(",");
+      //let aux1 = JSON.parse(params.ppus);
+      //controllerLogger.info("parse : " + ppuAux);
+      for (let _ppu of miarrayaux) {
         if (_ppu != undefined)
           ppuRequest = _ppu;
         //ppuRequest = _ppu.ppu
