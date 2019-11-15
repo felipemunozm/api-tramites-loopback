@@ -29,6 +29,7 @@ export class EmpresaRepository extends DefaultCrudRepository<
       "left join region r on dpn.codigo_region = r.codigo\n" +
       "left join comuna c on dpn.codigo_comuna = c.codigo\n" +
       "where pj.identificador = $1\n" +
+      "and pj.representante_legal_id = dpn.persona_id\n" +
       "order by de.id desc";
     return this.dataSource.execute(query, [rut]);
   }
