@@ -171,7 +171,18 @@ export class EmpresaControllerController {
               telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
             }
             //revisar el ingreso de la dirección de mandatario
-            //await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, persona.id);
+            await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, persona.id);
+          } else {
+            let direccionRepresentanteLegal = {
+              codigo_region: params.empresa.representanteLegal.direccion.codigoRegionIntermediario,
+              codigo_comuna: params.empresa.representanteLegal.direccion.codigoComunaIntermediario,
+              texto: params.empresa.representanteLegal.direccion.textoDireccion,
+              tipo: 'particular',
+              persona_id: persona.id,
+              telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
+              telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
+            }
+            // await this.analistaRepository.actualizarDireccionNaturalByRut(direccionRepresentanteLegal.codigo_region,direccionRepresentanteLegal.codigo_comuna,direccionRepresentanteLegal.tipo,direccionRepresentanteLegal.texto,direccionRepresentanteLegal.persona_id,direccionRepresentanteLegal.telefono_fijo,direccionRepresentanteLegal.telefono_movil);
           }
           controllerLogger.info('Paso 8')
           let personaJuridica = {
@@ -248,6 +259,9 @@ export class EmpresaControllerController {
               await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularMandatario, respuestaCreacionPersonaJuridica.id);
             }
           }
+          //-----------------------------RL-----------------------
+
+
           controllerLogger.info('Paso 13')
           await params.documentosAdjuntos.forEach(async (documento: any) => {
             let tipoDocumento = (await this.tipoDocumentoRepository.obtenerTipoDocumentoByCodigo(documento.codigoTipoDocumento));
@@ -543,7 +557,9 @@ export class EmpresaControllerController {
       if (pRutSolicitante[0] !== "'rutSolicitante'" || pRutEmpresa[0] !== "'rutEmpresa'") throw 'Parámetros incorrectos'
       let rutSolicitante = pRutSolicitante[1].replace(/\'/g, '')
       let rutEmpresa = pRutEmpresa[1].replace(/\'/g, '')
-      let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(rutEmpresa))[0];
+      let empresa: any = [];
+      empresa = (await this.empresaRepository.obtenerEmpresaByRut(rutEmpresa))[0];
+      //let empresa: any = (await this.empresaRepository.obtenerEmpresaByRut(rutEmpresa))[0];
       let solicitantes: any = [],
         sol: any = [],
         documentos = [],
