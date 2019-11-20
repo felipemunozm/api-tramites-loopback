@@ -65,15 +65,15 @@ export class FlotaControllerController {
 
       let ppuRequest: any;
       // controllerLogger.info('Respuesta de Civil para vehiculo nuevo: ' + JSON.stringify(v))
-      let ppuAux = new Array();
-      ppuAux = params.ppus;
-      let miarrayaux: any[] = [params];
+      // let ppuAux = new Array();
+      // ppuAux = params.ppus;
+      // let miarrayaux: any[] = [params];
 
-      miarrayaux = params;
+      // miarrayaux = params;
       //let ppuAux = params.ppus.split(",");
       //let aux1 = JSON.parse(params.ppus);
       //controllerLogger.info("parse : " + ppuAux);
-      for (let _ppu of miarrayaux) {
+      for (let _ppu of params.ppus) {
         if (_ppu != undefined)
           ppuRequest = _ppu;
         //ppuRequest = _ppu.ppu
