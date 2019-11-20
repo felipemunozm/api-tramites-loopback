@@ -21,8 +21,8 @@ export class SolicitanteAutorizadoRepository extends DefaultCrudRepository<
       "left join direccion_persona_natural dpn on pn.id = dpn.persona_id and dpn.persona_juridica_id = e.persona_juridica_id\n" +
       "left join region r on dpn.codigo_region = r.codigo\n" +
       "left join comuna c on dpn.codigo_comuna = c.codigo\n" +
-      "left join persona_juridica pj on pj.id = e.persona_juridica_id\n" +
-      "where e.id = $1 and sa.habilitado = true and sa.relacion ='Mandatario'  and pj.representante_legal_id <> sa.persona_natural_id";
+      "left join persona_juridica pj on pj.id = e.persona_juridica_id and sa.habilitado = true and sa.relacion ='Mandatario'  and pj.representante_legal_id <> sa.persona_natural_id\n" +
+      "where e.id = $1";
     return this.dataSource.execute(query, [empresaId]);
   }
   public crearSolicitanteAutorizado(empresaId: any, personaId: any, relacion: any): Promise<any> {

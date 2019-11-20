@@ -25,11 +25,11 @@ export class EmpresaRepository extends DefaultCrudRepository<
       "left join comuna co on de.codigo_comuna = co.codigo\n" +
       "left join region re on de.codigo_region = re.codigo\n" +
       "left join persona_natural pn on pj.representante_legal_id = pn.id\n" +
-      "left join direccion_persona_natural dpn on pj.id = dpn.persona_juridica_id\n" +
+      "left join direccion_persona_natural dpn on pj.id = dpn.persona_juridica_id and pj.representante_legal_id = dpn.persona_id\n" +
       "left join region r on dpn.codigo_region = r.codigo\n" +
       "left join comuna c on dpn.codigo_comuna = c.codigo\n" +
       "where pj.identificador = $1\n" +
-      "and pj.representante_legal_id = dpn.persona_id\n" +
+      //"and pj.representante_legal_id = dpn.persona_id\n" +
       "order by de.id desc";
     let aux: number;
     aux = rut;
