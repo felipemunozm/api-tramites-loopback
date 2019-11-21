@@ -39,6 +39,9 @@ export class PersonaNaturalRepository extends DefaultCrudRepository<
       "left join region re on re.codigo = dpa.codigo_region\n" +
       "left join persona_natural pn on pn.id = dpa.persona_id\n" +
       "where dpa.persona_id = $1 and dpa.persona_juridica_id = $2";
-    return this.dataSource.execute(query, [id, persona_juridica_id]);
+    let resp1 = this.dataSource.execute(query, [id, persona_juridica_id]);
+
+    return resp1
+    // return this.dataSource.execute(query, [id, persona_juridica_id]);
   }
 }

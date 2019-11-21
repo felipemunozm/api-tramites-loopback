@@ -504,7 +504,8 @@ export class EmpresaControllerController {
                     await this.personaJuridicaRepository.actualizarRepresentanteLegalEmpresa(empresa.persona_juridica_id, persona.id);
                     await this.personaNaturalrepsitory.actualizarPersonaNaturalByRut(datosRepresentante.representanteLegal.nombre, datosRepresentante.representanteLegal.rut, datosRepresentante.representanteLegal.direccion.email);
                     let direccion: any = (await this.personaNaturalrepsitory.obtenerDireccionByPersonaId(persona.id, empresa.persona_juridica_id));
-                    if (direccion == undefined) {
+
+                    if (!Array.isArray(direccion) || direccion.length === 0) {
                       direccion = {
                         codigo_region: params.modificaciones[0].representanteLegal.direccion.codigoRegionIntermediario,
                         codigo_comuna: params.modificaciones[0].representanteLegal.direccion.codigoComunaIntermediario,
