@@ -20,8 +20,8 @@ export class DireccionPersonaNaturalRepository extends DefaultCrudRepository<
       "where dpa.persona_id = $1 and dpa.persona_juridica_id = $2";
     return this.dataSource.execute(query, [id, persona_juridica_id]);
   }
-  public crearDireccionPersonaNatural(direccion: any): Promise<any> {
-    let query: string = "insert into direccion_persona_natural (version, codigo_region, codigo_comuna, tipo, texto, persona_id, telefono_fijo, telefono_movil) values (0, $1, $2, $3, $4, $5, $6, $7) returning id";
-    return this.dataSource.execute(query, [direccion.codigoRegion, direccion.codigoComuna, 'particular', direccion.direccion, direccion.personaId])
+  public crearDireccionPersonaNatural(direccion: any, persona_juridica_id: any): Promise<any> {
+    let query = "insert into direccion_persona_natural (version, codigo_region, codigo_comuna, tipo, texto, persona_id, telefono_fijo, telefono_movil, persona_juridica_id) values (0, $1, $2, $3, $4, $5, $6, $7, $8) returning id";
+    return this.dataSource.execute(query, [direccion.codigo_region, direccion.codigo_comuna, 'particular', direccion.texto, direccion.persona_id, direccion.telefono_fijo, direccion.telefono_movil, persona_juridica_id]);
   }
 }
