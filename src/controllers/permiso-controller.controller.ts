@@ -106,8 +106,14 @@ export class PermisoControllerController {
             codigoComuna: params.solicitante.codigoComuna,
             direccion: params.solicitante.direccion
           }
-          let respDireccion: any = (await this.direccionPersonaNaturalRepository.crearDireccionPersonaNatural(direccionPersonaNatural))[0]
-          respDireccion != undefined ? controllerLogger.info(respDireccion.id) : controllerLogger.info('la dirección no pudo ser creada')
+          if (params.persona_juridica_id == null) {
+            let respDireccion: any = (await this.direccionPersonaNaturalRepository.crearDireccionPersonaNaturalsinEmpresa(direccionPersonaNatural))[0]
+            respDireccion != undefined ? controllerLogger.info(respDireccion.id) : controllerLogger.info('la dirección no pudo ser creada')
+          }
+          else {
+            let respDireccion: any = (await this.direccionPersonaNaturalRepository.crearDireccionPersonaNatural(direccionPersonaNatural, params.persona_juridica_id))[0]
+            respDireccion != undefined ? controllerLogger.info(respDireccion.id) : controllerLogger.info('la dirección no pudo ser creada')
+          }
         }
       }
       controllerLogger.info("Solicitante OK");

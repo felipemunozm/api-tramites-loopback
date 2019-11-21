@@ -254,7 +254,7 @@ export class EmpresaControllerController {
             await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresaCreada.id, solicitanteCreado.id, params.relacionSolicitanteEmpresa);
             await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, respuestaCreacionPersonaJuridica.id);
           } else {
-            //await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresaCreada.id, solicitante.id, params.relacionSolicitanteEmpresa);
+            await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresaCreada.id, solicitante.id, params.relacionSolicitanteEmpresa);
             let direccionParticularRepresentante = {
               codigo_region: params.empresa.representanteLegal.direccion.codigoRegionIntermediario,
               codigo_comuna: params.empresa.representanteLegal.direccion.codigoComunaIntermediario,
