@@ -414,19 +414,6 @@ export class EmpresaControllerController {
                 }
                 else {
                   await this.personaNaturalrepsitory.actualizarPersonaNaturalByRut(solicitante.nombre, solicitante.rut, solicitante.email);
-                  //if (parseInt(solicitante.codigoRegionIntermediario)) {
-                  // codigo_region: solicitante.codigoRegionIntermediario,
-                  // }
-                  //else {
-                  // return false;
-                  //}
-
-                  //if (parseInt(solicitante.codigoComunaIntermediario)) {
-                  // codigo_comuna: solicitante.codigoComunaIntermediario;
-                  //} else {
-                  // codigo_comuna: solicitante.codigoRegionIntermediario;
-                  //return false;
-                  // }
                   let direccionParticularMandatario = {
                     texto: solicitante.textoDireccion,
                     tipo: 'particular',
