@@ -444,7 +444,7 @@ export class EmpresaControllerController {
                 mensajes.push('Nuevo solicitante autorizado creado: ' + solicitante.nombre);
               }
               else {
-                throw new Error('Relación ' + solicitante.relacionEmpresa + ' desconocida                   .')
+                throw new Error('Relación ' + solicitante.relacionEmpresa + ' desconocida.')
               }
             })
             break
