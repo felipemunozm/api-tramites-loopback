@@ -152,7 +152,7 @@ export class EmpresaControllerController {
           }
           controllerLogger.info('Paso 7')
 
-          //-----------------------------
+          //---------------- 1-------------
 
           let persona = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(representanteLegal.identificador))[0];
           if (persona == undefined) {
@@ -164,30 +164,19 @@ export class EmpresaControllerController {
             }
             let respuestaCreacionPersonaNatural = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
             persona.id = respuestaCreacionPersonaNatural.id;
-            /* let direccionParticularRepresentante = {
-               codigo_region: params.empresa.representanteLegal.direccion.codigoRegionIntermediario,
-               codigo_comuna: params.empresa.representanteLegal.direccion.codigoComunaIntermediario,
-               texto: params.empresa.representanteLegal.direccion.textoDireccion,
-               tipo: 'particular',
-               persona_id: respuestaCreacionPersonaNatural.id,
-               telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
-               telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
-             }
-             //revisar el ingreso de la dirección de mandatario
-             await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, respuestaCreacionPersonaJuridica.);
-             */
+
           } else {
-            let direccionRepresentanteLegal = {
-              codigo_region: params.empresa.representanteLegal.direccion.codigoRegionIntermediario,
-              codigo_comuna: params.empresa.representanteLegal.direccion.codigoComunaIntermediario,
-              texto: params.empresa.representanteLegal.direccion.textoDireccion,
-              tipo: 'particular',
-              persona_id: persona.id,
-              telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
-              telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
+            let datosRepresentanteLegal = {
+              nombreCompleto: representanteLegal.nombreCompleto,
+              identificador: representanteLegal.identificador,
+              tipoIdentificadorId: representanteLegal.tipoIdentificadorId,
+              email: representanteLegal.email
+
             }
-            // await this.analistaRepository.actualizarDireccionNaturalByRut(direccionRepresentanteLegal.codigo_region,direccionRepresentanteLegal.codigo_comuna,direccionRepresentanteLegal.tipo,direccionRepresentanteLegal.texto,direccionRepresentanteLegal.persona_id,direccionRepresentanteLegal.telefono_fijo,direccionRepresentanteLegal.telefono_movil);
+            await this.personaNaturalrepsitory.actualizarPersonaNaturalByRut(datosRepresentanteLegal.nombreCompleto, datosRepresentanteLegal.identificador, datosRepresentanteLegal.email);
           }
+
+          //-------------------fin ---1-------
           controllerLogger.info('Paso 8')
           let personaJuridica = {
             razonSocial: params.empresa.razonSocial,
@@ -218,20 +207,7 @@ export class EmpresaControllerController {
           await this.domicilioEmpresaRepository.crearDomicilioEmpresa(domicilio);
           controllerLogger.info('Paso 11')
 
-          //---------------------------------------------
-          /* let direccionParticularRepresentante = {
-             codigo_region: params.empresa.representanteLegal.direccion.codigoRegionIntermediario,
-             codigo_comuna: params.empresa.representanteLegal.direccion.codigoComunaIntermediario,
-             texto: params.empresa.representanteLegal.direccion.textoDireccion,
-             tipo: 'particular',
-             persona_id: persona.id,// respuestaCreacionPersonaNatural.id,
-             telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
-             telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
-           }
-           //revisar el ingreso de la dirección de mandatario
-           await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, respuestaCreacionPersonaJuridica.id);
- */
-          //--------------------------
+          //------------------------------------- Solicitante ----------------------------------------------
 
           let solicitante: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(params.solicitante.rut))[0];
           controllerLogger.info('Paso 12')
@@ -242,52 +218,77 @@ export class EmpresaControllerController {
             personaSolicitante.tipoIdentificadorId = 1
             personaSolicitante.email = params.solicitante.email
             let solicitanteCreado: any = (await this.personaNaturalrepsitory.crearPersonaNatural(personaSolicitante))[0];
-            let direccionParticularRepresentante = {
-              codigo_region: params.empresa.representanteLegal.direccion.codigoRegionIntermediario,
-              codigo_comuna: params.empresa.representanteLegal.direccion.codigoComunaIntermediario,
-              texto: params.empresa.representanteLegal.direccion.textoDireccion,
+            let direccion = {
+              codigo_region: params.solicitante.direccion.codigoRegionIntermediario,
+              codigo_comuna: params.solicitante.direccion.codigoComunaIntermediario,
+              texto: params.solicitante.direccion.textoDireccion,
               tipo: 'particular',
               persona_id: solicitanteCreado.id,
-              telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
-              telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
+              telefono_fijo: params.solicitante.direccion.telefonoFijo,
+              telefono_movil: params.soliccitante.direccion.telefonoMovil
             }
             await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresaCreada.id, solicitanteCreado.id, params.relacionSolicitanteEmpresa);
-            await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, respuestaCreacionPersonaJuridica.id);
-          } else {
-            await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresaCreada.id, solicitante.id, params.relacionSolicitanteEmpresa);
+            await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccion, respuestaCreacionPersonaJuridica.id);
+          }
+          controllerLogger.info('Paso 13')
+          await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresaCreada.id, solicitante.id, params.relacionSolicitanteEmpresa);
+          let direccion = {
+            codigo_region: params.solicitante.direccion.codigoRegionIntermediario,
+            codigo_comuna: params.solicitante.direccion.codigoComunaIntermediario,
+            texto: params.solicitante.direccion.textoDireccion,
+            tipo: 'particular',
+            persona_id: solicitante.id,
+            telefono_fijo: params.solicitante.direccion.telefonoFijo,
+            telefono_movil: params.solicitante.direccion.telefonoMovil
+          }
+          await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccion, respuestaCreacionPersonaJuridica.id);
+          controllerLogger.info('Paso 14')
+          //----------------------------- Representante legal -----------------------
+          let representante: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(params.empresa.representanteLegal.rut))[0];
+          if (representante == undefined) {
+            let personaRepresentante: any = {}
+            personaRepresentante.nombreCompleto = params.empresa.representanteLegal.nombre,
+              personaRepresentante.identificador = params.empresa.representanteLegal.rut,
+              personaRepresentante.tipoIdentificadorId = 1,
+              personaRepresentante.email = params.empresa.representanteLegal.email
+            let representanteCreado: any = (await this.personaNaturalrepsitory.crearPersonaNatural(representante))[0];
             let direccionParticularRepresentante = {
+              relacionEmpresa: "Representante legal",
               codigo_region: params.empresa.representanteLegal.direccion.codigoRegionIntermediario,
               codigo_comuna: params.empresa.representanteLegal.direccion.codigoComunaIntermediario,
               texto: params.empresa.representanteLegal.direccion.textoDireccion,
               tipo: 'particular',
-              persona_id: solicitante.id,
+              persona_id: representante.persona.identificador,
               telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
               telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
             }
-            await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, respuestaCreacionPersonaJuridica.id);
-            // se ingresa dirección del Mandatario asociado a la empresa por persona_juridica_id
-            if (params.solicitante.direccion != undefined) {
-              let direccionParticularMandatario = {
-                codigo_region: params.solicitante.direccion.codigoRegionIntermediario,
-                codigo_comuna: params.solicitante.direccion.codigoComunaIntermediario,
-                texto: params.solicitante.direccion.textoDireccion,
-                persona_id: solicitante.id,
-                telefono_fijo: params.solicitante.direccion.telefonoFijo,
-                telefono_movil: params.solicitante.direccion.telefonoMovil,
-                email: params.solicitante.direccion.email
-              }
-              await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularMandatario, respuestaCreacionPersonaJuridica.id);
-            }
+            await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, respuestaCreacionPersonaJuridica.persona_juridica_id);
+            await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresaCreada.id, representante.id, direccionParticularRepresentante.relacionEmpresa);
+            controllerLogger.info('Paso 15')
           }
-          //-----------------------------RL-----------------------
+          let relacionEmpresaRepresentanteLegal = {
+            relacionEmpresa: "Representante legal"
+          }
+          await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresaCreada.id, representante.id, relacionEmpresaRepresentanteLegal.relacionEmpresa);
+          let direccionParticularRepresentante = {
+            codigo_region: params.empresa.representanteLegal.direccion.codigoRegionIntermediario,
+            codigo_comuna: params.empresa.representanteLegal.direccion.codigoComunaIntermediario,
+            texto: params.empresa.representanteLegal.direccion.textoDireccion,
+            tipo: 'particular',
+            persona_id: persona.id,
+            telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
+            telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
+          }
+          await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, respuestaCreacionPersonaJuridica.id);
 
+          //-------------------------- FIN RL-------------------
 
-          controllerLogger.info('Paso 13')
+          controllerLogger.info('Paso 16')
           await params.documentosAdjuntos.forEach(async (documento: any) => {
             let tipoDocumento = (await this.tipoDocumentoRepository.obtenerTipoDocumentoByCodigo(documento.codigoTipoDocumento));
             await this.documentoEmpresaRepository.crearDocumentoEmpresa(tipoDocumento[0].id, empresaCreada.id, documento.urlDescargaDocumento);
           })
-          controllerLogger.info('Paso 14 Final')
+          controllerLogger.info('Paso 17 Final')
           let estadoTramite: any = (await this.estadoTramiteRepository.crearEstadoTramite(resultadoCrearTramite.id, 7))[0]
           if (estadoTramite != undefined) {
             return {
