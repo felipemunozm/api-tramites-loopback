@@ -389,7 +389,7 @@ export class EmpresaControllerController {
             controllerLogger.info('Modificaciones caso 1')
             if (modificacion.solicitantes.length === 0) throw new Error('Falta datos del o los solicitantes.')
             await this.solicitanteAutorizadoRepository.borrarSolicitanteAutorizadoExistente(empresa.id);
-            await this.solicitanteAutorizadoRepository.borrarDireccionAutorizadoExistente(empresa.persona_juridica_id);
+            //await this.solicitanteAutorizadoRepository.borrarDireccionAutorizadoExistente(empresa.persona_juridica_id);
             modificacion.solicitantes.forEach(async (solicitante: any) => {
               if (solicitante.relacionEmpresa === 'Representante Legal' || solicitante.relacionEmpresa === 'Representante legal' || solicitante.relacionEmpresa === 'representante legal' || solicitante.relacionEmpresa === 'Mandatario' || solicitante.relacionEmpresa === 'mandatario') {
                 let persona: any = (await this.personaNaturalrepsitory.obtenerPersonaNaturalByRut(solicitante.rut))[0];
@@ -403,13 +403,13 @@ export class EmpresaControllerController {
                   let respuestaCreacionPersonaNatural: any = (await this.personaNaturalrepsitory.crearPersonaNatural(persona))[0];
                   persona.id = respuestaCreacionPersonaNatural.id;
                   let direccionParticularRepresentante = {
-                    codigo_region: params.empresa.representanteLegal.direccion.codigoRegionIntermediario,
-                    codigo_comuna: params.empresa.representanteLegal.direccion.codigoComunaIntermediario,
-                    texto: params.empresa.representanteLegal.direccion.textoDireccion,
+                    codigo_region: solicitante.codigoRegionIntermediario,
+                    codigo_comuna: solicitante.codigoComunaIntermediario,
+                    texto: solicitante.textoDireccion,
                     tipo: 'particular',
                     persona_id: respuestaCreacionPersonaNatural.id,
-                    telefono_fijo: params.empresa.representanteLegal.direccion.telefonoFijo,
-                    telefono_movil: params.empresa.representanteLegal.direccion.telefonoMovil
+                    telefono_fijo: solicitante.telefonoFijo,
+                    telefono_movil: solicitante.telefonoMovil
                   }
                   await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularRepresentante, empresa.persona_juridica_id);
                 }
@@ -424,7 +424,7 @@ export class EmpresaControllerController {
                     codigo_region: solicitante.codigoRegionIntermediario,
                     codigo_comuna: solicitante.codigoComunaIntermediario
                   }
-                  await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularMandatario, empresa.persona_juridica_id);
+                  await this.personaNaturalrepsitory.actualizarDireccionNaturalByRut(direccionParticularMandatario.codigo_region, direccionParticularMandatario.codigo_comuna, direccionParticularMandatario.tipo, direccionParticularMandatario.texto, direccionParticularMandatario.persona_id, direccionParticularMandatario.telefono_fijo, direccionParticularMandatario.telefono_movil, empresa.persona_juridica_id);
                 }
                 await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresa.id, persona.id, solicitante.relacionEmpresa);
                 //await this.solicitanteAutorizadoRepository.crearDireccionPersonaNatural(direccionParticularRepresentante, empresa.persona_juridica_id);
@@ -495,13 +495,13 @@ export class EmpresaControllerController {
 
                     if (!Array.isArray(direccion) || direccion.length === 0) {
                       direccion = {
-                        codigo_region: params.modificaciones[0].representanteLegal.direccion.codigoRegionIntermediario,
-                        codigo_comuna: params.modificaciones[0].representanteLegal.direccion.codigoComunaIntermediario,
-                        texto: params.modificaciones[0].representanteLegal.direccion.textoDireccion,
+                        codigo_region: modificacion.representanteLegal.direccion.codigoRegionIntermediario,
+                        codigo_comuna: modificacion.representanteLegal.direccion.codigoComunaIntermediario,
+                        texto: modificacion.representanteLegal.direccion.textoDireccion,
                         tipo: 'particular',
                         persona_id: persona.id,
-                        telefono_fijo: params.modificaciones[0].representanteLegal.direccion.telefonoFijo,
-                        telefono_movil: params.modificaciones[0].representanteLegal.direccion.telefonoMovil
+                        telefono_fijo: modificacion.representanteLegal.direccion.telefonoFijo,
+                        telefono_movil: modificacion.representanteLegal.direccion.telefonoMovil
                       }
                       await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccion, empresa.persona_juridica_id);
                     }
