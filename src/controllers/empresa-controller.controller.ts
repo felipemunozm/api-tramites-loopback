@@ -458,16 +458,35 @@ export class EmpresaControllerController {
                 }
                 else {
                   await this.personaNaturalrepsitory.actualizarPersonaNaturalByRut(solicitante.nombre, solicitante.rut, solicitante.email);
-                  let direccionParticularMandatario = {
-                    texto: solicitante.textoDireccion,
-                    tipo: 'particular',
-                    persona_id: persona.id,
-                    telefono_fijo: solicitante.telefonoFijo,
-                    telefono_movil: solicitante.telefonoMovil,
-                    codigo_region: solicitante.codigoRegionIntermediario,
-                    codigo_comuna: solicitante.codigoComunaIntermediario
+                  let direccion_mandatario: any = await this.personaNaturalrepsitory.obtenerDireccionByPersonaId(persona.id, empresa.persona_juridica_id);
+
+                  if (!Array.isArray(direccion_mandatario) || direccion_mandatario.length === 0 || direccion_mandatario === undefined) {
+
+                    let direccionParticularMandatario = {
+                      texto: solicitante.textoDireccion,
+                      tipo: 'particular',
+                      persona_id: persona.id,
+                      telefono_fijo: solicitante.telefonoFijo,
+                      telefono_movil: solicitante.telefonoMovil,
+                      codigo_region: solicitante.codigoRegionIntermediario,
+                      codigo_comuna: solicitante.codigoComunaIntermediario
+                    }
+                    await this.personaNaturalrepsitory.crearDireccionPersonaNatural(direccionParticularMandatario, empresa.persona_juridica_id);
                   }
-                  await this.personaNaturalrepsitory.actualizarDireccionNaturalByRut(direccionParticularMandatario.codigo_region, direccionParticularMandatario.codigo_comuna, direccionParticularMandatario.tipo, direccionParticularMandatario.texto, direccionParticularMandatario.persona_id, direccionParticularMandatario.telefono_fijo, direccionParticularMandatario.telefono_movil, empresa.persona_juridica_id);
+                  else {
+                    let direccionParticularMandatario = {
+                      texto: solicitante.textoDireccion,
+                      tipo: 'particular',
+                      persona_id: persona.id,
+                      telefono_fijo: solicitante.telefonoFijo,
+                      telefono_movil: solicitante.telefonoMovil,
+                      codigo_region: solicitante.codigoRegionIntermediario,
+                      codigo_comuna: solicitante.codigoComunaIntermediario
+                    }
+                    await this.personaNaturalrepsitory.actualizarDireccionNaturalByRut(direccionParticularMandatario.codigo_region, direccionParticularMandatario.codigo_comuna, direccionParticularMandatario.tipo, direccionParticularMandatario.texto, direccionParticularMandatario.persona_id, direccionParticularMandatario.telefono_fijo, direccionParticularMandatario.telefono_movil, empresa.persona_juridica_id);
+                  }
+
+                  //await this.personaNaturalrepsitory.actualizarDireccionNaturalByRut(direccionParticularMandatario.codigo_region, direccionParticularMandatario.codigo_comuna, direccionParticularMandatario.tipo, direccionParticularMandatario.texto, direccionParticularMandatario.persona_id, direccionParticularMandatario.telefono_fijo, direccionParticularMandatario.telefono_movil, empresa.persona_juridica_id);
                 }
                 await this.solicitanteAutorizadoRepository.crearSolicitanteAutorizado(empresa.id, persona.id, solicitante.relacionEmpresa);
                 //await this.solicitanteAutorizadoRepository.crearDireccionPersonaNatural(direccionParticularRepresentante, empresa.persona_juridica_id);
