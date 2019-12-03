@@ -45,7 +45,8 @@ export class PermisoControllerController {
   @post('/tramites/internacional/chile-chile/permiso/persona')
   async crearPermisoChileChilePersona(@requestBody() params: any): Promise<any> {
     try {
-      if (params == undefined || params.identificadorIntermediario == undefined || params.idPermisoAnterior == undefined || params.fechaHoraCreacion == undefined || params.solicitante == undefined
+      // params.idPermisoAnterior == undefined agregar despues
+      if (params == undefined || params.identificadorIntermediario == undefined || params.fechaHoraCreacion == undefined || params.solicitante == undefined
         || params.documentosAdjuntos == undefined
         || params.solicitante.rut == undefined
         || params.codigoAnalista == undefined || params.nombreAnalista == undefined || params.codigoRegion == undefined
