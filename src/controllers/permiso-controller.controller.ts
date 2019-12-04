@@ -241,7 +241,7 @@ export class PermisoControllerController {
           chasis: flota.chasis,
           ejes: flota.ejes,
           capacidadCarga: flota.capacidadCargaToneladas,
-          patente: flota.ppu,
+          ppu: flota.ppu,
           tipo: flota.tipo
         }
 
