@@ -95,7 +95,7 @@ export class ServiciosGateway {
             controllerLogger.info('No fue posible la conexión con el servicio externo - id error:-10')
             return reject(-10)
           }
-          controllerLogger.info(result + ' - id resp: 1')
+          controllerLogger.info(JSON.stringify(result) + ' - id resp: 1')
           resolve(result)
         })
       })
@@ -128,7 +128,7 @@ export class ServiciosGateway {
           vehiculo.ele('anno', {}, flota.anno)
           vehiculo.ele('chasis', {}, flota.chasis)
           vehiculo.ele('ejes', {}, flota.ejes)
-          vehiculo.ele('capacidad_carga', {}, flota.toneladas)
+          vehiculo.ele('capacidad_carga', {}, flota.toneladas).up()
           vehiculo.ele('patente', {}, flota.ppu)
         }
       })
