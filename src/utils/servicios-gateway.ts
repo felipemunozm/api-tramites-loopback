@@ -128,8 +128,8 @@ export class ServiciosGateway {
           vehiculo.ele('anno', {}, flota.anno)
           vehiculo.ele('chasis', {}, flota.chasis)
           vehiculo.ele('ejes', {}, flota.ejes)
-          vehiculo.ele('capacidad_carga', {}, flota.capacidadCarga)
-          vehiculo.ele('patente', {}, flota.patente)
+          vehiculo.ele('capacidad_carga', {}, flota.toneladas)
+          vehiculo.ele('patente', {}, flota.ppu)
         }
       })
     })
