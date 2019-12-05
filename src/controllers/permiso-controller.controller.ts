@@ -191,7 +191,9 @@ export class PermisoControllerController {
         tipoId: tipoPermisoChileChile.id,
         urlCallback: params.urlCallback,
         fechaHoraCreacion: moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").toDate(),
-        fechaFinVigencia: fechaVigencia
+        fechaFinVigencia: fechaVigencia,
+        ciudadOrigen: params.ciudadOrigen,
+        ciudadDestino: params.ciudadDestino
       }
       //Nuevo FV
       let respCreacionPermiso: any = (await this.permisoRepository.crearPermiso(permiso))[0];
@@ -491,7 +493,9 @@ export class PermisoControllerController {
         tipoId: tipoPermisoChileChile.id,
         urlCallback: params.urlCallback,
         fechaHoraCreacion: moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").toDate(),
-        fechaFinVigencia: fechaVigencia
+        fechaFinVigencia: fechaVigencia,
+        ciudadOrigen: params.ciudadOrigen,
+        ciudadDestino: params.ciudadDestino
       }
       //Nuevo FV
       let respCreacionPermiso: any = (await this.permisoRepository.crearPermiso(permiso))[0];

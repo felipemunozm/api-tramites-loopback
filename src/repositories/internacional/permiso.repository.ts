@@ -36,8 +36,8 @@ export class PermisoRepository extends DefaultCrudRepository<
     return this.dataSource.execute(query, [certificado]);
   }
   public crearPermiso(permiso: any): Promise<any> {
-    let query: string = "insert into permiso (version, sujeto_id, pais_id, tipo_carga_id, tipo_id, fecha_creacion, fecha_fin_vigencia, url_callback, id_anterior) values (0, $1, $2, $3, $4, $5, $6, $7, $8) returning id";
-    return this.dataSource.execute(query, [permiso.sujetoId, permiso.paisId, permiso.tipoCargaId, permiso.tipoId, permiso.fechaHoraCreacion, permiso.fechaFinVigencia, permiso.urlCallback, permiso.id_anterior]);
+    let query: string = "insert into permiso (version, sujeto_id, pais_id, tipo_carga_id, tipo_id, fecha_creacion, fecha_fin_vigencia, url_callback, id_anterior, ciudad_origen, ciudad_destino) values (0, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning id";
+    return this.dataSource.execute(query, [permiso.sujetoId, permiso.paisId, permiso.tipoCargaId, permiso.tipoId, permiso.fechaHoraCreacion, permiso.fechaFinVigencia, permiso.urlCallback, permiso.id_anterior, permiso.ciudadOrigen, permiso.ciudadDestino]);
   }
   public actualizarCertificadoEnPermisoById(permisoId: any, certificadoId: any, tipoEstadoPermisoId: any): Promise<any> {
     let query: string = "update permiso set certificado = $2, tipo_estado_permiso_id = $3 where id = $1 returning id";
