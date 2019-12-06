@@ -292,7 +292,9 @@ export class PermisoControllerController {
         nombreTransportista: params.solicitante.nombre,
         tipoCarga: 'CARGA GENERAL',
         flota: flotasPorTipo,
-        resumen: flotasResumen
+        resumen: flotasResumen,
+        ciudadOrigen: permiso.ciudadOrigen,
+        ciudadDestino: permiso.ciudadDestino
       }
       let serviciosGateway: ServiciosGateway = new ServiciosGateway();
       let responseFirmador: any;
