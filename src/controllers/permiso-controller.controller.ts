@@ -509,23 +509,23 @@ export class PermisoControllerController {
       controllerLogger.info("Permiso OK");
       let flotasPorTipo: any = []
       let flotasResumen: any = []
-      for (let flotas of params.flotaFinal) {
+      for (let flota of params.flotaFinal) {
         let vehiculoFlota = {
-          ejes: flotas.ejes,
-          fechaVigenciaLS: flotas.fechaVencimientoLS,
-          observacion: flotas.observacion,
-          patente: flotas.ppu,
-          tipo: flotas.tipo,
-          marca: flotas.marca,
-          modelo: flotas.modelo,
-          anno: flotas.anno,
-          carroceria: flotas.carroceria,
-          chasis: flotas.chasis,
-          numeroMotor: flotas.numeroMotor,
-          fechaVencimientoRT: flotas.fechaVencimientoRT,
-          estadoRT: flotas.estadoRT,
-          propietario: flotas.rutPropietario,
-          toneladas: flotas.capacidadCargaToneladas
+          ejes: flota.ejes,
+          fechaVigenciaLS: flota.fechaVencimientoLS,
+          observacion: flota.observacion,
+          patente: flota.ppu,
+          tipo: flota.tipo,
+          marca: flota.marca,
+          modelo: flota.modelo,
+          anno: flota.anno,
+          carroceria: flota.carroceria,
+          chasis: flota.chasis,
+          numeroMotor: flota.numeroMotor,
+          fechaVencimientoRT: flota.fechaVencimientoRT,
+          estadoRT: flota.estadoRT,
+          propietario: flota.rutPropietario,
+          toneladas: flota.capacidadCargaToneladas
         }
         if (vehiculoFlota.ejes == "Sin dato" || vehiculoFlota.ejes == "Sin Dato" || vehiculoFlota.ejes == "") {
           vehiculoFlota.ejes = 0
@@ -550,12 +550,12 @@ export class PermisoControllerController {
           flotaResumen.cantidadVehiculos = flotaResumen.cantidadVehiculos + 1
         } else {
           flotaTipo = {
-            tipo: flotas.tipo,
+            tipo: flota.tipo,
           }
           controllerLogger.info("#2")
           flotasPorTipo.push(vehiculoFlota)
           let flotaResumen = {
-            tipoVehiculo: flotas.tipo,
+            tipoVehiculo: flota.tipo,
             cantidadVehiculos: 1
           }
           flotasResumen.push(flotaResumen)
