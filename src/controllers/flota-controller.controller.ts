@@ -338,10 +338,10 @@ export class FlotaControllerController {
                     resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_AUT", nombre: "Autorización de entidad financiera para salir del país", ppu: [ppuRequest] });
                   else
                     resultado.tiposDocumentosPosiblesAdjuntar.data[vehAutIdx].ppu.push(ppuRequest)
-                  if (vehRls == undefined)
-                    resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RLS", nombre: "Declaracion de responsabilida de vehículos bajo régimen de leasing", ppu: [ppuRequest] })
+                  /*if (vehRls == undefined)
+                    resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RLS", nombre: "Declaracion de responsabilidad de vehículos bajo régimen de leasing", ppu: [ppuRequest] })
                   else
-                    resultado.tiposDocumentosPosiblesAdjuntar.data[vehRlsIdx].ppu.push(ppuRequest)
+                    resultado.tiposDocumentosPosiblesAdjuntar.data[vehRlsIdx].ppu.push(ppuRequest)*/
                 }
               }
             } else {
