@@ -113,6 +113,8 @@ export class ServiciosGateway {
       .ele('fecha_fin', certificado.fechaFin).up()
       .ele('nombre_transportista', certificado.nombreTransportista).up()
       .ele('tipo_carga', certificado.tipoCarga).up()
+      .ele('ciudad_origen', certificado.ciudadOrigen).up()
+      .ele('ciudad_destino', certificado.ciudadDestino).up()
     //.ele('listado_flota', {'etiqueta': 'Listado flota'}).up()
     //xml.ele('certificado').cdata(xml)
     let listado_flota = xml.ele('listado_flota')
