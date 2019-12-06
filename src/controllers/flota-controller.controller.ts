@@ -61,6 +61,7 @@ export class FlotaControllerController {
       resultado.tiposDocumentosPosiblesAdjuntar = {};
       resultado.tiposDocumentosPosiblesAdjuntar.caso = 0
       resultado.tiposDocumentosPosiblesAdjuntar.data = new Array();
+      resultado.empresa
 
 
       let ppuRequest: any;
@@ -77,6 +78,7 @@ export class FlotaControllerController {
         if (_ppu != undefined)
           ppuRequest = _ppu;
         //ppuRequest = _ppu.ppu
+
         let rechazoTipoVehiculo: Rechazo = new Rechazo(), rechazoAntiguedad: Rechazo = new Rechazo(), rechazoCivil: Rechazo = new Rechazo(), rechazoDuplicado: Rechazo = new Rechazo();
         let vehiculoBD: any = await this.vehiculoRepository.ObtenerVehiculoPorPPU(ppuRequest)
         if (vehiculoBD.length == 0)
@@ -398,6 +400,14 @@ export class FlotaControllerController {
       if (resultado.flotaRechazada.length == 0) {
         resultado.codigoResultado = 1;
         resultado.descripcionResultado = 'Todas las PPUs validadas correctamente';
+
+        let empresa: any = (await this.vehiculoRepository.obtenerEmpresaByRut(params.rutSujeto))[0];
+        if (empresa == undefined) {
+          resultado.empresa = "";
+        }
+        else {
+          resultado.empresa = empresa.razon_social;
+        }
       }
       if (resultado.flotaValidada.length > 0 && resultado.flotaRechazada.length > 0) {
         resultado.codigoResultado = 3
