@@ -48,7 +48,7 @@ export class PermisoControllerController {
       // agregar despues
       if (params == undefined || params.identificadorIntermediario == undefined || params.idPermisoAnterior == undefined || params.fechaHoraCreacion == undefined || params.fechaHoraCreacion == "" || params.solicitante == undefined
         || params.documentosAdjuntos == undefined
-        || params.solicitante.rut == undefined
+        || params.solicitante.rut == undefined || params.empresa == undefined
         || params.codigoAnalista == undefined || params.nombreAnalista == undefined || params.codigoRegion == undefined
         || params.flotaFinal == undefined || params.flotaFinal.length === 0
         || params.documentosAdjuntos == undefined || params.urlCallback == undefined) {
@@ -204,7 +204,7 @@ export class PermisoControllerController {
           ejes: flotas.ejes,
           fechaVigenciaLS: flotas.fechaVencimientoLS,
           observacion: flotas.observacion,
-          ppu: flotas.ppu,
+          patente: flotas.ppu,
           tipo: flotas.tipo,
           marca: flotas.marca,
           modelo: flotas.modelo,
@@ -242,9 +242,10 @@ export class PermisoControllerController {
           anno: flota.anno,
           chasis: flota.chasis,
           ejes: flota.ejes,
-          toneladas: flota.capacidadCargaToneladas,
-          ppu: flota.ppu,
-          tipo: flota.tipo
+          carga: flota.capacidadCargaToneladas,
+          patente: flota.ppu,
+          tipo: flota.tipo,
+          carroceria: flota.carroceria
         }
 
         let flotaTipo = flotasPorTipo.find((flotaPorTipo: any) => flotaPorTipo.tipo === flota.tipo)
@@ -283,18 +284,22 @@ export class PermisoControllerController {
       let estadoPermisoAnt: any = (await this.estadoPermisoRepository.ObtenerEstadoPermisoByPermisoId(idPermisoAnterior, tipo_estado_permiso_id))[0]
       estadoPermisoAnt != undefined ? folioDocumentoAnt = estadoPermisoAnt.folio_documento : controllerLogger.info("Sin folio anterior")
       let certificado = {
-        titulo: 'Permiso Ocasional País-País',
-        encabezado: 'CONFORME A LO ACORDADO EN EL CONVENIO CHILENO-ARGENTINO DE TRANSPORTE TERRESTRE EN TRÁNSITO PARA VINCULAR DOS PUNTOS DE UN MISMO PAÍS, COMUNICO A USTED, HABER AUTORIZADO PERMISO OCASIONAL CON DESTINO A TERRITORIO NACIONAL EN TRÁNSITO POR TERRITORIO ARGENTINO POR PASOS FRONTERIZOS AUTORIZADOS ENTRE LAS REGIONES DE LOS LAGOS, DE AYSÉN Y DE MAGALLANES ANTÁRTICA CHILENA.',
+        titulo: 'Permiso Ocasional de Carga para Vincular dos puntos de Chile en Tránsito por Territorio Argentino',
+        encabezado: 'El Ministerio de Transportes y Telecomunicaciones de la República de Chile, de acuerdo a las normas del Convenio Chileno-Argentino de Transporte Terrestre en Tránsito para Vincular dos puntos de un mismo País, comunica el haber autorizado el siguiente Permiso Ocasional:',
+        texto_autorizacion: 'Este Permiso Ocasional autoriza a transportar todo tipo de carga.',
+        texto_aclarativo: 'La presente autorización no autoriza para cargar o descargar cualquier tipo de carga en Territorio Argentino.',
+        footer: 'La empresa podrá hacer uso de los siguientes pasos fronterizos: Cardenal Samoré, Futalelfú, Río Encuentro, Coihaique, Huemules, Río Jeinemeni, Río Don Guillermo, Dorotea, Laurita Casas Viejas, Integración Austral y San Sebastián.  El Complejo Fronterizo Pino Hachado solo podrá ser usado cuando la carga sean productos del mar congelados y/o refrigerados, de acuerdo a las disposiciones de la legislación argentina.',
         numeroPermiso: 'acairaelfolio',
-        numeroPermisoAnt: folioDocumentoAnt,
-        fechaInicio: dateFormat(permiso.fechaHoraCreacion, "yyyy-mm-dd"),
-        fechaFin: dateFormat(permiso.fechaFinVigencia, "yyyy-mm-dd"),
+        nro_permiso_ant: folioDocumentoAnt,
+        fecha_inicio: dateFormat(permiso.fechaHoraCreacion, "yyyy-mm-dd"),
+        fecha_fin: dateFormat(permiso.fechaFinVigencia, "yyyy-mm-dd"),
+        empresa: params.empresa,
         nombreTransportista: params.solicitante.nombre,
         tipoCarga: 'CARGA GENERAL',
-        flota: flotasPorTipo,
+        listado_flota: flotasPorTipo,
         resumen: flotasResumen,
-        ciudadOrigen: permiso.ciudadOrigen,
-        ciudadDestino: permiso.ciudadDestino
+        ciudad_origen: permiso.ciudadOrigen,
+        ciudad_destino: permiso.ciudadDestino
       }
       let serviciosGateway: ServiciosGateway = new ServiciosGateway();
       let responseFirmador: any;
@@ -504,23 +509,23 @@ export class PermisoControllerController {
       controllerLogger.info("Permiso OK");
       let flotasPorTipo: any = []
       let flotasResumen: any = []
-      for (let flota of params.flotaFinal) {
+      for (let flotas of params.flotaFinal) {
         let vehiculoFlota = {
-          ejes: flota.ejes,
-          fechaVigenciaLS: flota.fechaVencimientoLS,
-          observacion: flota.observacion,
-          ppu: flota.ppu,
-          tipo: flota.tipo,
-          marca: flota.marca,
-          modelo: flota.modelo,
-          anno: flota.anno,
-          carroceria: flota.carroceria,
-          chasis: flota.chasis,
-          numeroMotor: flota.numeroMotor,
-          fechaVencimientoRT: flota.fechaVencimientoRT,
-          estadoRT: flota.estadoRT,
-          propietario: flota.rutPropietario,
-          toneladas: flota.capacidadCargaToneladas
+          ejes: flotas.ejes,
+          fechaVigenciaLS: flotas.fechaVencimientoLS,
+          observacion: flotas.observacion,
+          patente: flotas.ppu,
+          tipo: flotas.tipo,
+          marca: flotas.marca,
+          modelo: flotas.modelo,
+          anno: flotas.anno,
+          carroceria: flotas.carroceria,
+          chasis: flotas.chasis,
+          numeroMotor: flotas.numeroMotor,
+          fechaVencimientoRT: flotas.fechaVencimientoRT,
+          estadoRT: flotas.estadoRT,
+          propietario: flotas.rutPropietario,
+          toneladas: flotas.capacidadCargaToneladas
         }
         if (vehiculoFlota.ejes == "Sin dato" || vehiculoFlota.ejes == "Sin Dato" || vehiculoFlota.ejes == "") {
           vehiculoFlota.ejes = 0
@@ -545,12 +550,12 @@ export class PermisoControllerController {
           flotaResumen.cantidadVehiculos = flotaResumen.cantidadVehiculos + 1
         } else {
           flotaTipo = {
-            tipo: flota.tipo,
+            tipo: flotas.tipo,
           }
           controllerLogger.info("#2")
           flotasPorTipo.push(vehiculoFlota)
           let flotaResumen = {
-            tipoVehiculo: flota.tipo,
+            tipoVehiculo: flotas.tipo,
             cantidadVehiculos: 1
           }
           flotasResumen.push(flotaResumen)
@@ -579,16 +584,22 @@ export class PermisoControllerController {
       let estadoPermisoAnt: any = (await this.estadoPermisoRepository.ObtenerEstadoPermisoByPermisoId(idPermisoAnterior, tipo_estado_permiso_id))[0]
       estadoPermisoAnt != undefined ? folioDocumentoAnt = estadoPermisoAnt.folio_documento : controllerLogger.info("Sin folio anterior")
       let certificado = {
-        titulo: 'Permiso Ocasional País-País',
-        encabezado: 'CONFORME A LO ACORDADO EN EL CONVENIO CHILENO-ARGENTINO DE TRANSPORTE TERRESTRE EN TRÁNSITO PARA VINCULAR DOS PUNTOS DE UN MISMO PAÍS, COMUNICO A USTED, HABER AUTORIZADO PERMISO OCASIONAL CON DESTINO A TERRITORIO NACIONAL EN TRÁNSITO POR TERRITORIO ARGENTINO POR PASOS FRONTERIZOS AUTORIZADOS ENTRE LAS REGIONES DE LOS LAGOS, DE AYSÉN Y DE MAGALLANES ANTÁRTICA CHILENA.',
+        titulo: 'Permiso Ocasional de Carga para Vincular dos puntos de Chile en Tránsito por Territorio Argentino',
+        encabezado: 'El Ministerio de Transportes y Telecomunicaciones de la República de Chile, de acuerdo a las normas del Convenio Chileno-Argentino de Transporte Terrestre en Tránsito para Vincular dos puntos de un mismo País, comunica el haber autorizado el siguiente Permiso Ocasional:',
+        texto_autorizacion: 'Este Permiso Ocasional autoriza a transportar todo tipo de carga.',
+        texto_aclarativo: 'La presente autorización no autoriza para cargar o descargar cualquier tipo de carga en Territorio Argentino.',
+        footer: 'La empresa podrá hacer uso de los siguientes pasos fronterizos: Cardenal Samoré, Futalelfú, Río Encuentro, Coihaique, Huemules, Río Jeinemeni, Río Don Guillermo, Dorotea, Laurita Casas Viejas, Integración Austral y San Sebastián.  El Complejo Fronterizo Pino Hachado solo podrá ser usado cuando la carga sean productos del mar congelados y/o refrigerados, de acuerdo a las disposiciones de la legislación argentina.',
         numeroPermiso: 'acairaelfolio',
-        numeroPermisoAnt: folioDocumentoAnt,
-        fechaInicio: dateFormat(permiso.fechaHoraCreacion, "yyyy-mm-dd"),
-        fechaFin: dateFormat(permiso.fechaFinVigencia, "yyyy-mm-dd"),
+        nro_permiso_ant: folioDocumentoAnt,
+        fecha_inicio: dateFormat(permiso.fechaHoraCreacion, "yyyy-mm-dd"),
+        fecha_fin: dateFormat(permiso.fechaFinVigencia, "yyyy-mm-dd"),
+        empresa: params.empresa,
         nombreTransportista: params.solicitante.nombre,
         tipoCarga: 'CARGA GENERAL',
-        flota: flotasPorTipo,
-        resumen: flotasResumen
+        listado_flota: flotasPorTipo,
+        resumen: flotasResumen,
+        ciudad_origen: permiso.ciudadOrigen,
+        ciudad_destino: permiso.ciudadDestino
       }
       controllerLogger.info('llamando al firmador')
       let idEstadoLog = 1;
