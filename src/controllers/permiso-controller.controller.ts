@@ -200,11 +200,12 @@ export class PermisoControllerController {
       controllerLogger.info("Permiso OK")
       let flotaFinal: any = []
       for (let flotas of params.flotaFinal) {
-        let vehiculoFlota = {
+        let vehiculoFlota =
+        {
           ejes: flotas.ejes,
           fechaVigenciaLS: flotas.fechaVencimientoLS,
           observacion: flotas.observacion,
-          patente: flotas.ppu,
+          ppu: flotas.ppu,
           tipo: flotas.tipo,
           marca: flotas.marca,
           modelo: flotas.modelo,
