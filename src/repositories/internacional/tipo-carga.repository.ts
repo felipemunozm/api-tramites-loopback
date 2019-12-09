@@ -12,4 +12,9 @@ export class TipoCargaRepository extends DefaultCrudRepository<
   ) {
     super(TipoCarga, dataSource);
   }
+  public obtenerTiposCargas(): Promise<any> {
+    let query: string = "select id, codigo, nombre from tipo_carga";
+    return this.dataSource.execute(query);
+  }
 }
+
