@@ -271,10 +271,12 @@ export class PermisoControllerController {
       let opdf: ObtenerPDFs = new ObtenerPDFs();
       for (let doc of params.documentosAdjuntos) {
         try {
-          doc.idPersistido = (await this.documentoRepository.insertarDocumento(doc.urlDescargaDocumento, doc.codigoTipoDocumento, respCreacionPermiso.id))[0].id
-          opdf.obtenerVehiculo(doc.urlDescargaDocumento, respCreacionPermiso.id, doc.idPersistido)
-          controllerLogger.info(doc.urlDescargaDocumento + " - " + respCreacionPermiso.id + " - " + doc.idPersistido)
-          controllerLogger.info("Documento OK");
+          if (doc.urlDescargaDocumento != "") {
+            doc.idPersistido = (await this.documentoRepository.insertarDocumento(doc.urlDescargaDocumento, doc.codigoTipoDocumento, respCreacionPermiso.id))[0].id
+            opdf.obtenerVehiculo(doc.urlDescargaDocumento, respCreacionPermiso.id, doc.idPersistido)
+            controllerLogger.info(doc.urlDescargaDocumento + " - " + respCreacionPermiso.id + " - " + doc.idPersistido)
+            controllerLogger.info("Documento OK");
+          }
         } catch (err) {
           controllerLogger.info("Error insertando documento: " + err)
         }
@@ -282,8 +284,15 @@ export class PermisoControllerController {
       // tipo_estado_permiso_id = 3 Firmado
       let tipo_estado_permiso_id = 3;
       let folioDocumentoAnt = '';
-      let estadoPermisoAnt: any = (await this.estadoPermisoRepository.ObtenerEstadoPermisoByPermisoId(idPermisoAnterior, tipo_estado_permiso_id))[0]
-      estadoPermisoAnt != undefined ? folioDocumentoAnt = estadoPermisoAnt.folio_documento : controllerLogger.info("Sin folio anterior")
+      if (idPermisoAnterior != undefined) {
+        let estadoPermisoAnt: any = (await this.estadoPermisoRepository.ObtenerEstadoPermisoByPermisoId(idPermisoAnterior, tipo_estado_permiso_id))[0]
+        estadoPermisoAnt != undefined ? folioDocumentoAnt = estadoPermisoAnt.folio_documento : controllerLogger.info("Sin folio anterior")
+      }
+      else {
+        folioDocumentoAnt = "Sin folio anterior"
+      }
+
+
       let certificado = {
         titulo: 'Permiso Ocasional de Carga para Vincular dos puntos de Chile en Tránsito por Territorio Argentino',
         encabezado: 'El Ministerio de Transportes y Telecomunicaciones de la República de Chile, de acuerdo a las normas del Convenio Chileno-Argentino de Transporte Terrestre en Tránsito para Vincular dos puntos de un mismo País, comunica el haber autorizado el siguiente Permiso Ocasional:',
@@ -570,10 +579,12 @@ export class PermisoControllerController {
       let opdf: ObtenerPDFs = new ObtenerPDFs();
       for (let doc of params.documentosAdjuntos) {
         try {
-          doc.idPersistido = (await this.documentoRepository.insertarDocumento(doc.urlDescargaDocumento, doc.codigoTipoDocumento, respCreacionPermiso.id))[0].id
-          opdf.obtenerVehiculo(doc.urlDescargaDocumento, respCreacionPermiso.id, doc.idPersistido)
-          controllerLogger.info(doc.urlDescargaDocumento + " - " + respCreacionPermiso.id + " - " + doc.idPersistido)
-          controllerLogger.info("Documento OK");
+          if (doc.urlDescargaDocumento != "") {
+            doc.idPersistido = (await this.documentoRepository.insertarDocumento(doc.urlDescargaDocumento, doc.codigoTipoDocumento, respCreacionPermiso.id))[0].id
+            opdf.obtenerVehiculo(doc.urlDescargaDocumento, respCreacionPermiso.id, doc.idPersistido)
+            controllerLogger.info(doc.urlDescargaDocumento + " - " + respCreacionPermiso.id + " - " + doc.idPersistido)
+            controllerLogger.info("Documento OK");
+          }
         } catch (err) {
           controllerLogger.info("Error insertando documento: " + err)
         }
@@ -582,8 +593,13 @@ export class PermisoControllerController {
       // tipo_estado_permiso_id = 3 Firmado
       let tipo_estado_permiso_id = 3;
       let folioDocumentoAnt = '';
-      let estadoPermisoAnt: any = (await this.estadoPermisoRepository.ObtenerEstadoPermisoByPermisoId(idPermisoAnterior, tipo_estado_permiso_id))[0]
-      estadoPermisoAnt != undefined ? folioDocumentoAnt = estadoPermisoAnt.folio_documento : controllerLogger.info("Sin folio anterior")
+      if (idPermisoAnterior != undefined) {
+        let estadoPermisoAnt: any = (await this.estadoPermisoRepository.ObtenerEstadoPermisoByPermisoId(idPermisoAnterior, tipo_estado_permiso_id))[0]
+        estadoPermisoAnt != undefined ? folioDocumentoAnt = estadoPermisoAnt.folio_documento : controllerLogger.info("Sin folio anterior")
+      }
+      else {
+        folioDocumentoAnt = "Sin folio anterior"
+      }
       let certificado = {
         titulo: 'Permiso Ocasional de Carga para Vincular dos puntos de Chile en Tránsito por Territorio Argentino',
         encabezado: 'El Ministerio de Transportes y Telecomunicaciones de la República de Chile, de acuerdo a las normas del Convenio Chileno-Argentino de Transporte Terrestre en Tránsito para Vincular dos puntos de un mismo País, comunica el haber autorizado el siguiente Permiso Ocasional:',
