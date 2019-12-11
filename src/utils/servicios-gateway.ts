@@ -1,7 +1,7 @@
 import * as builder from 'xmlbuilder';
 import * as soap from 'soap';
 import { controllerLogger } from '../logger/logger-config';
-import { DataSource } from 'loopback-datasource-juggler';
+//import { DataSource } from 'loopback-datasource-juggler';
 import { Vehiculo } from '../models';
 
 export class ServiciosGateway {
@@ -106,10 +106,13 @@ export class ServiciosGateway {
   public armarXmlCertificado2(certificado: any): any {
     let xml = builder.create('certificado', { version: '1.0', encoding: 'UTF-8' })
       .ele('titulo', certificado.titulo).up()
+      .ele('titulo2', certificado.titulo2).up()
+      .ele('titulo3', certificado.titulo3).up()
       .ele('encabezado', certificado.encabezado).up()
       .ele('texto_autorizacion', certificado.texto_autorizacion).up()
       .ele('texto_aclarativo', certificado.texto_aclarativo).up()
       .ele('footer', certificado.footer).up()
+      .ele('footer2', certificado.footer2).up()
       .ele('nro_permiso_ant', certificado.nro_permiso_ant).up()
       .ele('fecha_inicio', certificado.fecha_inicio).up()
       .ele('fecha_fin', certificado.fecha_fin).up()

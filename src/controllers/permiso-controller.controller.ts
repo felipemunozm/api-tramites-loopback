@@ -304,11 +304,14 @@ export class PermisoControllerController {
 
 
       let certificado = {
-        titulo: 'Permiso Ocasional de Carga para Vincular dos puntos de Chile en Tránsito por Territorio Argentino',
+        titulo: 'Permiso Ocasional de Carga para',
+        titulo2: 'Vincular dos puntos de Chile en',
+        titulo3: 'Tránsito por Territorio Argentino',
         encabezado: 'El Ministerio de Transportes y Telecomunicaciones de la República de Chile, de acuerdo a las normas del Convenio Chileno-Argentino de Transporte Terrestre en Tránsito para Vincular dos puntos de un mismo País, comunica el haber autorizado el siguiente Permiso Ocasional:',
         texto_autorizacion: 'Este Permiso Ocasional autoriza a transportar todo tipo de carga y transitar en vacío',
         texto_aclarativo: 'La presente autorización no autoriza para cargar o descargar cualquier tipo de carga en Territorio Argentino.',
-        footer: 'La empresa podrá hacer uso de los siguientes pasos fronterizos: Cardenal Samoré, Futalelfú, Río Encuentro, Coihaique, Huemules, Río Jeinemeni, Río Don Guillermo, Dorotea, Laurita Casas Viejas, Integración Austral y San Sebastián.  El Complejo Fronterizo Pino Hachado solo podrá ser usado cuando la carga sean productos del mar congelados y/o refrigerados, de acuerdo a las disposiciones de la legislación argentina.',
+        footer: 'La empresa podrá hacer uso de los siguientes pasos fronterizos: Cardenal Samoré, Futaleufú, Río Encuentro, Coihaique, Huemules, Río Jeinemeni, Río Don Guillermo, Dorotea, Laurita Casas Viejas, Integración Austral y San Sebastián.  El Complejo Fronterizo Pino Hachado solo podrá ser usado cuando la carga sean productos del mar congelados y/o refrigerados, de acuerdo a las disposiciones de la legislación argentina.',
+        footer2: 'La empresa deberá contratar los seguros pertinentes.',
         numeroPermiso: 'acairaelfolio',
         nro_permiso_ant: folioDocumentoAnt,
         fecha_inicio: dateFormat(permiso.fechaHoraCreacion, "yyyy-mm-dd"),
