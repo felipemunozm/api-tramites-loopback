@@ -1,7 +1,8 @@
 import * as builder from 'xmlbuilder';
 import * as soap from 'soap';
 import { controllerLogger } from '../logger/logger-config';
-import { DataSource } from 'loopback-datasource-juggler';
+//import { DataSource } from 'loopback-datasource-juggler';
+import { Vehiculo } from '../models';
 
 export class ServiciosGateway {
   constructor(
@@ -107,51 +108,40 @@ export class ServiciosGateway {
 
   public armarXmlCertificado2(certificado: any): any {
     let xml = builder.create('certificado', { version: '1.0', encoding: 'UTF-8' })
-      //xml.ele('certificado').cdata(xml)
       .ele('titulo', certificado.titulo).up()
+      .ele('titulo2', certificado.titulo2).up()
+      .ele('titulo3', certificado.titulo3).up()
       .ele('encabezado', certificado.encabezado).up()
       .ele('texto_autorizacion', certificado.texto_autorizacion).up()
       .ele('texto_aclarativo', certificado.texto_aclarativo).up()
-      .ele('nro_permiso', certificado.numeroPermiso).up()
-      .ele('nro_permiso_ant', certificado.numeroPermisoAnt).up()
-      .ele('fecha_inicio', certificado.fechaInicio).up()
-      .ele('fecha_fin', certificado.fechaFin).up()
+      .ele('footer', certificado.footer).up()
+      .ele('footer2', certificado.footer2).up()
+      .ele('nro_permiso_ant', certificado.nro_permiso_ant).up()
+      .ele('fecha_inicio', certificado.fecha_inicio).up()
+      .ele('fecha_fin', certificado.fecha_fin).up()
       .ele('empresa', certificado.empresa).up()
-      //.ele('nombre_transportista', certificado.nombreTransportista).up()
-      .ele('tipo_carga', certificado.tipoCarga).up()
       .ele('ciudad_origen', certificado.ciudad_origen).up()
       .ele('ciudad_destino', certificado.ciudad_destino).up()
-    //.ele('listado_flota', {'etiqueta': 'Listado flota'}).up()
-    //xml.ele('certificado').cdata(xml)
+
+    if (!Array.isArray(certificado.listado_flota) || certificado.listado_flota.length === 0 || certificado.listado_flota === undefined) {
+      console.log(certificado.listado_flota)
+    }
     let listado_flota = xml.ele('listado_flota')
-    //console..log(certificado.flota)
-    certificado.resumen.forEach((item: any) => {
-      let itemResumen = listado_flota.ele('item_Tabla_tipo_vehiculo')
-      itemResumen.ele('tipoVehiculo', {}, item.tipoVehiculo)
-      let listadoVehiculos = itemResumen.ele('listado_vehiculos')
-      certificado.flota.forEach((flota: any) => {
-        if (item.tipoVehiculo == flota.tipo) {
-          let vehiculo = listadoVehiculos.ele('vehiculo')
-          vehiculo.ele('tipo', {}, flota.tipo)
-          vehiculo.ele('marca', {}, flota.marca)
-          vehiculo.ele('anno', {}, flota.anno)
-          vehiculo.ele('chasis', {}, flota.chasis)
-          vehiculo.ele('carroceria', {}, flota.carroceria)
-          vehiculo.ele('ejes', {}, flota.ejes)
-          vehiculo.ele('carga', {}, flota.carga).up()
-          vehiculo.ele('patente', {}, flota.ppu)
-        }
-      })
-    })
 
-    let resumenFlota = xml.ele('resumen_flota')
-    certificado.resumen.forEach((item: any) => {
-      let itemResumen = resumenFlota.ele('item_resumen')
-      itemResumen.ele('tipoVehiculo', {}, item.tipoVehiculo)
-      itemResumen.ele('cantidad_vehiculos', {}, item.cantidadVehiculos)
-    })
+    certificado.listado_flota.forEach((f: any) => {
 
-    //var xml2 = xml.cdata('cerificado')
+      let vehiculo = listado_flota.ele('vehiculo')
+
+      vehiculo.ele('tipo', {}, f.tipo)
+      vehiculo.ele('marca', {}, f.marca)
+      vehiculo.ele('anno', {}, f.anno)
+      vehiculo.ele('chasis', {}, f.chasis)
+      vehiculo.ele('carroceria', {}, f.carroceria)
+      vehiculo.ele('ejes', {}, f.ejes)
+      vehiculo.ele('carga', {}, f.toneladas).up()
+      vehiculo.ele('patente', {}, f.patente)
+
+    })
 
     return xml.end({ pretty: true })
   }
