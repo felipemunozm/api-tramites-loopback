@@ -316,7 +316,7 @@ export class PermisoControllerController {
         nro_permiso_ant: folioDocumentoAnt,
         fecha_inicio: dateFormat(permiso.fechaHoraCreacion, "yyyy-mm-dd"),
         fecha_fin: dateFormat(permiso.fechaFinVigencia, "yyyy-mm-dd"),
-        empresa: params.empresa,
+        empresa: params.solicitante.nombre, // SOLICITUD COMO PERSONA NATURAL
         nombreTransportista: params.solicitante.nombre,
         tipoCarga: 'CARGA GENERAL',
         listado_flota: flotasPorTipo,
