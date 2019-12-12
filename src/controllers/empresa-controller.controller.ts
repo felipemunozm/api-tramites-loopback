@@ -500,8 +500,8 @@ export class EmpresaControllerController {
             break
           case 2:
             controllerLogger.info('Modificaciones caso 2')
-            if (!modificacion.domicilio || !modificacion.domicilio.codigoRegionIntermediario || !modificacion.domicilio.codigoComunaIntermediario ||
-              !modificacion.domicilio.textoDireccion || !modificacion.domicilio.telefonoFijo || !modificacion.domicilio.telefonoMovil || !modificacion.domicilio.email) {
+            if (!modificacion.domicilio.codigoRegionIntermediario || !modificacion.domicilio.codigoComunaIntermediario ||
+              !modificacion.domicilio.textoDireccion || !modificacion.domicilio.telefonoFijo || !modificacion.domicilio.email) {
               throw new Error('Parámetros de modificación de domicilio incorrectos.')
             }
             let domicilio: any = {
