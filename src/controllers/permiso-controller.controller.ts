@@ -187,7 +187,7 @@ export class PermisoControllerController {
         obtenerPermisoAnt != undefined ? fechaVigencia = moment(obtenerPermisoAnt.fecha_fin_vigencia, "DD/MM/YYYY kk:mm:ss").toDate() : controllerLogger.info("Sin permiso anterior");
       }
       else {
-        folioDocumentoAnt = "Sin folio anterior"
+        folioDocumentoAnt = ""
       }
       /*let fechaVigencia = moment(params.fechaHoraCreacion, "DD/MM/YYYY kk:mm:ss").add(tipoPermisoChileChile.meses_vigencia, "M").toDate()
       let obtenerPermisoAnt: any = (await this.permisoRepository.obtenerPermisoById(idPermisoAnterior))[0]
@@ -299,7 +299,7 @@ export class PermisoControllerController {
         estadoPermisoAnt != undefined ? folioDocumentoAntx = estadoPermisoAnt.folio_documento : controllerLogger.info("Sin folio anterior")
       }
       else {
-        folioDocumentoAntx = "Sin folio anterior"
+        folioDocumentoAntx = ""
       }
 
 
@@ -611,7 +611,7 @@ export class PermisoControllerController {
         estadoPermisoAnt != undefined ? folioDocumentoAnt = estadoPermisoAnt.folio_documento : controllerLogger.info("Sin folio anterior")
       }
       else {
-        folioDocumentoAnt = "Sin folio anterior"
+        folioDocumentoAnt = ""
       }
       let certificado = {
         titulo: 'Permiso Ocasional de Carga para',
@@ -620,7 +620,7 @@ export class PermisoControllerController {
         encabezado: 'El Ministerio de Transportes y Telecomunicaciones de la República de Chile, de acuerdo a las normas del Convenio Chileno-Argentino de Transporte Terrestre en Tránsito para Vincular dos puntos de un mismo País, comunica el haber autorizado el siguiente Permiso Ocasional:',
         texto_autorizacion: 'Este Permiso Ocasional autoriza a transportar todo tipo de carga y transitar en vacío',
         texto_aclarativo: 'La presente autorización no autoriza para cargar o descargar cualquier tipo de carga en Territorio Argentino.',
-        footer: 'La empresa podrá hacer uso de los siguientes pasos fronterizos: Cardenal Samoré, Futalelfú, Río Encuentro, Coihaique, Huemules, Río Jeinemeni, Río Don Guillermo, Dorotea, Laurita Casas Viejas, Integración Austral y San Sebastián.  El Complejo Fronterizo Pino Hachado solo podrá ser usado cuando la carga sean productos del mar congelados y/o refrigerados, de acuerdo a las disposiciones de la legislación argentina.',
+        footer: 'La empresa podrá hacer uso de los siguientes pasos fronterizos: Cardenal Samoré, Futaleufú, Río Encuentro, Coihaique, Huemules, Río Jeinemeni, Río Don Guillermo, Dorotea, Laurita Casas Viejas, Integración Austral y San Sebastián.  El Complejo Fronterizo Pino Hachado solo podrá ser usado cuando la carga sean productos del mar congelados y/o refrigerados, de acuerdo a las disposiciones de la legislación argentina.',
         footer2: 'La empresa deberá contratar los seguros pertinentes.',
         numeroPermiso: 'acairaelfolio',
         nro_permiso_ant: folioDocumentoAnt,

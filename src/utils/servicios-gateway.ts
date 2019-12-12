@@ -116,7 +116,7 @@ export class ServiciosGateway {
       .ele('nro_permiso_ant', certificado.nro_permiso_ant).up()
       .ele('fecha_inicio', certificado.fecha_inicio).up()
       .ele('fecha_fin', certificado.fecha_fin).up()
-      .ele('empresa', certificado.empresa.nombre).up()
+      .ele('empresa', certificado.empresa).up()
       .ele('ciudad_origen', certificado.ciudad_origen).up()
       .ele('ciudad_destino', certificado.ciudad_destino).up()
 
@@ -135,7 +135,7 @@ export class ServiciosGateway {
       vehiculo.ele('chasis', {}, f.chasis)
       vehiculo.ele('carroceria', {}, f.carroceria)
       vehiculo.ele('ejes', {}, f.ejes)
-      vehiculo.ele('carga', {}, f.carga).up()
+      vehiculo.ele('carga', {}, f.toneladas).up()
       vehiculo.ele('patente', {}, f.patente)
 
     })
