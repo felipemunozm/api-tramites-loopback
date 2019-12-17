@@ -76,8 +76,7 @@ export class FlotaControllerController {
       //controllerLogger.info("parse : " + ppuAux);
       for (let _ppu of params.ppus) {
         if (_ppu != undefined)
-          ppuRequest = _ppu;
-        //ppuRequest = _ppu.ppu
+          ppuRequest = _ppu.ppu;
 
         let rechazoTipoVehiculo: Rechazo = new Rechazo(), rechazoAntiguedad: Rechazo = new Rechazo(), rechazoCivil: Rechazo = new Rechazo(), rechazoDuplicado: Rechazo = new Rechazo();
         let vehiculoBD: any = await this.vehiculoRepository.ObtenerVehiculoPorPPU(ppuRequest)
@@ -270,7 +269,8 @@ export class FlotaControllerController {
               vehiculo.tipo = v.return.tipoVehi ? v.return.tipoVehi : 'Sin Dato'
               vehiculo.ppu = infoPrt.return.ppu ? infoPrt.return.ppu : 'Sin Dato'
               vehiculo.anno = infoPrt.return.anoFabricacion ? infoPrt.return.anoFabricacion : 'Sin Dato'
-              vehiculo.carroceria = infoPrt.return.marcaCarroceria ? infoPrt.return.marcaCarroceria : 'Sin Dato'
+              vehiculo.carroceria = _ppu.carroceria // params. carroceria
+              //vehiculo.carroceria = infoPrt.return.marcaCarroceria ? infoPrt.return.marcaCarroceria : 'Sin Dato'
               vehiculo.chasis = infoPrt.return.numeroChasis ? infoPrt.return.numeroChasis : 'Sin dato'
               vehiculo.numeroMotor = infoPrt.return.numeroMotor ? infoPrt.return.numeroMotor : 'Sin dato'
               try {
