@@ -135,9 +135,12 @@ export class ServiciosGateway {
       vehiculo.ele('chasis', {}, f.chasis)
       vehiculo.ele('carroceria', {}, f.carroceria)
       vehiculo.ele('ejes', {}, f.ejes)
-      vehiculo.ele('carga', {}, f.toneladas).up()
+      if (f.toneladas != undefined) {
+        vehiculo.ele('carga', {}, f.toneladas).up()
+      } else {
+        vehiculo.ele('carga', {}, f.carga).up()
+      }
       vehiculo.ele('patente', {}, f.patente)
-
     })
 
     return xml.end({ pretty: true })
