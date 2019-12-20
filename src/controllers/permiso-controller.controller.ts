@@ -232,10 +232,10 @@ export class PermisoControllerController {
           vehiculoFlota.ejes = 0
           flotaFinal.push(vehiculoFlota)
         }
-        if (vehiculoFlota.fechaVigenciaLS == "" || vehiculoFlota.fechaVigenciaLS == '') {
+        if (vehiculoFlota.fechaVigenciaLS == "" || vehiculoFlota.fechaVigenciaLS == '' || vehiculoFlota.fechaVigenciaLS == undefined) {
           vehiculoFlota.fechaVigenciaLS = "01/01/1900"
         }
-        if (vehiculoFlota.fechaVencimientoRT == "" || vehiculoFlota.fechaVencimientoRT == '') {
+        if (vehiculoFlota.fechaVencimientoRT == "" || vehiculoFlota.fechaVencimientoRT == '' || vehiculoFlota.fechaVencimientoRT == undefined) {
           vehiculoFlota.fechaVencimientoRT = "01/01/1900"
         }
         await this.permisoSujetoVehiculoRepository.insertPermisoSujetoVehiculoFV(vehiculoFlota, respCreacionPermiso);
@@ -553,10 +553,10 @@ export class PermisoControllerController {
         if (vehiculoFlota.ejes == "Sin dato" || vehiculoFlota.ejes == "Sin Dato" || vehiculoFlota.ejes == "") {
           vehiculoFlota.ejes = 0
         }
-        if (vehiculoFlota.fechaVigenciaLS == "" || vehiculoFlota.fechaVigenciaLS == '') {
+        if (vehiculoFlota.fechaVigenciaLS == "" || vehiculoFlota.fechaVigenciaLS == '' || vehiculoFlota.fechaVigenciaLS == undefined) {
           vehiculoFlota.fechaVigenciaLS = "01/01/1900"
         }
-        if (vehiculoFlota.fechaVencimientoRT == "" || vehiculoFlota.fechaVencimientoRT == '') {
+        if (vehiculoFlota.fechaVencimientoRT == "" || vehiculoFlota.fechaVencimientoRT == '' || vehiculoFlota.fechaVencimientoRT == undefined) {
           vehiculoFlota.fechaVencimientoRT = "01/01/1900"
         }
         controllerLogger.info(vehiculoFlota.ejes)
