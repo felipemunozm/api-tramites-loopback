@@ -79,7 +79,7 @@ export class FlotaControllerController {
           ppuRequest = _ppu[0];
 
         let rechazoTipoVehiculo: Rechazo = new Rechazo(), rechazoAntiguedad: Rechazo = new Rechazo(), rechazoCivil: Rechazo = new Rechazo(), rechazoDuplicado: Rechazo = new Rechazo();
-        let vehiculoBD: any = await this.vehiculoRepository.ObtenerVehiculoPorPPU(ppuRequest)
+        let vehiculoBD: any = await this.vehiculoRepository.ObtenerVehiculoPorPPU(_ppu.ppu)
         if (vehiculoBD.length == 0)
           vehiculoBD = undefined;
         let v: any = {
