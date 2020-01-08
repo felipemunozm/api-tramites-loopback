@@ -91,18 +91,18 @@ export class FlotaControllerController {
           fechaRegistro = vehiculoBD[0].vigencia_registro
         }
         else {
-          controllerLogger.info('Sin fecha_vigencia, no exite PPU: ' + ppuRequest + ' en al BD')
+          controllerLogger.info('Sin fecha_vigencia, no exite PPU: ' + _ppu.ppu + ' en al BD')
           fechaRegistro = new Date('')
         }
         let hoy: Date = new Date();
         controllerLogger.info('fecha: ' + (vehiculoBD ? vehiculoBD[0].vigencia_registro : undefined))
         if (vehiculoBD == undefined) {
-          v = await serviciosGateway.obtenerVehiculo(ppuRequest)
+          v = await serviciosGateway.obtenerVehiculo(_ppu.ppu)
           // controllerLogger.info('Respuesta de Civil para vehiculo nuevo: ' + JSON.stringify(v))
         }
         else {
           if (fechaRegistro.getFullYear() != hoy.getFullYear() || fechaRegistro.getMonth() != hoy.getMonth() || fechaRegistro.getDay() != hoy.getDay()) {
-            v = await serviciosGateway.obtenerVehiculo(ppuRequest)
+            v = await serviciosGateway.obtenerVehiculo(_ppu.ppu)
             // controllerLogger.info('Respuesta de Civil para vehiculo existente: ' + JSON.stringify(v))
           }
           else {
@@ -134,16 +134,16 @@ export class FlotaControllerController {
             // controllerLogger.info('vehiculo de civil simulado v: ' + JSON.stringify(v))
           }
         }
-        let infoPrt: any = await serviciosGateway.obtenerRevisionTecnica(ppuRequest);
+        let infoPrt: any = await serviciosGateway.obtenerRevisionTecnica(_ppu.ppu);
         let ppu: any;
         try {
           ppu = v.return.patente.split('-')[0]
         } catch (Ex) {
-          controllerLogger.info("Saltando PPU: " + ppuRequest + " no se encontro en SRCeI");
+          controllerLogger.info("Saltando PPU: " + _ppu.ppu + " no se encontro en SRCeI");
           if (resultado.flotaRechazada.find((value: any) => {
-            if (value.ppu == ppuRequest) return value
+            if (value.ppu == _ppu.ppu) return value
           }) == undefined) {
-            resultado.flotaRechazada.push({ ppu: ppuRequest, motivoRechazo: 'Vehículo no encontrado en Registro civil' });
+            resultado.flotaRechazada.push({ ppu: _ppu.ppu, motivoRechazo: 'Vehículo no encontrado en Registro civil' });
           }
           rechazoCivil.estado = true
           rechazoCivil.motivo = 'Vehículo no encontrado en Registro civil'
@@ -152,7 +152,7 @@ export class FlotaControllerController {
         ppusProcesadas.push({ ppu: ppu })
         //Condicion de rechazo, propiedad sea diferente o meratenencia, tipo de vehiculo se valida contra una lista, antiguedad del vehiculo
         if (ppuDuplicada != undefined) {
-          resultado.flotaRechazada.push({ ppu: ppuRequest, motivoRechazo: 'Vehículo duplicado' });
+          resultado.flotaRechazada.push({ ppu: _ppu.ppu, motivoRechazo: 'Vehículo duplicado' });
           rechazoDuplicado.estado = true
           rechazoDuplicado.motivo = 'Vehículo duplicado'
         } else {
@@ -218,9 +218,9 @@ export class FlotaControllerController {
             if (!tiposVehiculosAceptados.includes(vehiculo.tipo.toLowerCase())) {
               //buscar si el vehiculo ya existe en la flota rechazada para no duplicarlo
               if (resultado.flotaRechazada.find((value: any) => {
-                if (value.ppu == ppuRequest) return value
+                if (value.ppu == _ppu.ppu) return value
               }) == undefined) {
-                resultado.flotaRechazada.push({ ppu: ppuRequest, motivoRechazo: 'Tipo de vehículo no corresponde a solicitud' });
+                resultado.flotaRechazada.push({ ppu: _ppu.ppu, motivoRechazo: 'Tipo de vehículo no corresponde a solicitud' });
                 rechazoTipoVehiculo.estado = true
                 rechazoTipoVehiculo.motivo = 'Tipo de vehículo no corresponde a solicitud'
                 // continue
@@ -230,9 +230,9 @@ export class FlotaControllerController {
             if (vehiculo.tipo != 'REMOLQUE' && vehiculo.tipo != 'SEMIREMOLQUE') {
               if ((new Date().getFullYear() - vehiculo.anno) > 28) {
                 if (resultado.flotaRechazada.find((value: any) => {
-                  if (value.ppu == ppuRequest) return value
+                  if (value.ppu == _ppu.ppu) return value
                 }) == undefined) {
-                  resultado.flotaRechazada.push({ ppu: ppuRequest, motivoRechazo: 'Antigüedad del vehiculo supera la permitida (28 años)' });
+                  resultado.flotaRechazada.push({ ppu: _ppu.ppu, motivoRechazo: 'Antigüedad del vehiculo supera la permitida (28 años)' });
                   rechazoAntiguedad.estado = true
                   rechazoAntiguedad.motivo = 'Antigüedad del vehiculo supera la permitida (28 años)'
                   // continue
@@ -242,11 +242,11 @@ export class FlotaControllerController {
             //validacion de Propietario
             if (params.rutSujeto != vehiculo.rutPropietario && params.rutSujeto != vehiculo.rutMerotenedor) {
               if (resultado.flotaRechazada.find((value: any) => {
-                if (value.ppu == ppuRequest) return value
+                if (value.ppu == _ppu.ppu) return value
               }) == undefined) {
                 rechazoCivil.estado = true
                 rechazoCivil.motivo = 'Propietario del vehículo no corresponde al solicitante'
-                resultado.flotaRechazada.push({ ppu: ppuRequest, motivoRechazo: 'Propietario del vehículo no corresponde al solicitante' })
+                resultado.flotaRechazada.push({ ppu: _ppu.ppu, motivoRechazo: 'Propietario del vehículo no corresponde al solicitante' })
               }
             }
             if (infoPrt && infoPrt.return.revisionTecnica) {
@@ -318,9 +318,9 @@ export class FlotaControllerController {
                   let vehRTIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RT')
                   let vehRT: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx]
                   if (vehRT == undefined)
-                    resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RT", nombre: "Certificado de revisión Técnica", ppu: [ppuRequest] })
+                    resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RT", nombre: "Certificado de revisión Técnica", ppu: [_ppu.ppu] })
                   else
-                    resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx].ppu.push(ppuRequest)
+                    resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx].ppu.push(_ppu.ppu)
                 }
                 //revision de Leasing
                 let tenedores: any = v.return.limita.itemLimita[v.return.limita.itemLimita.length - 1].tenedores
@@ -333,13 +333,13 @@ export class FlotaControllerController {
                   let vehRlsIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RLS')
                   let vehRls: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehRlsIdx];
                   if (vehCls == undefined)
-                    resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_CLS", nombre: "Contrato de leasing", ppu: [ppuRequest] });
+                    resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_CLS", nombre: "Contrato de leasing", ppu: [_ppu.ppu] });
                   else
-                    resultado.tiposDocumentosPosiblesAdjuntar.data[vehClsIdx].ppu.push(ppuRequest)
+                    resultado.tiposDocumentosPosiblesAdjuntar.data[vehClsIdx].ppu.push(_ppu.ppu)
                   if (vehAut == undefined)
-                    resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_AUT", nombre: "Autorización de entidad financiera para salir del país", ppu: [ppuRequest] });
+                    resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_AUT", nombre: "Autorización de entidad financiera para salir del país", ppu: [_ppu.ppu] });
                   else
-                    resultado.tiposDocumentosPosiblesAdjuntar.data[vehAutIdx].ppu.push(ppuRequest)
+                    resultado.tiposDocumentosPosiblesAdjuntar.data[vehAutIdx].ppu.push(_ppu.ppu)
                   /*if (vehRls == undefined)
                     resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RLS", nombre: "Declaracion de responsabilidad de vehículos bajo régimen de leasing", ppu: [ppuRequest] })
                   else
@@ -351,9 +351,9 @@ export class FlotaControllerController {
                 let vehRTIdx: any = resultado.tiposDocumentosPosiblesAdjuntar.data.map((e: any) => { return e.codigo }).indexOf('VEH_RT')
                 let vehRT: any = resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx]
                 if (vehRT == undefined)
-                  resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RT", nombre: "Certificado de revisión Técnica", ppu: [ppuRequest] })
+                  resultado.tiposDocumentosPosiblesAdjuntar.data.push({ codigo: "VEH_RT", nombre: "Certificado de revisión Técnica", ppu: [_ppu.ppu] })
                 else
-                  resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx].ppu.push(ppuRequest)
+                  resultado.tiposDocumentosPosiblesAdjuntar.data[vehRTIdx].ppu.push(_ppu.ppu)
               }
             }
             delete vehiculo.identificador
@@ -362,9 +362,9 @@ export class FlotaControllerController {
               resultado.flotaValidada.push(vehiculo)
           } else {
             if (resultado.flotaRechazada.find((value: any) => {
-              if (value.ppu == ppuRequest) return value
+              if (value.ppu == _ppu.ppu) return value
             }) == undefined) {
-              resultado.flotaRechazada.push({ ppu: ppuRequest, motivoRechazo: 'Vehículo no encontrado en Registro civil' });
+              resultado.flotaRechazada.push({ ppu: _ppu.ppu, motivoRechazo: 'Vehículo no encontrado en Registro civil' });
             }
           }
         }
