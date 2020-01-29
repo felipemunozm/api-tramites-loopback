@@ -54,6 +54,7 @@
     "@loopback/rest-explorer": "^1.1.19",
     "@loopback/service-proxy": "^1.1.7",
     "@types/dateformat": "^3.0.0",
+    "basic-ftp": "^4.5.3",
     "dateformat": "^3.0.3",
     "fs": "0.0.1-security",
     "http": "0.0.0",
@@ -69,7 +70,7 @@
     "@loopback/build": "^1.5.1",
     "@loopback/testlab": "^1.2.6",
     "@loopback/tslint-config": "^2.0.4",
-    "@types/node": "^10.11.2",
+    "@types/node": "^10.17.14",
     "tslint": "^5.15.0",
     "typescript": "^3.4.3"
   }
