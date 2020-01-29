@@ -27,7 +27,7 @@ export class DescargaControllerController {
         const request = require('request');
 
         /* Create an empty file where we can save data */
-        let file = fs.createWriteStream((process.platform == 'win32' ? 'C:\\APIDOCS\\' : '/root/APIDOCS') + dateFormat("ddmmyyyy") + '-TRAMITE_ID-' + idTramite + '.pdf')
+        let file = fs.createWriteStream((process.platform == 'win32' ? 'C:\\APIDOCS\\' : '/root/APIDOCS/') + dateFormat("ddmmyyyy") + '-TRAMITE_ID-' + idTramite + '.pdf')
 
         /* Using Promises so that we can use the ASYNC AWAIT syntax */
         await new Promise((resolve, reject) => {
