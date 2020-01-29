@@ -10,7 +10,7 @@ export class DescargaControllerController {
   }
 
   @get('/tramites/documentos')
-  public async  getdocumentos(@param.query.string('idTramite') idTramite: number, @param.query.string('token') token: string, @param.query.string('url') url: string): Promise<any> {
+  public async  getdocumentos(@param.query.string('idTramite') idTramite: number, @param.query.string('token') token: string, @param.query.string('url') url: string, @param.query.string('idProceso') idProceso: number, @param.query.string('rutSol') rutSol: string): Promise<any> {
     try {
       if (!url || !idTramite) {
         throw {
@@ -27,7 +27,7 @@ export class DescargaControllerController {
         const request = require('request');
 
         /* Create an empty file where we can save data */
-        let file = fs.createWriteStream((process.platform == 'win32' ? 'C:\\APIDOCS\\' : '/root/APIDOCS/') + dateFormat("ddmmyyyy") + '-TRAMITE_ID-' + idTramite + '.pdf')
+        let file = fs.createWriteStream((process.platform == 'win32' ? 'C:\\APIDOCS\\' : '/root/APIDOCS/') + idProceso + '_' + idTramite + '_' + dateFormat("ddmmyyyy") + '_' + rutSol + '.pdf')
 
         /* Using Promises so that we can use the ASYNC AWAIT syntax */
         await new Promise((resolve, reject) => {
@@ -53,7 +53,7 @@ export class DescargaControllerController {
         //***************************************************** FTP *************************************/
 
 
-        let remoteFile = dateFormat("ddmmyyyy") + '-TRAMITE_ID-' + idTramite + '.pdf';
+        let remoteFile = idProceso + '_' + idTramite + '_' + dateFormat("ddmmyyyy") + '_' + rutSol + '.pdf'
         let path = file.path;
         //file.close();
 
