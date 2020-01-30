@@ -57,12 +57,13 @@ export class DescargaControllerController {
         let path = file.path;
         //file.close();
 
+        //"172.25.1.169",
         const ftp = require("basic-ftp");
         const client = new ftp.Client()
         client.ftp.verbose = true
         try {
           await client.access({
-            host: "172.25.12.169",   //"172.25.1.169",
+            host: "172.25.12.169",
             user: "exedoc",
             password: "1wO14AKN",
             port: "21",
