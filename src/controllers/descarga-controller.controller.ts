@@ -58,6 +58,7 @@ export class DescargaControllerController {
         //file.close();
 
         //"172.25.1.169",
+
         const ftp = require("basic-ftp");
         const client = new ftp.Client()
         client.ftp.verbose = true
