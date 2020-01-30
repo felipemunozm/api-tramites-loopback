@@ -56,7 +56,7 @@ export class DescargaControllerController {
         let remoteFile = idProceso + '_' + idTramite + '_' + dateFormat("ddmmyyyy") + '_' + rutSol + '.pdf'
         let path = file.path;
         //file.close();
-        //host: "172.25.1.169",
+        //host: "172.25.1.169 ",
         const ftp = require("basic-ftp");
         const client = new ftp.Client()
         client.ftp.verbose = true
