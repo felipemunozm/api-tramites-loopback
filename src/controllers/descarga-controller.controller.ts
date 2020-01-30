@@ -74,15 +74,17 @@ export class DescargaControllerController {
         }
         client.close()
 
+        return {
+          codigoResultado: 1,
+          descripcionResultado: "Exitoso",
+          filename: remoteFile
 
-        //***************************************************************************************/
+        }
+
+        //************************************************************************************** */
 
       }
-      return {
-        codigoResultado: 1,
-        descripcionResultado: "Exitoso"
 
-      }
 
     } catch (ex) {
       controllerLogger.info(ex)
