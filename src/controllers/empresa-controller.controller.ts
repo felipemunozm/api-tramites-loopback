@@ -626,8 +626,9 @@ export class EmpresaControllerController {
           descripcionResultado: "No hay una empresa registrada con el rut (" + rutEmpresa + ")"
         }
       }
-      solicitantes = await this.solicitanteAutorizadoRepository.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id);
+      //solicitantes = await this.solicitanteAutorizadoRepository.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id);
       if (rutSolicitante !== empresa.identificador_representante_legal) {
+        solicitantes = await this.solicitanteAutorizadoRepository.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id);
 
         if (!solicitantes || solicitantes.length === 0) {
           return {
