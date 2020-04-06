@@ -171,6 +171,7 @@ export class PersonasControllerController {
         resp.empresa = {}
         resp.empresa.razonSocial = empresa.razon_social
         resp.empresa.codigo_empresa_razon_social = empresa.codigo_empresa
+        resp.empresa.tramite = empresa.tramite
         resp.empresa.direccion = {
           codigo_comuna: empresa.codigo_comuna,
           codigo_region: empresa.codigo_region,
@@ -201,6 +202,7 @@ export class PersonasControllerController {
           resp.empresa = {}
           resp.empresa.razonSocial = empresa.razon_social
           resp.empresa.codigo_empresa_razon_social = empresa.codigo_empresa
+          resp.empresa.tramite = empresa.tramite
           resp.empresa.direccion = {
             codigo_comuna: empresa.codigo_comuna,
             codigo_region: empresa.codigo_region,
@@ -223,6 +225,7 @@ export class PersonasControllerController {
       resp.empresa.razonSocial = empresa.razon_social
       resp.empresa.codigo_empresa_razon_social = empresa.codigo_empresa
       resp.empresa.tipo = empresa.tipo_empresa
+      resp.empresa.tramite = empresa.tramite
       resp.empresa.direccion = {
         codigo_comuna: empresa.codigo_comuna,
         codigo_region: empresa.codigo_region,
