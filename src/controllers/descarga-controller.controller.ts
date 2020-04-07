@@ -44,7 +44,7 @@ export class DescargaControllerController {
             .on('error', (error: any) => {
               reject(error);
             })
-        }) conflicts
+        })
           .catch(error => {
             console.log('Something happened: ${error}');
           });
