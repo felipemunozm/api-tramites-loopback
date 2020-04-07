@@ -72,7 +72,7 @@ export class EmpresaControllerController {
         !params.solicitante.nombre || !params.solicitante.rut || !params.solicitante.email ||
         !params.empresa.rut || !params.empresa.razonSocial || !params.empresa.nombreFantasia ||
         !params.empresa.tipoEmpresa || !params.empresa.direccion || !params.empresa.representanteLegal ||
-        !params.codigoAnalista || !params.nombreAnalista || !params.codigoRegion) {
+        !params.empresa.tramite || !params.codigoAnalista || !params.nombreAnalista || !params.codigoRegion) {
         throw {
           error: {
             statusCode: 502,
@@ -183,7 +183,8 @@ export class EmpresaControllerController {
             identificador: params.empresa.rut,
             tipoIdentificadorId: tipoIdRut.id,
             nombreFantasia: params.empresa.nombreFantasia,
-            representanteLegalId: persona.id
+            representanteLegalId: persona.id,
+            tramite: params.empresa.tramite
 
           }
           controllerLogger.info('Paso 9')
@@ -626,8 +627,9 @@ export class EmpresaControllerController {
           descripcionResultado: "No hay una empresa registrada con el rut (" + rutEmpresa + ")"
         }
       }
-      solicitantes = await this.solicitanteAutorizadoRepository.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id);
+      //solicitantes = await this.solicitanteAutorizadoRepository.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id);
       if (rutSolicitante !== empresa.identificador_representante_legal) {
+        solicitantes = await this.solicitanteAutorizadoRepository.obtenerSolicitantesAutorizadosByEmpresaId(empresa.id);
 
         if (!solicitantes || solicitantes.length === 0) {
           return {
@@ -673,6 +675,7 @@ export class EmpresaControllerController {
           razonSocial: empresa.razon_social,
           nombreFantasia: empresa.nombre_fantasia,
           tipoEmpresa: empresa.tipo_empresa,
+          tramite: empresa.tramite,
           representanteLegal: {
             rut: empresa.identificador_representante_legal,
             nombre: empresa.nombre_representante_legal,
