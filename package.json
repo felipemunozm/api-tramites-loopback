@@ -61,7 +61,7 @@
     "json2typescript": "^1.2.2",
     "loopback-connector-postgresql": "^3.6.1",
     "loopback-connector-soap": "^4.3.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "soap": "^0.27.1",
     "typescript-logging": "^0.6.3",
     "xmlbuilder": "^13.0.1"
