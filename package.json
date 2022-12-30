@@ -67,7 +67,7 @@
     "xmlbuilder": "^13.0.1"
   },
   "devDependencies": {
-    "@loopback/build": "^1.5.1",
+    "@loopback/build": "^9.0.6",
     "@loopback/testlab": "^1.2.6",
     "@loopback/tslint-config": "^2.0.4",
     "@types/node": "^10.17.14",
